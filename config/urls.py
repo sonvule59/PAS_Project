@@ -87,7 +87,7 @@ urlpatterns = [
     path('intervention/tr/challenge-12/', views.tr_challenge_12, name='tr_challenge_12'),
     path('intervention/tr/challenge-13/', views.tr_challenge_13, name='tr_challenge_13'),
     path('intervention/tr/challenge-14/', views.tr_challenge_14, name='tr_challenge_14'),
-    path('intervention/dom/challenge-15/', views.tr_challenge_15, name='dom_challenge_15'),
+    path('intervention/tr/challenge-15/', views.tr_challenge_15, name='tr_challenge_15'),
     # Domestic-Related Physical Activity Challenges
 
     path('intervention/dom/challenge-16/', views.dom_challenge_16, name='dom_challenge_16'),
