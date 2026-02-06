@@ -495,7 +495,7 @@ class Challenge5Response(models.Model):
     def __str__(self):
         return f"Challenge5Response(user={self.user.username}, created_at={self.created_at:%Y-%m-%d %H:%M})"
 
-class WorkRelatedChallenge8Response(models.Model):
+class WorkRelatedChallenge7Response(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     participant = models.ForeignKey(Participant, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -508,9 +508,9 @@ class WorkRelatedChallenge8Response(models.Model):
         ordering = ['-created_at']
 
     def __str__(self):
-        return f"WorkRelatedChallenge8Response(user={self.user.username}, created_at={self.created_at:%Y-%m-%d %H:%M})"
+        return f"WorkRelatedChallenge7Response(user={self.user.username}, created_at={self.created_at:%Y-%m-%d %H:%M})"
 
-class WorkRelatedChallenge11Response(models.Model):
+class WorkRelatedChallenge10Response(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     participant = models.ForeignKey(Participant, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -525,9 +525,9 @@ class WorkRelatedChallenge11Response(models.Model):
         ordering = ['-created_at']
 
     def __str__(self):
-        return f"WorkRelatedChallenge11Response(user={self.user.username}, created_at={self.created_at:%Y-%m-%d %H:%M})"
+        return f"WorkRelatedChallenge10Response(user={self.user.username}, created_at={self.created_at:%Y-%m-%d %H:%M})"
 
-class TransportRelatedChallenge13Response(models.Model):
+class TransportRelatedChallenge12Response(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     participant = models.ForeignKey(Participant, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -540,9 +540,9 @@ class TransportRelatedChallenge13Response(models.Model):
         ordering = ['-created_at']
 
     def __str__(self):
-        return f"TransportRelatedChallenge13Response(user={self.user.username}, created_at={self.created_at:%Y-%m-%d %H:%M})"
+        return f"TransportRelatedChallenge12Response(user={self.user.username}, created_at={self.created_at:%Y-%m-%d %H:%M})"
 
-class TransportRelatedChallenge16Response(models.Model):
+class TransportRelatedChallenge15Response(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     participant = models.ForeignKey(Participant, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -557,9 +557,9 @@ class TransportRelatedChallenge16Response(models.Model):
         ordering = ['-created_at']
 
     def __str__(self):
-        return f"TransportRelatedChallenge16Response(user={self.user.username}, created_at={self.created_at:%Y-%m-%d %H:%M})"
+        return f"TransportRelatedChallenge15Response(user={self.user.username}, created_at={self.created_at:%Y-%m-%d %H:%M})"
 
-class DomesticRelatedChallenge18Response(models.Model):
+class DomesticRelatedChallenge17Response(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     participant = models.ForeignKey(Participant, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -572,9 +572,9 @@ class DomesticRelatedChallenge18Response(models.Model):
         ordering = ['-created_at']
 
     def __str__(self):
-        return f"DomesticRelatedChallenge18Response(user={self.user.username}, created_at={self.created_at:%Y-%m-%d %H:%M})"
+        return f"DomesticRelatedChallenge17Response(user={self.user.username}, created_at={self.created_at:%Y-%m-%d %H:%M})"
 
-class DomesticRelatedChallenge21Response(models.Model):
+class DomesticRelatedChallenge20Response(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     participant = models.ForeignKey(Participant, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -589,9 +589,9 @@ class DomesticRelatedChallenge21Response(models.Model):
         ordering = ['-created_at']
 
     def __str__(self):
-        return f"DomesticRelatedChallenge21Response(user={self.user.username}, created_at={self.created_at:%Y-%m-%d %H:%M})"
+        return f"DomesticRelatedChallenge20Response(user={self.user.username}, created_at={self.created_at:%Y-%m-%d %H:%M})"
 
-class LeisureRelatedChallenge23Response(models.Model):
+class LeisureRelatedChallenge22Response(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     participant = models.ForeignKey(Participant, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -604,9 +604,9 @@ class LeisureRelatedChallenge23Response(models.Model):
         ordering = ['-created_at']
 
     def __str__(self):
-        return f"LeisureRelatedChallenge23Response(user={self.user.username}, created_at={self.created_at:%Y-%m-%d %H:%M})"
+        return f"LeisureRelatedChallenge22Response(user={self.user.username}, created_at={self.created_at:%Y-%m-%d %H:%M})"
 
-class LeisureRelatedChallenge26Response(models.Model):
+class LeisureRelatedChallenge27Response(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     participant = models.ForeignKey(Participant, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -621,7 +621,7 @@ class LeisureRelatedChallenge26Response(models.Model):
         ordering = ['-created_at']
 
     def __str__(self):
-        return f"LeisureRelatedChallenge26Response(user={self.user.username}, created_at={self.created_at:%Y-%m-%d %H:%M})"
+        return f"LeisureRelatedChallenge27Response(user={self.user.username}, created_at={self.created_at:%Y-%m-%d %H:%M})"
 
 class ChallengeCompletion(models.Model):
     """Track which challenges each user has completed"""
