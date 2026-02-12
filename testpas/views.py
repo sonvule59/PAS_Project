@@ -390,9 +390,30 @@ def questionnaire(request):
         answers = request.POST
         print(f"Full POST Data: {answers}")
 
-        age = int(answers.get("age", 0))
-        height = int(answers.get("height", 0))
-        weight = int(answers.get("weight", 0))
+        age_value = answers.get("age", "0")
+        if age_value == "lt18":
+            age = 17
+        elif age_value == "gt64":
+            age = 65
+        else:
+            age = int(age_value)
+
+        height_value = answers.get("height", "0")
+        if height_value == "lt48":
+            height = 47
+        elif height_value == "gt84":
+            height = 85
+        else:
+            height = int(height_value)
+        
+        weight_value = answers.get("weight", "0")
+        if weight_value == "lt120":
+            weight = 119
+        elif weight_value == "gt500":
+                weight = 501
+        else:
+            weight = int(weight_value)
+
         access_to_device = answers.get("has_device", "").strip().lower() == "yes"
         willing_no_other_study = answers.get("not_enroll_other", "").strip().lower() == "yes"
         willing_monitor = answers.get("comply_monitoring", "").strip().lower() == "yes"
