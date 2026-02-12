@@ -19,7 +19,7 @@ from django.db.models import Model
 
 from testpas.settings import *
 from hashlib import sha256
-from testpas.tasks import send_wave1_monitoring_email, send_wave1_code_entry_email, send_wave3_code_entry_email, send_confirmation_email_task, send_password_reset_email_task, randomize_participant_now
+from testpas.tasks import send_wave1_monitoring_email, send_wave1_code_entry_email, send_wave3_code_entry_email, send_confirmation_email_task, send_password_reset_email_task
 # from testpas.settings import DEFAULT_FROM_EMAIL
 from testpas.schedule_emails import schedule_wave1_monitoring_email
 from .models import *
@@ -195,6 +195,10 @@ def login_view(request):
         
         user = authenticate(request, username=username, password=password)
         if user is not None:
+            participant = Participant.objects.filter(user=user).first()
+            if participant and not participant.is_confirmed:
+                messages.error(request, "Please confirm your registration via the email link before logging in.")
+                return render(request, 'login.html')
             print(f"[DEBUG] Authentication successful for user: {user.username}")
             login(request, user)
             next_url = request.GET.get('next', 'dashboard')  # Redirect to next URL or dashboard
@@ -299,6 +303,14 @@ def password_reset_confirm(request, token):
 
 def questionnaire_interest(request):
     """Information 4: Interest Screening - Store IRB interest response"""
+    if not request.user.is_authenticated:
+        return redirect('login')
+
+    participant = Participant.objects.filter(user=request.user).first()
+    if participant and not participant.is_confirmed:
+        messages.error(request, "Please confirm your registration via the email link before starting the survey.")
+        return redirect('login')
+
     if request.method == 'GET':
         return render(request, 'questionnaire_interest.html')
     elif request.method == 'POST':
@@ -547,12 +559,6 @@ def consent_form(request, survey_id=None):
             except Exception as e:
                 print(f"[ERROR] Failed to trigger timeline email scheduling for {participant.participant_id}: {e}")
                 messages.warning(request, "Consent saved, but email scheduling failed. Contact support.")
-
-            # Trigger early randomization in background (notification still waits for Day 29)
-            try:
-                randomize_participant_now.delay(request.user.id)
-            except Exception as e:
-                print(f"[ERROR] Failed to trigger early randomization for {participant.participant_id}: {e}")
 
             print(f"[SEND] Consent processed successfully for {user.username}")
             return redirect("dashboard")

@@ -26,174 +26,6 @@ def run_daily_timeline_checks():
             print(f"[CELERY TASK] ERROR processing user {user.id}: {str(e)}")
     print(f"[CELERY TASK] run_daily_timeline_checks completed")
 
-@shared_task
-def randomize_participant_now(user_id):
-    user_progress = UserSurveyProgress.objects.filter(
-        user_id=user_id,
-        survey__title="Eligibility Criteria"
-    ).first()
-    if not user_progress or not user_progress.eligible or not user_progress.consent_given or not user_progress.day_1:
-        return
-
-    participant = Participant.objects.filter(user_id=user_id).first()
-    if not participant:
-        return
-
-    now = get_current_time()
-    today = get_study_day(
-        user_progress.day_1,
-        now=now,
-        compressed=getattr(settings, 'TIME_COMPRESSION', False),
-        seconds_per_day=getattr(settings, 'SECONDS_PER_DAY', 86400),
-        reference_timestamp=user_progress.timeline_reference_timestamp
-    )
-    participant.refresh_from_db()
-    handle_randomization(participant, today)
-
-def handle_randomization(participant, today):
-    # This can happen if there was a bug or manual data change
-    if participant.randomization_completed and participant.randomized_group is None:
-        print(f"[FIX] Participant {participant.participant_id} has randomization_completed=True but randomized_group=None. Resetting randomization_completed.")
-        participant.randomization_completed = False
-        participant.save()
-    
-    # Info 15 – 2-Block Randomization
-    # Allow early randomization after eligibility + consent; only notify on Day 29+
-    if not participant.randomization_completed:
-        print(f"[RANDOMIZATION] Participant {participant.participant_id} on Day {today}, checking for randomization...")
-        # Check if we need to assign this participant to a pair
-        if participant.randomization_pair_id is None:
-            # Find the next available pair or create a new one
-            last_pair = Participant.objects.filter(
-                randomization_pair_id__isnull=False
-            ).order_by('-randomization_pair_id').first()
-            
-            if last_pair is None:
-                # First participant ever
-                pair_id = 1
-                position = 1
-            else:
-                # Check if the last pair is complete (has 2 participants)
-                pair_participants = Participant.objects.filter(
-                    randomization_pair_id=last_pair.randomization_pair_id
-                ).count()
-                
-                if pair_participants < 2:
-                    # Join the existing incomplete pair
-                    pair_id = last_pair.randomization_pair_id
-                    position = 2
-                else:
-                    # Create a new pair
-                    pair_id = last_pair.randomization_pair_id + 1
-                    position = 1
-            
-            participant.randomization_pair_id = pair_id
-            participant.randomization_position = position
-            participant.save()
-        
-        # The 2-block randomization procedure starts here
-        pair_participants = Participant.objects.filter(
-            randomization_pair_id=participant.randomization_pair_id
-        ).order_by('id')  # Order by enrollment time (earlier ID = earlier enrollment)
-        
-        if len(pair_participants) == 2:
-            # Both participants in the pair are ready for randomization
-            # First participant (earlier enrollment) gets random assignment
-            first_participant = pair_participants[0]
-            second_participant = pair_participants[1]
-            
-            # Check if first participant is already randomized (from when they were alone)
-            if first_participant.randomization_completed and first_participant.randomized_group is not None:
-                # First participant already randomized, assign second participant to opposite group
-                first_group = first_participant.randomized_group
-                second_group = 1 - first_group  # Opposite group
-                # Assign groups to second participant
-                second_participant.randomized_group = second_group
-                second_participant.group = second_group
-                second_participant.group_assigned = True
-                second_participant.randomization_completed = True
-                second_participant.save()
-                # Log the randomization result
-                print(f"[2-BLOCK RANDOMIZE] Pair {participant.randomization_pair_id}: "
-                      f"First participant (ID {first_participant.id}) already in Group {first_group}, "
-                      f"Second participant (ID {second_participant.id}) -> Group {second_group}")
-            else:
-                # Neither participant is randomized yet - do full 2-block randomization
-                # Fair coin flip for first participant
-                first_group = random.choice([0, 1])
-                second_group = 1 - first_group  # Opposite group
-                
-                # Assign groups
-                first_participant.randomized_group = first_group
-                first_participant.group = first_group
-                first_participant.group_assigned = True
-                first_participant.randomization_completed = True
-                first_participant.save()
-                
-                second_participant.randomized_group = second_group
-                second_participant.group = second_group
-                second_participant.group_assigned = True
-                second_participant.randomization_completed = True
-                second_participant.save()
-                
-                print(f"[2-BLOCK RANDOMIZE] Pair {participant.randomization_pair_id}: "
-                      f"First participant (ID {first_participant.id}) -> Group {first_group}, "
-                      f"Second participant (ID {second_participant.id}) -> Group {second_group}")
-        elif len(pair_participants) == 1:
-            # Only one participant in pair - randomize them now, second participant will get opposite when they join
-            single_participant = pair_participants[0]
-            
-            # Random assignment for the single participant
-            assigned_group = random.choice([0, 1])
-            single_participant.randomized_group = assigned_group
-            single_participant.group = assigned_group
-            single_participant.group_assigned = True
-            single_participant.randomization_completed = True
-            single_participant.save()
-            
-            print(f"[2-BLOCK RANDOMIZE] Single participant in Pair {participant.randomization_pair_id}: "
-                  f"Participant (ID {single_participant.id}) -> Group {assigned_group} (waiting for pair)")
-        else:
-            print(f"[2-BLOCK RANDOMIZE] Pair {participant.randomization_pair_id} has unexpected number of participants: {len(pair_participants)}")
-
-    # Notify participants on Day 29 or later (even if randomized earlier)
-    if today and today >= 29 and participant.randomization_completed and participant.randomized_group is not None:
-        from django.db import transaction
-        with transaction.atomic():
-            updated = Participant.objects.filter(
-                id=participant.id,
-                randomization_email_sent=False
-            ).update(
-                randomization_email_sent=True,
-                randomization_email_sent_date=timezone.now().date()
-            )
-        if updated:
-            try:
-                if participant.randomized_group == 0:
-                    participant.send_email(
-                        "intervention_access_later",
-                        extra_context={"username": participant.user.username},
-                        mark_as='sent_intervention_access'
-                    )
-                    print(f"[2-BLOCK RANDOMIZE] Sent intervention_access_later email to {participant.participant_id}")
-                elif participant.randomized_group == 1:
-                    participant.send_email(
-                        "intervention_access_immediate",
-                        extra_context={
-                            "username": participant.user.username,
-                            "login_link": settings.LOGIN_URL if hasattr(settings, "LOGIN_URL") else "https://your-login-page.com"
-                        },
-                        mark_as='sent_intervention_access'
-                    )
-                    print(f"[2-BLOCK RANDOMIZE] Sent intervention_access_immediate email to {participant.participant_id}")
-            except Exception as e:
-                # Roll back notification flag if email fails so it can retry later
-                Participant.objects.filter(id=participant.id).update(
-                    randomization_email_sent=False,
-                    randomization_email_sent_date=None
-                )
-                print(f"[2-BLOCK RANDOMIZE] ERROR: Failed to send email to participant {participant.participant_id}: {str(e)}")
-
 def daily_timeline_check(user):
     seconds_per_day = getattr(settings, 'SECONDS_PER_DAY', 86400)
     compressed = getattr(settings, 'TIME_COMPRESSION', False)
@@ -451,7 +283,197 @@ def daily_timeline_check(user):
 
     	Group 1 (i.e., the intervention group) will be given the access to the intervention from Day 29 to Day 56. We will track their engagement with the intervention (e.g., the number of challenges completed) from Group 1.
     """
-    handle_randomization(participant, today)
+    # This can happen if there was a bug or manual data change
+    if participant.randomization_completed and participant.randomized_group is None:
+        print(f"[FIX] Participant {participant.participant_id} has randomization_completed=True but randomized_group=None. Resetting randomization_completed.")
+        participant.randomization_completed = False
+        participant.save()
+    
+    # Info 15 – 2-Block Randomization
+    # Only randomize on Day 29+ (catch-up if missed)
+    if today and today >= 29 and not participant.randomization_completed:
+        print(f"[RANDOMIZATION] Participant {participant.participant_id} on Day {today}, checking for randomization...")
+        # Check if we need to assign this participant to a pair
+        if participant.randomization_pair_id is None:
+            # Find the next available pair or create a new one
+            last_pair = Participant.objects.filter(
+                randomization_pair_id__isnull=False
+            ).order_by('-randomization_pair_id').first()
+            
+            if last_pair is None:
+                # First participant ever
+                pair_id = 1
+                position = 1
+            else:
+                # Check if the last pair is complete (has 2 participants)
+                pair_participants = Participant.objects.filter(
+                    randomization_pair_id=last_pair.randomization_pair_id
+                ).count()
+                
+                if pair_participants < 2:
+                    # Join the existing incomplete pair
+                    pair_id = last_pair.randomization_pair_id
+                    position = 2
+                else:
+                    # Create a new pair
+                    pair_id = last_pair.randomization_pair_id + 1
+                    position = 1
+            
+            participant.randomization_pair_id = pair_id
+            participant.randomization_position = position
+            participant.save()
+        
+        # The 2-block randomization procedure starts here
+        pair_participants = Participant.objects.filter(
+            randomization_pair_id=participant.randomization_pair_id
+        ).order_by('id')  # Order by enrollment time (earlier ID = earlier enrollment)
+        
+        if len(pair_participants) == 2:
+            # Both participants in the pair are ready for randomization
+            # First participant (earlier enrollment) gets random assignment
+            first_participant = pair_participants[0]
+            second_participant = pair_participants[1]
+            
+            # Check if first participant is already randomized (from when they were alone)
+            if first_participant.randomization_completed and first_participant.randomized_group is not None:
+                # First participant already randomized, assign second participant to opposite group
+                first_group = first_participant.randomized_group
+                second_group = 1 - first_group  # Opposite group
+                # Assign groups to second participant
+                second_participant.randomized_group = second_group
+                second_participant.group = second_group
+                second_participant.group_assigned = True
+                second_participant.randomization_completed = True
+                second_participant.save()
+                # Log the randomization result
+                print(f"[2-BLOCK RANDOMIZE] Pair {participant.randomization_pair_id}: "
+                      f"First participant (ID {first_participant.id}) already in Group {first_group}, "
+                      f"Second participant (ID {second_participant.id}) -> Group {second_group}")
+                
+                # Send email to second participant only (first already received theirs)
+                try:
+                    if second_participant.randomized_group == 0:
+                        second_participant.send_email("intervention_access_later", extra_context={
+                            "username": second_participant.user.username
+                        }, mark_as='sent_intervention_access')
+                        second_participant.randomization_email_sent = True
+                        second_participant.randomization_email_sent_date = timezone.now().date()
+                        second_participant.save()
+                        print(f"[2-BLOCK RANDOMIZE] Sent intervention_access_later email to {second_participant.participant_id}")
+                    elif second_participant.randomized_group == 1:
+                        second_participant.send_email("intervention_access_immediate", extra_context={
+                            "username": second_participant.user.username,
+                            "login_link": settings.LOGIN_URL if hasattr(settings, "LOGIN_URL") else "https://your-login-page.com"
+                        }, mark_as='sent_intervention_access')
+                        second_participant.randomization_email_sent = True
+                        second_participant.randomization_email_sent_date = timezone.now().date()
+                        second_participant.save()
+                        print(f"[2-BLOCK RANDOMIZE] Sent intervention_access_immediate email to {second_participant.participant_id}")
+                except Exception as e:
+                    print(f"[2-BLOCK RANDOMIZE] ERROR: Failed to send email to second participant {second_participant.participant_id}: {str(e)}")
+            else:
+                # Neither participant is randomized yet - do full 2-block randomization
+                # Fair coin flip for first participant
+                first_group = random.choice([0, 1])
+                second_group = 1 - first_group  # Opposite group
+                
+                # Assign groups
+                first_participant.randomized_group = first_group
+                first_participant.group = first_group
+                first_participant.group_assigned = True
+                first_participant.randomization_completed = True
+                first_participant.save()
+                
+                second_participant.randomized_group = second_group
+                second_participant.group = second_group
+                second_participant.group_assigned = True
+                second_participant.randomization_completed = True
+                second_participant.save()
+                
+                print(f"[2-BLOCK RANDOMIZE] Pair {participant.randomization_pair_id}: "
+                      f"First participant (ID {first_participant.id}) -> Group {first_group}, "
+                      f"Second participant (ID {second_participant.id}) -> Group {second_group}")
+                
+                # Send notification emails to both
+                try:
+                    if first_participant.randomized_group == 0:
+                        first_participant.send_email("intervention_access_later", extra_context={
+                            "username": first_participant.user.username
+                        }, mark_as='sent_intervention_access')
+                        first_participant.randomization_email_sent = True
+                        first_participant.randomization_email_sent_date = timezone.now().date()
+                        first_participant.save()
+                        print(f"[2-BLOCK RANDOMIZE] Sent intervention_access_later email to {first_participant.participant_id}")
+                    elif first_participant.randomized_group == 1:
+                        first_participant.send_email("intervention_access_immediate", extra_context={
+                            "username": first_participant.user.username,
+                            "login_link": settings.LOGIN_URL if hasattr(settings, "LOGIN_URL") else "https://your-login-page.com"
+                        }, mark_as='sent_intervention_access')
+                        first_participant.randomization_email_sent = True
+                        first_participant.randomization_email_sent_date = timezone.now().date()
+                        first_participant.save()
+                        print(f"[2-BLOCK RANDOMIZE] Sent intervention_access_immediate email to {first_participant.participant_id}")
+                except Exception as e:
+                    print(f"[2-BLOCK RANDOMIZE] ERROR: Failed to send email to first participant {first_participant.participant_id}: {str(e)}")
+                
+                try:
+                    if second_participant.randomized_group == 0:
+                        second_participant.send_email("intervention_access_later", extra_context={
+                            "username": second_participant.user.username
+                        }, mark_as='sent_intervention_access')
+                        second_participant.randomization_email_sent = True
+                        second_participant.randomization_email_sent_date = timezone.now().date()
+                        second_participant.save()
+                        print(f"[2-BLOCK RANDOMIZE] Sent intervention_access_later email to {second_participant.participant_id}")
+                    elif second_participant.randomized_group == 1:
+                        second_participant.send_email("intervention_access_immediate", extra_context={
+                            "username": second_participant.user.username,
+                            "login_link": settings.LOGIN_URL if hasattr(settings, "LOGIN_URL") else "https://your-login-page.com"
+                        }, mark_as='sent_intervention_access')
+                        second_participant.randomization_email_sent = True
+                        second_participant.randomization_email_sent_date = timezone.now().date()
+                        second_participant.save()
+                        print(f"[2-BLOCK RANDOMIZE] Sent intervention_access_immediate email to {second_participant.participant_id}")
+                except Exception as e:
+                    print(f"[2-BLOCK RANDOMIZE] ERROR: Failed to send email to second participant {second_participant.participant_id}: {str(e)}")
+        elif len(pair_participants) == 1:
+            # Only one participant in pair - randomize them now, second participant will get opposite when they join
+            single_participant = pair_participants[0]
+            
+            # Random assignment for the single participant
+            assigned_group = random.choice([0, 1])
+            single_participant.randomized_group = assigned_group
+            single_participant.group = assigned_group
+            single_participant.group_assigned = True
+            single_participant.randomization_completed = True
+            single_participant.save()
+            
+            print(f"[2-BLOCK RANDOMIZE] Single participant in Pair {participant.randomization_pair_id}: "
+                  f"Participant (ID {single_participant.id}) -> Group {assigned_group} (waiting for pair)")
+            
+            # Send notification email to the single participant
+            try:
+                if single_participant.randomized_group == 0:
+                    single_participant.send_email("intervention_access_later", extra_context={
+                        "username": single_participant.user.username
+                    }, mark_as='sent_intervention_access')
+                    single_participant.randomization_email_sent = True
+                    single_participant.randomization_email_sent_date = timezone.now().date()
+                    single_participant.save()
+                    print(f"[2-BLOCK RANDOMIZE] Sent intervention_access_later email to {single_participant.participant_id}")
+                elif single_participant.randomized_group == 1:
+                    single_participant.send_email("intervention_access_immediate", extra_context={
+                        "username": single_participant.user.username,
+                        "login_link": settings.LOGIN_URL if hasattr(settings, "LOGIN_URL") else "https://your-login-page.com"
+                    }, mark_as='sent_intervention_access')
+                    single_participant.randomization_email_sent = True
+                    single_participant.randomization_email_sent_date = timezone.now().date()
+                    single_participant.save()
+                    print(f"[2-BLOCK RANDOMIZE] Sent intervention_access_immediate email to {single_participant.participant_id}")
+            except Exception as e:
+                print(f"[2-BLOCK RANDOMIZE] ERROR: Failed to send email to single participant {single_participant.participant_id}: {str(e)}")
+        else:
+            print(f"[2-BLOCK RANDOMIZE] Pair {participant.randomization_pair_id} has unexpected number of participants: {len(pair_participants)}")
     ############### NEW DOUBLE BLIND RANDOMIZATION MECHANICS ENDS HERE ######################
     """
     Information 18: Day 57: Wave 2 Survey Ready
