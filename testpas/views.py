@@ -195,6 +195,10 @@ def login_view(request):
         
         user = authenticate(request, username=username, password=password)
         if user is not None:
+            participant = Participant.objects.filter(user=user).first()
+            if participant and not participant.is_confirmed:
+                messages.error(request, "Please confirm your registration via the email link before logging in.")
+                return render(request, 'login.html')
             print(f"[DEBUG] Authentication successful for user: {user.username}")
             login(request, user)
             next_url = request.GET.get('next', 'dashboard')  # Redirect to next URL or dashboard
@@ -299,6 +303,14 @@ def password_reset_confirm(request, token):
 
 def questionnaire_interest(request):
     """Information 4: Interest Screening - Store IRB interest response"""
+    if not request.user.is_authenticated:
+        return redirect('login')
+
+    participant = Participant.objects.filter(user=request.user).first()
+    if participant and not participant.is_confirmed:
+        messages.error(request, "Please confirm your registration via the email link before starting the survey.")
+        return redirect('login')
+
     if request.method == 'GET':
         return render(request, 'questionnaire_interest.html')
     elif request.method == 'POST':
