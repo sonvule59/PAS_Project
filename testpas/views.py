@@ -847,7 +847,6 @@ def dashboard(request):
         # Create default content if it doesn't exist
         wave2_survey_content = Content.objects.create(
             content_type='wave2_survey',
-            title='Wave 2 Online Survey',
             defaults= {
             'title': 'Wave 2 Online Survey',
             'content': (
@@ -913,7 +912,6 @@ def dashboard(request):
         # Create default content if it doesn't exist
         wave3_survey_content = Content.objects.create(
             content_type='wave3_survey',
-            title='Wave 3 Online Survey',
             defaults= {
             'title': 'Wave 3 Online Survey',
             'content': (
