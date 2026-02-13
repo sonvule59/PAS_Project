@@ -844,22 +844,22 @@ def dashboard(request):
     wave2_survey_content = None
     if study_day and 57 <= study_day <= 63:
         show_wave2_survey = True
-        try:
-            wave2_survey_content = Content.objects.get(content_type='wave2_survey')
-        except Content.DoesNotExist:
-            # Create default content if it doesn't exist
-            wave2_survey_content = Content.objects.create(
-                content_type='wave2_survey',
-                title='Wave 2 Online Survey',
-                content=(
-                    '<a href="https://s.surveyplanet.com/rh37ybo5" '
-                    'class="btn btn-primary" '
-                    'target="_blank" '
-                    'style="margin-top: 0.5rem;">'
-                    'Open Survey 2'
-                    '</a>'
-                )
+        # Create default content if it doesn't exist
+        wave2_survey_content = Content.objects.create(
+            content_type='wave2_survey',
+            title='Wave 2 Online Survey',
+            defaults= {
+            'title': 'Wave 2 Online Survey',
+            'content': (
+                '<a href="https://s.surveyplanet.com/rh37ybo5" '
+                'class="btn btn-primary" '
+                'target="_blank" '
+                'style="margin-top: 0.5rem;">'
+                'Open Survey 2'
+                '</a>'
             )
+            
+        })
 
     # Wave 2 Status Tracking
     wave2_survey_status = "Not Available"
@@ -910,22 +910,22 @@ def dashboard(request):
     wave3_survey_content = None
     if study_day and 113 <= study_day <= 119:
         show_wave3_survey = True
-        try:
-            wave3_survey_content = Content.objects.get(content_type='wave3_survey')
-        except Content.DoesNotExist:
-            # Create default content if it doesn't exist
-            wave3_survey_content = Content.objects.create(
-                content_type='wave3_survey',
-                title='Wave 3 Online Survey',
-                content=(
-                    '<a href="https://s.surveyplanet.com/tv3uouft" '
-                    'class="btn btn-primary" '
-                    'target="_blank" '
-                    'style="margin-top: 0.5rem;">'
-                    'Open Survey 3'
-                    '</a>'
-                )
+        # Create default content if it doesn't exist
+        wave3_survey_content = Content.objects.create(
+            content_type='wave3_survey',
+            title='Wave 3 Online Survey',
+            defaults= {
+            'title': 'Wave 3 Online Survey',
+            'content': (
+                '<a href="https://s.surveyplanet.com/tv3uouft" '
+                'class="btn btn-primary" '
+                'target="_blank" '
+                'style="margin-top: 0.5rem;">'
+                'Open Survey 3'
+                '</a>'
             )
+            
+        })
     
     # Information 25: Show message after Wave 3 code entry (same as email)
     show_information_25 = False
