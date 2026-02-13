@@ -16,16 +16,16 @@ EMAIL_TEMPLATES = [
         "subject": "Wave 1 Online Survey Set – Ready",
         "body": "Hi {username},\n\nCongratulations! You are now enrolled as a participant in the study."
         "\n\nYour next task is to complete the Wave 1 Online Survey Set within 7 days. You will earn $5 in your Amazon electronic gift card account for completing this task. You will receive the accrued incentives after this study ends. After 7 days, this task will expire (i.e., no Amazon gift card for this task)."
-        "\n\n· Link: {survey_link}\n\nIf you need any assistance or have any questions at any time, please contact Seungmin (“Seung”) Lee (Principal Investigator) at seunglee@iastate.edu or 517-898-0020.\n\nSincerely,\n\nThe Confident Moves Research Team"
+        "\n\n· Link: {survey_link}\n\nYou may click the following link to view and download the consent document for your records:[a link that will be updated by researchers]\n\nIf you need any assistance or have any questions at any time, please contact Seungmin (“Seung”) Lee (Principal Investigator) at seunglee@iastate.edu or 517-898-0020.\n\nSincerely,\n\nThe Confident Moves Research Team"
     },
     {
         "name": "wave1_monitor_ready",
         "subject": "Wave 1 Physical Activity Monitoring – Ready",
         "body": (
             "Hi {username},\n\n"
-            "Your next task is to complete Wave 1 Physical Activity Monitoring.\n"
+            "Your next task is to complete Wave 1 Physical Activity Monitoring.\n\n"
             "You need to enter a code on the website within 14 days to complete the physical activity monitoring. "
-            "The code can be found in the mail package that will arrive at your address (the one you provided) in a few days.\n"
+            "The code can be found in the mail package that will arrive at your address (the one you provided) in a few days.\n\n"
             "You will earn an additional $25 in your Amazon electronic gift card account for completing this task. "
             "You will receive the accrued incentives after this study ends. After 14 days, this task will expire (i.e., no Amazon gift card for this task).\n\n"
             "If you need any assistance or have any questions at any time, please contact Seungmin (“Seung”) Lee (Principal Investigator) "
@@ -103,9 +103,9 @@ EMAIL_TEMPLATES = [
             "Hi {username},\n\n"
             "Your next task is to complete the Wave 2 Online Survey Set within 7 days. You will earn $5 in your Amazon electronic gift card account for completing this task. "
             "You will receive the accrued incentives after this study ends. After 7 days, this task will expire (i.e., no Amazon gift card for this task).\n"
-            "· Link: TBD\n\n"
+            "· Link: {survey_link}\n\n"
             "If you need any assistance or have any questions at any time, please contact Seungmin Lee (Principal Investigator) at seunglee@iastate.edu or 517-898-0020.\n\n"
-            "Sincerely,\n"
+            "Sincerely,\n\n"
             "The Confident Moves Research Team"
         )
     },
@@ -117,7 +117,7 @@ EMAIL_TEMPLATES = [
             "There is no Wave 2 Physical Activity Monitoring.\n\n"
             "We will email you again in approximately 4 weeks for the next task (i.e., completing an online survey set). Please regularly check your inbox. You will receive the accrued incentives after this study ends.\n\n"
             "If you need any assistance or have any questions at any time, please contact Seungmin (“Seung”) Lee (Principal Investigator) at seunglee@iastate.edu or 517-898-0020.\n\n"
-            "Sincerely,\n"
+            "Sincerely,\n\n"
             "The Confident Moves Research Team"
         )
     },
@@ -129,9 +129,9 @@ EMAIL_TEMPLATES = [
             "Hi {username},\n\n"
             "Your next task is to complete the Wave 3 Online Survey Set within 7 days. You will earn $5 in your Amazon electronic gift card account for completing this task. "
             "You will receive the accrued incentives after this study ends. After 7 days, this task will expire (i.e., no Amazon gift card for this task).\n"
-            "· Link: TBD\n\n"
+            "· Link: {survey_link}\n\n"
             "If you need any assistance or have any questions at any time, please contact Seungmin Lee (Principal Investigator) at seunglee@iastate.edu or 517-898-0020.\n\n"
-            "Sincerely,\n"
+            "Sincerely,\n\n"
             "The Confident Moves Research Team"
         )
     },
@@ -141,10 +141,10 @@ EMAIL_TEMPLATES = [
         "body": (
             "Hi {username},\n\n"
             "Your next task is to complete Wave 3 Physical Activity Monitoring.\n"
-            "You need to enter a code on the website within 14 days to complete the physical activity monitoring. The code can be found in the mail package that will arrive at your address (the one you provided) in a few days.\n"
+            "You need to enter a code on the website within 14 days to complete the physical activity monitoring. The code can be found in the mail package that will arrive at your address (the one you provided) in a few days.\n\n"
             "You will earn an additional $30 in your Amazon electronic gift card account for completing this task. You will receive the accrued incentives after this study ends. After 14 days, this task will expire (i.e., no Amazon gift card for this task).\n\n"
             "If you need any assistance or have any questions at any time, please contact Seungmin Lee (Principal Investigator) at seunglee@iastate.edu or 517-898-0020.\n\n"
-            "Sincerely,\n"
+            "Sincerely,\n\n"
             "The Confident Moves Research Team"
         )
     },
@@ -158,7 +158,7 @@ EMAIL_TEMPLATES = [
             "Please wear the monitor as much as possible during the seven consecutive days. To earn $30 in Amazon gift cards, please wear the monitor for at least 3 days with at least 10 hours each day. If this requirement is not met, we may not be able to provide the incentive.\n\n"
             "Please keep the yellow prepaid envelope. You will use it to return the monitor after the 7 days.\n\n"
             "If you need any assistance or have any questions at any time, please contact Seungmin Lee (Principal Investigator) at seunglee@iastate.edu or 517-898-0020.\n\n"
-            "Sincerely,\n"
+            "Sincerely,\n\n"
             "The Confident Moves Research Team"
         )
     },
@@ -171,7 +171,7 @@ EMAIL_TEMPLATES = [
             "Please return the monitor using the yellow prepaid envelope that was included in the mail package. If possible, within 3 days, visit a nearby USPS office or drop it in a USPS dropbox. The monitor is expensive and important to us.\n\n"
             "If you complete the above tasks, no further action is required for this study.\n\n"
             "Any funds earned on your Amazon electronic gift card account will be sent to you as soon as possible via your email. Thank you for the time you have contributed to this study!\n\n"
-            "Sincerely,\n"
+            "Sincerely,\n\n"
             "The Confident Moves Research Team"
         )
     },
@@ -184,24 +184,21 @@ EMAIL_TEMPLATES = [
             "You may have received our mail package—please check your mailbox. Please (a) open the package and (b) return the monitor using the yellow prepaid envelope. If possible, within 3 days, visit a nearby USPS office or drop it in a USPS dropbox. The monitor is expensive and important to us.\n\n"
             "If you complete the above tasks, no further action is required for this study.\n\n"
             "Any funds earned on your Amazon electronic gift card account will be sent to you as soon as possible via your email. Thank you for the time you have contributed to this study!\n\n"
-            "Sincerely,\n"
+            "Sincerely,\n\n"
             "The Confident Moves Research Team"
         )
     },
     {
         "name": "study_end",
-        "subject": "CM (Confident Moves) Study Concluded",
+        "subject": "Return Monitor (Study End)",
         "body": (
             "Hi {username},\n\n"
-            "Thank you for participating in the CM-Confident Moves study. The study has now concluded.\n\n"
-            "Your final tasks are:\n"
-            "1. Please complete a short survey. This task must be done by today and should take approximately 10 minutes to complete.\n"
-            "   Please click the following link to complete the task: {survey_link}\n\n"
-            "2. Please return the monitor. Within a couple of days, research members will contact you to arrange the return.\n\n"
-            "If you were assigned to Group 0, you will now receive access to the intervention. "
-            "Please check your email for intervention access instructions.\n\n"
-            "If you need any assistance or have questions, please contact Seungmin Lee at svu23@iastate.edu or 517-898-0020.\n\n"
-            "Sincerely,\nThe Confident Moves Research Team"
+            "The timeline for wearing the physical activity monitor is complete for this wave.\n\n"
+            "Please return the monitor using the yellow prepaid envelope that was included in the mail package. If possible, within 3 days, visit a nearby USPS office or drop it in a USPS dropbox. The monitor is expensive and important to us.\n\n"
+            "If you complete the above tasks, no further action is required for this study.\n\n"
+            "Any funds earned on your Amazon electronic gift card account will be sent to you as soon as possible via your email. Thank you for the time you have contributed to this study!\n\n"
+            "Sincerely,\n\n"
+            "The Confident Moves Research Team"
         )
     },
 ]

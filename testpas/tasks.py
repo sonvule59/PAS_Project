@@ -13,6 +13,10 @@ from .models import User
 from .timeline import get_study_day
 import logging
 
+survey1_link = "https://s.surveyplanet.com/yuy9vvug"
+survey2_link = "https://s.surveyplanet.com/jvbpp9rs"
+survey3_link = "https://s.surveyplanet.com/oai3qp0z"
+
 from .timeline import get_timeline_day
 @shared_task
 def run_daily_timeline_checks():
@@ -144,7 +148,7 @@ def daily_timeline_check(user):
         try:
             participant.send_email(
                 "wave1_survey_ready", 
-                extra_context={'username': user.username, 'participant_id': participant.participant_id},
+                extra_context={'username': user.username, 'participant_id': participant.participant_id, 'survey_link': survey1_link},
                 mark_as='sent_wave1_survey'
             )
             print(f"[EMAIL] ✓ Successfully sent Wave 1 survey email to {participant.participant_id}")
@@ -516,6 +520,7 @@ def daily_timeline_check(user):
                     extra_context={
                         # "participant_id": participant.participant_id,
                         "username": participant.user.username,
+                        "survey_link": survey2_link,
                     }
                 )
                 print(f"[INFO 18] Successfully sent Wave 2 survey email to {participant.participant_id}")
@@ -554,7 +559,8 @@ def daily_timeline_check(user):
         participant.send_email(
             "wave3_survey_ready", 
             extra_context={
-                "username": user.username})
+                "username": participant.user.username,
+                "survey_link": survey3_link,})
         participant.wave3_survey_email_sent = True
         participant.save()
 
