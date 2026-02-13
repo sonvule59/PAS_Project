@@ -803,7 +803,7 @@ def dashboard(request):
             # Create default content if it doesn't exist
             information_16_content = Content.objects.create(
                 content_type='information_16',
-                title='Information 16 - Control Group Message',
+                title='Information 16: (Website, Email) Next Task in Approximately 4 Weeks',
                 content=(
                     '<div>'
                     '<p>We recommend that you maintain your usual daily routines. We will email you again in approximately 4 weeks for the next task (i.e., completing an online survey set). Please regularly check your inbox. You will receive the accrued incentives after this study ends.</p>'
