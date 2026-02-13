@@ -852,9 +852,12 @@ def dashboard(request):
                 content_type='wave2_survey',
                 title='Wave 2 Online Survey',
                 content=(
-                    '<div>'
-                    '<a href="https://s.surveyplanet.com/rh37ybo5" class="btn btn-primary" style="margin-top: 0.5rem;">Open Survey 2</a>'
-                    '</div>'
+                    '<a href="https://s.surveyplanet.com/rh37ybo5" '
+                    'class="btn btn-primary" '
+                    'target="_blank" '
+                    'style="margin-top: 0.5rem;">'
+                    'Open Survey 2'
+                    '</a>'
                 )
             )
 
@@ -915,9 +918,12 @@ def dashboard(request):
                 content_type='wave3_survey',
                 title='Wave 3 Online Survey',
                 content=(
-                    '<div>'
-                    '<a href="https://s.surveyplanet.com/tv3uouft" class="btn btn-primary" style="margin-top: 0.5rem;">Open Survey 3</a>'
-                    '</div>'
+                    '<a href="https://s.surveyplanet.com/tv3uouft" '
+                    'class="btn btn-primary" '
+                    'target="_blank" '
+                    'style="margin-top: 0.5rem;">'
+                    'Open Survey 3'
+                    '</a>'
                 )
             )
     
