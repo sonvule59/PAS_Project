@@ -1112,17 +1112,17 @@ def enter_code(request, wave):
                             print(f"[SEND] Sent wave3_code_entry email synchronously for participant {participant.participant_id}")
                         except Exception as e2:
                             print(f"[ERROR] Failed to send wave3_code_entry email for participant {participant.participant_id}: {e2}")
-                    # Send Information 25 email asynchronously - use participant.id (database ID)
-                    try:
-                        send_wave3_code_entry_email.delay(participant.id)
-                        print(f"[SEND] Queued Wave 3 code entry email for participant {participant.participant_id}")
-                    except Exception as e:
-                        # If Celery is not available, try synchronous sending as fallback
-                        print(f"[ERROR] Celery task failed for Wave 3 code entry email, trying synchronous: {e}")
-                        try:
-                            send_wave3_code_entry_email(participant.id)
-                        except Exception as e2:
-                            print(f"[ERROR] Failed to send Wave 3 code entry email for participant {participant.participant_id}: {e2}")
+                    # # Send Information 25 email asynchronously - use participant.id (database ID)
+                    # try:
+                    #     send_wave3_code_entry_email.delay(participant.id)
+                    #     print(f"[SEND] Queued Wave 3 code entry email for participant {participant.participant_id}")
+                    # except Exception as e:
+                    #     # If Celery is not available, try synchronous sending as fallback
+                    #     print(f"[ERROR] Celery task failed for Wave 3 code entry email, trying synchronous: {e}")
+                    #     try:
+                    #         send_wave3_code_entry_email(participant.id)
+                    #     except Exception as e2:
+                    #         print(f"[ERROR] Failed to send Wave 3 code entry email for participant {participant.participant_id}: {e2}")
                     
                     messages.success(request, "Code entered successfully!")
                     return redirect('code_success', wave=wave)
