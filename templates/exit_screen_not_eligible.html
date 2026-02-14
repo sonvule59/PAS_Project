@@ -6,14 +6,68 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Exit Screen</title>
     <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        .card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            padding: 2.5rem;
+        }
+        .card h1 {
+            color: #333;
+            margin: 0 0 1.5rem 0;
+            font-size: 2rem;
+            font-weight: 300;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 1rem;
+        }
+        .card h2 {
+            color: #555;
+            margin: 1.5rem 0 1rem 0;
+            font-size: 1.3rem;
+            font-weight: 500;
+        }
+        .btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 28px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 500;
+            margin-top: 1.5rem;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(102, 126, 234, 0.3);
+        }
+        .footer {
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid #eee;
+            color: #888;
+            font-size: 0.9rem;
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <h1>Thank You for Your Interest</h1>
-    </header>
-    
-    <main>
-        <section id="exit-screen">
+    <div class="container">
+        <div class="card">
+            <h1>Thank You for Your Interest</h1>
             {% if content %}
                 {{ content.content|safe }}
             {% else %}
@@ -29,12 +83,11 @@
                 The Confident Moves Research Team
             </p>
             {% endif %}
-            <a href="/">Return to Home Page</a>
-        </section>
-    </main>
-
-    <footer>
-        <p>&copy;Confident Moves Intervention. All rights reserved.</p>
-    </footer>
+            <a class="btn" href="/">Return to Home Page</a>
+            <div class="footer">
+                © Confident Moves Intervention. All rights reserved.
+            </div>
+        </div>
+    </div>
 </body>
 </html>
