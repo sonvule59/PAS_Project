@@ -199,6 +199,11 @@ def login_view(request):
             if participant and not participant.is_confirmed:
                 messages.error(request, "Please confirm your registration via the email link before logging in.")
                 return render(request, 'login.html')
+            survey_progress = SurveyProgress.objects.filter(user=user).first()
+            if not survey_progress or not survey_progress.interest_submitted:
+                messages.info(request, "Please complete the interest questionnaire before continuing.")
+                login(request, user)
+                return redirect('questionnaire_interest')
             print(f"[DEBUG] Authentication successful for user: {user.username}")
             login(request, user)
             next_url = request.GET.get('next', 'dashboard')  # Redirect to next URL or dashboard
@@ -397,6 +402,13 @@ def create_participant(request):
 """Information 4: Eligibility Questionnaire"""
 @login_required
 def questionnaire(request):
+    survey_progress = SurveyProgress.objects.filter(user=request.user).first()
+    if not survey_progress or not survey_progress.interest_submitted:
+        messages.info(request, "Please complete the interest questionnaire before continuing.")
+        return redirect('questionnaire_interest')
+    if survey_progress.interest_submitted and survey_progress.interested is False:
+        return redirect('exit_screen_not_interested')
+
     if request.method == "POST":
         user = request.user
         answers = request.POST
