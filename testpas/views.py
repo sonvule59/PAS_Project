@@ -529,6 +529,45 @@ def consent_form(request, survey_id=None):
         consent_choice = request.POST.get('consent')
         if consent_choice == 'no':
             print(f"[ERROR] User {request.user.username} declined consent")
+            consent_reason = request.POST.get('consent_reason', '').strip()
+            # Track consent decision and reason (if provided)
+            survey_progress, _ = SurveyProgress.objects.get_or_create(
+                user=request.user,
+                defaults={'consent_submitted': True, 'consented': False}
+            )
+            if survey_progress:
+                survey_progress.consent_submitted = True
+                survey_progress.consented = False
+                survey_progress.save()
+
+            try:
+                consent_survey, _ = Survey.objects.get_or_create(
+                    title="Consent Form",
+                    defaults={"description": "Information 6: Consent to Participate"}
+                )
+                question_consent, _ = Question.objects.get_or_create(
+                    survey=consent_survey,
+                    question_text="I consent to participate in this study",
+                    defaults={}
+                )
+                Response.objects.create(
+                    user=request.user,
+                    question=question_consent,
+                    answer="no"
+                )
+                if consent_reason:
+                    question_reason, _ = Question.objects.get_or_create(
+                        survey=consent_survey,
+                        question_text="If you do not consent, please provide a brief reason",
+                        defaults={}
+                    )
+                    Response.objects.create(
+                        user=request.user,
+                        question=question_reason,
+                        answer=consent_reason
+                    )
+            except Exception as e:
+                print(f"[ERROR] Failed to save consent decline reason: {e}")
             return redirect('exit_screen_not_interested')
         
         form = ConsentForm(request.POST)
@@ -585,11 +624,21 @@ def consent_form(request, survey_id=None):
 
 # INFORMATION 10: Exit Screen for Not Eligible
 def exit_screen_not_eligible(request):
-    try:
-        content = Content.objects.get(content_type='exit_screen')
-        return render(request, 'exit_screen_not_eligible.html', {'content': content})
-    except Content.DoesNotExist:
-        return render(request, 'exit_screen_not_eligible.html')
+    content, _ = Content.objects.get_or_create(
+        content_type='exit_screen',
+        defaults={
+            'title': 'Exit Screen',
+            'content': (
+                '<h2>Thank You for Your Interest</h2>'
+                '<p>Unfortunately, we are unable to enroll you at this time. Thank you for taking the time to learn more about the study.</p>'
+                '<p>If you need any assistance or have any questions at any time, please contact Seungmin ("Seung") Lee (Principal Investigator) at '
+                '<a href="mailto:seunglee@iastate.edu">seunglee@iastate.edu</a> or '
+                '<a href="tel:517-898-0020">517-898-0020</a>.</p>'
+                '<p>Sincerely,<br><br>The Confident Moves Research Team</p>'
+            )
+        }
+    )
+    return render(request, 'exit_screen_not_eligible.html', {'content': content})
 
 @login_required
 def survey_view(request, wave):
@@ -809,21 +858,19 @@ def dashboard(request):
         participant and participant.randomized_group == 0):
         show_information_16 = True
         print(f"[DEBUG] Showing Information 16 for Group 0 participant on Day {study_day}")
-        try:
-            information_16_content = Content.objects.get(content_type='information_16')
-        except Content.DoesNotExist:
-            # Create default content if it doesn't exist
-            information_16_content = Content.objects.create(
-                content_type='information_16',
-                title='Information 16: (Website, Email) Next Task in Approximately 4 Weeks',
-                content=(
+        information_16_content, _ = Content.objects.get_or_create(
+            content_type='information_16',
+            defaults={
+                'title': 'Information 16: (Website, Email) Next Task in Approximately 4 Weeks',
+                'content': (
                     '<div>'
                     '<p>We recommend that you maintain your usual daily routines. We will email you again in approximately 4 weeks for the next task (i.e., completing an online survey set). Please regularly check your inbox. You will receive the accrued incentives after this study ends.</p>'
                     '<p>If you need any assistance or have any questions at any time, please contact Seungmin ("Seung") Lee (Principal Investigator) at <a href="mailto:seunglee@iastate.edu">seunglee@iastate.edu</a> or <a href="tel:517-898-0020">517-898-0020</a>.</p>'
                     '<p><strong>Sincerely,</strong><br>The Confident Moves Research Team</p>'
                     '</div>'
                 )
-            )
+            }
+        )
 
     # Check if Information 17 should be shown for Group 1 (Days 29-56)
     # Information 17: Intervention group sees this message from Day 29 to Day 56, removed on Day 57
@@ -833,14 +880,11 @@ def dashboard(request):
         participant and participant.randomized_group is not None and participant.randomized_group == 1):
         show_information_17 = True
         print(f"[DEBUG] Showing Information 17 for Group 1 participant on Day {study_day}")
-        try:
-            information_17_content = Content.objects.get(content_type='information_17')
-        except Content.DoesNotExist:
-            # Create default content if it doesn't exist
-            information_17_content = Content.objects.create(
-                content_type='information_17',
-                title='Information 17 - Intervention Group Message',
-                content=(
+        information_17_content, _ = Content.objects.get_or_create(
+            content_type='information_17',
+            defaults={
+                'title': 'Information 17 - Intervention Group Message',
+                'content': (
                     '<div>'
                     '<p>Congratulations! You have been assigned to the intervention group (Group 1).</p>'
                     '<p>You now have access to the physical activity intervention from Day 29 to Day 56. You can access the intervention by clicking the button below.</p>'
@@ -849,7 +893,8 @@ def dashboard(request):
                     '<p><strong>Sincerely,</strong><br>The Confident Moves Research Team</p>'
                     '</div>'
                 )
-            )
+            }
+        )
 
     # Check if Wave 2 survey should be shown (Days 57-63)
     show_wave2_survey = False
@@ -899,14 +944,11 @@ def dashboard(request):
     information_20_content = None
     if study_day and 64 <= study_day <= 112:
         show_information_20 = True
-        try:
-            information_20_content = Content.objects.get(content_type='information_20')
-        except Content.DoesNotExist:
-            # Create default content if it doesn't exist
-            information_20_content = Content.objects.create(
-                content_type='information_20',
-                title='Information 20 - No Wave 2 Physical Activity Monitoring',
-                content=(
+        information_20_content, _ = Content.objects.get_or_create(
+            content_type='information_20',
+            defaults={
+                'title': 'Information 20 - No Wave 2 Physical Activity Monitoring',
+                'content': (
                     '<div>'
                     '<p>There is no Wave 2 Physical Activity Monitoring.</p>'
                     '<p>We will email you again in approximately 4 weeks for the next task (i.e., completing an online survey set). Please regularly check your inbox. You will receive the accrued incentives after this study ends.</p>'
@@ -914,7 +956,8 @@ def dashboard(request):
                     '<p><strong>Sincerely,</strong><br>The Confident Moves Research Team</p>'
                     '</div>'
                 )
-            )
+            }
+        )
 
     # Check if Wave 3 survey should be shown (Days 113-119)
     show_wave3_survey = False
@@ -1193,8 +1236,21 @@ def code_failure(request):
     return render(request, 'code_failure.html', {'days_remaining': days_remaining})
 
 def exit_screen_not_interested(request):
-    if request.method == 'GET':
-        return render(request, 'exit_screen_not_interested.html')
+    content, _ = Content.objects.get_or_create(
+        content_type='exit_screen',
+        defaults={
+            'title': 'Exit Screen',
+            'content': (
+                '<h2>Thank You for Your Interest</h2>'
+                '<p>Unfortunately, we are unable to enroll you at this time. Thank you for taking the time to learn more about the study.</p>'
+                '<p>If you need any assistance or have any questions at any time, please contact Seungmin ("Seung") Lee (Principal Investigator) at '
+                '<a href="mailto:seunglee@iastate.edu">seunglee@iastate.edu</a> or '
+                '<a href="tel:517-898-0020">517-898-0020</a>.</p>'
+                '<p>Sincerely,<br><br>The Confident Moves Research Team</p>'
+            )
+        }
+    )
+    return render(request, 'exit_screen_not_interested.html', {'content': content})
 def waiting_screen(request):
     try:
         content = Content.objects.get(content_type='waiting_screen')

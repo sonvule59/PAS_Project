@@ -116,6 +116,6 @@ else:
     app.conf.beat_schedule = {
         'run-daily-timeline-checks': {
             'task': 'testpas.tasks.run_daily_timeline_checks',
-            'schedule': crontab(hour='21', minute='30')
+            'schedule': crontab(hour=7, minute=0)
         },
     }

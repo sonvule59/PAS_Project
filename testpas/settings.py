@@ -204,6 +204,7 @@ CELERY_TASK_REJECT_ON_WORKER_LOST = True  # Reject tasks if worker dies
 CELERY_WORKER_PREFETCH_MULTIPLIER = 1  # Only prefetch one task at a time to prevent duplicates
 CELERY_TASK_MAX_RETRIES = 0  # Don't automatically retry failed tasks (we handle retries manually)
 CELERY_TASK_DEFAULT_RETRY_DELAY = 0  # No default retry delay
+from celery.schedules import crontab
 CELERY_BEAT_SCHEDULE = {
     'run-timeline-checks': {
         'task': 'testpas.tasks.run_daily_timeline_checks',

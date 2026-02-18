@@ -50,7 +50,7 @@ urlpatterns = [
     # path('consent/download/', views.download_consent, name='download_consent'),
     
     # Information 7: Exit Screens
-    # path('exit/not-interested/', views.exit_not_interested, name='exit_not_interested'),
+    path('exit/not-interested/', views.exit_screen_not_interested, name='exit_screen_not_interested'),
     path('exit/not-eligible/', views.exit_screen_not_eligible, name='exit_screen_not_eligible'),
 
     

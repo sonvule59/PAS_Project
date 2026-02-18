@@ -159,6 +159,20 @@ class UserLoginForm(forms.Form):
 
 class ConsentForm(forms.Form):
     consent = forms.BooleanField(label="I consent to participate in this study", required=True)
+    consent_reason = forms.CharField(
+        max_length=500,
+        required=False,
+        label="If you do not consent, please provide a brief reason",
+        widget=forms.Textarea(attrs={'rows': 3, 'cols': 40})
+    )
+
+    def clean(self):
+        cleaned_data = super().clean()
+        consent = cleaned_data.get('consent')
+        reason = cleaned_data.get('consent_reason')
+        if consent is False and not reason:
+            raise forms.ValidationError("Please provide a reason if you do not consent.")
+        return cleaned_data
 
 class PasswordResetForm(forms.Form):
     identifier = forms.CharField(
