@@ -304,13 +304,22 @@ class Participant(models.Model):
         self.email_send_date = timezone.now().date()
         self.save()
 
-    def send_missing_code_email(self):  # Info 14
+    #Info 14 - Day 22: Missing Code Entry (Wave 1)
+    # IMPORTANT: Only send ONCE on Day 22 if code NOT entered. Then stop checking.
+    # Whether they enter code or not, they move to randomization (Info 15) on Day 29.
+    # CRITICAL: Only send during Wave 1 period (Days 22-28). After Day 29 (randomization), don't send Wave 1 emails.
+    def send_missing_code_email(self): 
         template = EmailTemplate.objects.get(name='wave1_missing_code')
         message = template.body.format(username=self.user.username)
         send_mail(template.subject, message, settings.DEFAULT_FROM_EMAIL, [self.user.email, 'vuleson59@gmail.com'], fail_silently=False)
         self.email_status = 'sent'
         self.email_send_date = timezone.now().date()
         self.save()
+
+    #Info 16 & 19 - Day 29: No Monitoring Access (Wave 2)
+    # IMPORTANT: Only send ONCE on Day 29 if no monitoring access. Then stop checking.
+    # Whether they have access or not, they move to randomization (Info 15) on Day 29.
+    # CRITICAL: Only send during Wave 2 period (Days 29-35). After Day 35 (randomization), don't send Wave 2 emails.
     def send_wave2_no_monitoring_email(self):  # Info 16 & 19
         template = EmailTemplate.objects.get(name='intervention_access_later' if self.group == 0 else 'wave2_no_monitoring')
         message = template.body.format(participant_id=self.participant_id)
@@ -319,7 +328,11 @@ class Participant(models.Model):
         self.email_send_date = timezone.now().date()
         self.save()
 
-    def send_wave2_survey_email(self):  # Info 17 & 18
+    #Info 17 & 18 - Day 57: Survey Ready (Wave 2)
+    # IMPORTANT: Only send ONCE on Day 57 if survey is ready. Then stop checking.
+    # Whether they have access or not, they move to randomization (Info 15) on Day 29.
+    # CRITICAL: Only send during Wave 2 period (Days 29-35). After Day 35 (randomization), don't send Wave 2 emails.
+    def send_wave2_survey_email(self): 
         template = EmailTemplate.objects.get(name='intervention_access_immediate' if self.group == 1 and self.intervention_start_date == timezone.now().date() else 'wave2_survey_ready')
         message = template.body.format(participant_id=self.participant_id)
         send_mail(template.subject, message, settings.DEFAULT_FROM_EMAIL, [self.user.email, 'vuleson59@gmail.com'], fail_silently=False)

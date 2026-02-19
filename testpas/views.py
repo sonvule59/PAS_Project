@@ -200,6 +200,9 @@ def login_view(request):
                 messages.error(request, "Please confirm your registration via the email link before logging in.")
                 return render(request, 'login.html')
             survey_progress = SurveyProgress.objects.filter(user=user).first()
+            if survey_progress and survey_progress.consent_submitted and survey_progress.consented is False:
+                messages.error(request, "You declined consent and cannot log in.")
+                return redirect('exit_screen_not_interested')
             if not survey_progress or not survey_progress.interest_submitted:
                 messages.info(request, "Please complete the interest questionnaire before continuing.")
                 login(request, user)
@@ -522,6 +525,9 @@ def send_wave_1_email(user):
 Participants should be able to access the IRB consent form on the website."""
 @login_required
 def consent_form(request, survey_id=None):
+    survey_progress = SurveyProgress.objects.filter(user=request.user).first()
+    if survey_progress and survey_progress.consent_submitted and survey_progress.consented is False:
+        return redirect('exit_screen_not_interested')
     if request.method == "POST":
         print(f"[DEBUG] Consent form POST data for {request.user.username}: {dict(request.POST)}")
         
@@ -693,6 +699,10 @@ def dashboard(request):
     print(f"[DEBUG] User ID: {request.user.id}")
     print(f"[DEBUG] User is authenticated: {request.user.is_authenticated}")
     
+    survey_progress = SurveyProgress.objects.filter(user=request.user).first()
+    if survey_progress and survey_progress.consent_submitted and survey_progress.consented is False:
+        return redirect('exit_screen_not_interested')
+
     user_progress = UserSurveyProgress.objects.filter(user=request.user, survey__title="Eligibility Criteria").first()
     participant = Participant.objects.filter(user=request.user).first()
     progress_percentage = 0  # Default if not eligible or study_day not set
