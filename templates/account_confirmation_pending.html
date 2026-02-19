@@ -1,0 +1,35 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirm Your Email</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <style>
+        body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .container { max-width: 900px; margin: 0 auto; padding: 2.5rem 1.5rem; }
+        .card { background: #fff; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); padding: 2rem; }
+        h1 { margin: 0 0 0.5rem 0; font-weight: 600; color: #333; }
+        p { color: #444; font-size: 1rem; line-height: 1.6; }
+        .badge { display: inline-block; background: #f0f4ff; color: #3f51b5; padding: 6px 12px; border-radius: 999px; font-weight: 600; font-size: 0.9rem; margin-bottom: 1rem; }
+        .actions { margin-top: 1.5rem; display: flex; gap: 10px; flex-wrap: wrap; }
+        .btn { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #fff; padding: 10px 16px; border-radius: 8px; text-decoration: none; font-weight: 600; }
+        .muted { color: #666; font-size: 0.95rem; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="badge">Account Created</div>
+            <h1>Please Confirm Your Email</h1>
+            <p>We’ve sent a confirmation link to your email address. Please open your inbox and click the link to activate your account.</p>
+            <p class="muted">If you don’t see it, check your spam or junk folder.</p>
+            <div class="actions">
+                <a class="btn" href="{% url 'login' %}">Go to Login</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

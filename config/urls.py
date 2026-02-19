@@ -24,6 +24,7 @@ from testpas.views import *
 urlpatterns = [
     # Landing page and authentication
     path('', views.landing, name='landing'),
+    path('account/confirmation-pending/', views.account_confirmation_pending, name='account_confirmation_pending'),
     path('home/', views.home, name='home'),
     path('test-challenges/', views.test_all_challenges, name='test_all_challenges'),
     path('login/', views.login_view, name='login'),

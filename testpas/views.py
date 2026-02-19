@@ -46,6 +46,12 @@ def landing(request):
         return redirect('dashboard')
     return render(request, 'landing.html')
 
+def account_confirmation_pending(request):
+    """Show confirmation pending message after account creation"""
+    if request.user.is_authenticated:
+        return redirect('dashboard')
+    return render(request, 'account_confirmation_pending.html')
+
 def test_all_challenges(request):
     """Test page with links to all challenges for quick testing"""
     return render(request, 'test_all_challenges.html')
@@ -122,10 +128,10 @@ def create_account(request):
                         return JsonResponse({
                             'status': 'success',
                             'message': 'Account created. Please check your email to confirm.',
-                            'redirect': '/'
+                            'redirect': '/account/confirmation-pending/'
                         })
                     messages.success(request, "Account created. Please check your email to confirm.")
-                    return redirect("landing")
+                    return redirect("account_confirmation_pending")
                 except Exception as e:
                     import traceback
                     error_trace = traceback.format_exc()
