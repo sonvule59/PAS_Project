@@ -394,17 +394,6 @@
                 </div>
             {% endif %}
 
-            <!-- Debug info for intervention button (only shown if Information 17 is not showing) -->
-            {% if debug_intervention and not show_information_17 %}
-                <div class="card" style="background-color: #fff3cd; border: 1px solid #ffc107;">
-                    <p><strong>Debug - Intervention Button:</strong></p>
-                    <p>Randomized Group: {{ debug_intervention.randomized_group|default:"None" }}</p>
-                    <p>Study Day: {{ debug_intervention.study_day }}</p>
-                    <p>Randomization Completed: {{ debug_intervention.randomization_completed }}</p>
-                    <p>Should Show: {{ debug_intervention.should_show }}</p>
-                </div>
-            {% endif %}
-
             <!-- Wave 1 Code Entry -->
             {% if progress.day_1 %}
                 {% if within_wave1_period %}
