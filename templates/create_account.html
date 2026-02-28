@@ -172,15 +172,15 @@
                 {% csrf_token %}
                 
                 <div class="form-group">
-                    <label for="full_name">Full Name*</label>
-                    <input type="text" id="full_name" name="full_name" required placeholder="Enter your full name">
+                    <label for="registration_code">Registration Code*</label>
+                    <input type="text" id="registration_code" name="registration_code" required placeholder="Enter registration code">
                 </div>
-                
+
                 <div class="form-group">
                     <label for="username">ID (non-case-sensitive)*</label>
                     <input type="text" id="username" name="username" required placeholder="Enter your ID">
                 </div>
-                
+
                 <div class="form-group">
                     <label for="password">Password (case-sensitive)*</label>
                     <input type="password" id="password" name="password" required placeholder="Enter your password">
@@ -189,6 +189,11 @@
                 <div class="form-group">
                     <label for="password_confirm">Password Confirmation (case-sensitive)*</label>
                     <input type="password" id="password_confirm" name="password_confirm" required placeholder="Confirm your password">
+                </div>
+
+                <div class="form-group">
+                    <label for="full_name">Full Name*</label>
+                    <input type="text" id="full_name" name="full_name" required placeholder="Enter your full name">
                 </div>
                 
                 <div class="form-group">
@@ -199,11 +204,6 @@
                 <div class="form-group">
                     <label for="phone_number">Phone Number*</label>
                     <input type="tel" id="phone_number" name="phone_number" required placeholder="Enter your phone number">
-                </div>
-                
-                <div class="form-group">
-                    <label for="registration_code">Registration Code*</label>
-                    <input type="text" id="registration_code" name="registration_code" required placeholder="Enter registration code">
                 </div>
                 
                 <h2>Address Information</h2>
