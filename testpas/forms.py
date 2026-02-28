@@ -41,7 +41,7 @@ class UserRegistrationForm(forms.Form):
     def clean_registration_code(self):
         code = self.cleaned_data.get('registration_code', '').strip().lower()
         if code != 'wavepa':
-            raise forms.ValidationError("Invalid registration code. Please enter 'wavepa'.")
+            raise forms.ValidationError("Invalid registration code.")
         return code
 
     # FIX 4: Validate password confirmation

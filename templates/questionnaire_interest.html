@@ -148,7 +148,10 @@
     <div class="container">
         <div class="card">
             <h1>Participation Questionnaire</h1>
-            <h2>Are you interested in participating in the eligibility questionnaire?</h2>
+            <h2>Interested in Determining Eligibility</h2>
+            <p>To determine if you are eligible to enroll in this study, we need to ask you a few questions. This will take approximately 1-2 minutes.</p>
+            <p>If you are interested, please click "Interested" to answer the questions.</p>
+            <p>If you are not interested, please click "Not Interested" and provide a brief reason.</p>
             
             <form id="questionnaire-interest-form" action="" method="POST">
                 {% csrf_token %}
@@ -156,17 +159,17 @@
                 <div class="form-group">
                     <div class="radio-group">
                         <label>
-                            <input type="radio" name="interested" value="yes" required> Yes
+                            <input type="radio" name="interested" value="yes" required> Interested
                         </label>
                         <label>
-                            <input type="radio" name="interested" value="no" required> No
+                            <input type="radio" name="interested" value="no" required> Not Interested
                         </label>
                     </div>
                 </div>
                 
                 <div id="reason-field" style="display: none;">
-                    <label for="reason">If not interested, please provide a brief reason:</label>
-                    <textarea name="reason" id="reason" rows="4" placeholder="Please provide your reason here..."></textarea>
+                    <label for="reason">Not interested because</label>
+                    <textarea name="reason" id="reason" rows="4" placeholder="Type your answer"></textarea>
                 </div>
                 
                 <button type="submit" class="btn">Submit</button>
