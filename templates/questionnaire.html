@@ -158,26 +158,9 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="height">2. Height in Inches</label>
+                    <label for="height">2. Height</label>
                     <select id="height" name="height" required>
                         <option value="">Select your height</option>
-                        <option value="lt48">Less than 4 feet 0 inches</option>
-                        {% for i in "123456789"|make_list %}
-                            <option value="{{ forloop.counter|add:47 }}">{{ forloop.counter|add:47 }} inches</option>
-                        {% endfor %}
-                        {% for i in "123456789"|make_list %}
-                            <option value="{{ forloop.counter|add:56 }}">{{ forloop.counter|add:56 }} inches</option>
-                        {% endfor %}
-                        {% for i in "123456789"|make_list %}
-                            <option value="{{ forloop.counter|add:65 }}">{{ forloop.counter|add:65 }} inches</option>
-                        {% endfor %}
-                        {% for i in "123456789"|make_list %}
-                            <option value="{{ forloop.counter|add:74 }}">{{ forloop.counter|add:74 }} inches</option>
-                        {% endfor %}
-                        {% for i in "123456789"|make_list %}
-                            <option value="{{ forloop.counter|add:83 }}">{{ forloop.counter|add:83 }} inches</option>
-                        {% endfor %}
-                        <option value="gt83">More than 6 feet 11 inches</option>
                     </select>
                 </div>
 
@@ -395,6 +378,29 @@
     </div>
 
     <script>
+        function populateHeightOptions() {
+            const heightSelect = document.getElementById('height');
+            if (!heightSelect || heightSelect.dataset.populated === 'true') {
+                return;
+            }
+
+            const addOption = (value, label) => {
+                const option = document.createElement('option');
+                option.value = value;
+                option.textContent = label;
+                heightSelect.appendChild(option);
+            };
+
+            addOption('lt48', 'Less than 4 feet 0 inches (less than 48 inches)');
+            for (let inches = 48; inches <= 83; inches++) {
+                const feet = Math.floor(inches / 12);
+                const remainder = inches % 12;
+                addOption(String(inches), `${feet} feet ${remainder} inches (${inches} inches)`);
+            }
+            addOption('gt83', 'More than 6 feet 11 inches (more than 83 inches)');
+            heightSelect.dataset.populated = 'true';
+        }
+
         function toggleDominantHand() {
             const monitoringYes = document.querySelector('input[name="comply_monitoring"][value="yes"]');
             const dominantHandSection = document.getElementById('dominant-hand-section');
@@ -417,6 +423,7 @@
 
         // Initialize the form state on page load
         document.addEventListener('DOMContentLoaded', function() {
+            populateHeightOptions();
             toggleDominantHand();
         });
     </script>

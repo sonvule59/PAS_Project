@@ -434,8 +434,8 @@ def questionnaire(request):
         height_value = answers.get("height", "0")
         if height_value == "lt48":
             height = 47
-        elif height_value == "gt84":
-            height = 85
+        elif height_value == "gt83":
+            height = 84
         else:
             height = int(height_value)
         
