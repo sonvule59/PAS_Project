@@ -81,12 +81,20 @@ class EligibilityForm(forms.ModelForm):
         label="What is your age?"
     )
     height_inches = forms.ChoiceField(
-        choices=[('lt48', 'Less than 4 feet 0 inches')] + [(i, f"{i//12}'{i%12}\" ({i} inches)") for i in range(48, 84)] + [('gt83', 'More than 6 feet 11 inches')],
-        label="Height in Inches"
+        choices=(
+            [('lt48', 'Less than 4 feet 0 inches (less than 48 inches)')] +
+            [(i, f"{i//12} feet {i%12} inches ({i} inches)") for i in range(48, 84)] +
+            [('gt83', 'More than 6 feet 11 inches (more than 83 inches)')]
+        ),
+        label="Height"
     )
     weight_lbs = forms.ChoiceField(
-        choices=[('lt100', 'Less than 100 lbs')] + [(i, f"{i} lbs") for i in range(100, 501)] + [('gt500', 'More than 500 lbs')],
-        label="Weight in lbs"
+        choices=(
+            [('lt120', 'Less than 120 lbs')] +
+            [(i, f"{i} lbs") for i in range(120, 501)] +
+            [('gt500', 'More than 500 lbs')]
+        ),
+        label="Weight (lbs)"
     )
     has_device_access = forms.ChoiceField(
         choices=[('yes', 'Yes'), ('no', 'No')],
