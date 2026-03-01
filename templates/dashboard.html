@@ -323,7 +323,7 @@
                 <div class="card">
                     <div class="alert alert-success">
                         <h3>🎉 Wave 1 Online Survey</h3>
-                        <p><strong>Hi {{ participant.participant_id }},</strong></p>
+                        <p><strong>Hi {{ participant.user.username }},</strong></p>
                         <p>Congratulations! You are now enrolled as a participant in the study.</p>
                         <p>Please click the button below to complete your task, Survey 1, within 7 days to receive a $5 Amazon gift card. We highly recommend completing it as soon as possible before the link expires. You may need to remember your ID from this website and enter it to complete the survey. Your ID is: <strong>{{ participant.participant_id }}</strong></p>
                         
@@ -377,7 +377,7 @@
                 <div class="card">
                     <div class="alert alert-success">
                         <h3>🎉 Wave 2 Online Survey</h3>
-                        <p><strong>Hi {{ participant.participant_id }},</strong></p>
+                        <p><strong>Hi {{ participant.user.username }},</strong></p>
                         <p>Please click the button below to complete your task, Survey 2, within 7 days to receive a $5 Amazon gift card. We highly recommend completing it as soon as possible before the link expires. You may need to remember your ID from this website and enter it to complete the survey. Your ID is: <strong>{{ participant.participant_id }}</strong></p>
                         
                         {% if wave2_survey_content %}
@@ -531,7 +531,7 @@
                 <div class="card">
                     <div class="alert alert-success">
                         <h3>✅ Wave 3 Code Entry Successful</h3>
-                        <p><strong>Hi {{ participant.user.username }},</strong></p>
+                        <p><strong>Hi {{ participant.participant_id }},</strong></p>
                         <p>You have successfully entered the access code for physical activity monitoring. Thank you!</p>
                         <p>Please start wearing the monitor tomorrow for seven consecutive days. For example, if you entered the code on {{ information_25_content.code_date }}, please wear the monitor starting on {{ information_25_content.start_date }} and continue wearing it until {{ information_25_content.end_date }}.</p>
                         <p>Please wear the monitor as much as possible during the seven consecutive days. To earn $30 in Amazon gift cards, please wear the monitor for at least 3 days with at least 10 hours each day. If this requirement is not met, we may not be able to provide the incentive.</p>
@@ -547,7 +547,7 @@
                 <div class="card">
                     <div class="alert alert-warning">
                         <h3>⚠️ Missing Code Entry (Study End)</h3>
-                        <p><strong>Hi {{ participant.user.username }},</strong></p>
+                        <p><strong>Hi {{ participant.participant_id }},</strong></p>
                         <p>You missed the code entry (i.e., no $30 worth of Amazon electronic gift cards).</p>
                         <p>You may have received our mail package—please check your mailbox. Please (a) open the package and (b) return the monitor using the yellow prepaid envelope. If possible, within 3 days, visit a nearby USPS office or drop it in a USPS dropbox. The monitor is expensive and important to us.</p>
                         <p>If you complete the above tasks, no further action is required for this study.</p>
