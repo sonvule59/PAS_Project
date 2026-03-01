@@ -877,7 +877,7 @@ def dashboard(request):
         information_16_content, _ = Content.objects.get_or_create(
             content_type='information_16',
             defaults={
-                'title': 'Information 16: (Website, Email) Next Task in Approximately 4 Weeks',
+                'title': 'Next Task in Approximately 4 Weeks',
                 'content': (
                     '<div>'
                     '<p>We recommend that you maintain your usual daily routines. We will email you again in approximately 4 weeks for the next task (i.e., completing an online survey set). Please regularly check your inbox. You will receive the accrued incentives after this study ends.</p>'
@@ -899,7 +899,7 @@ def dashboard(request):
         information_17_content, _ = Content.objects.get_or_create(
             content_type='information_17',
             defaults={
-                'title': 'Information 17 - Intervention Group Message',
+                'title': 'Intervention Access Available',
                 'content': (
                     '<div>'
                     '<p>Congratulations! You have been assigned to the intervention group (Group 1).</p>'
