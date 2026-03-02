@@ -1,6 +1,7 @@
 import random
 # from bz2 import compress
 from datetime import timedelta
+import wave
 from celery import shared_task
 from django.core.mail import send_mail
 from django.core.management import call_command
@@ -27,7 +28,7 @@ def run_daily_timeline_checks():
         try:
             daily_timeline_check(user)
         except Exception as e:
-            print(f"[CELERY TASK] ERROR processing user {user.id}: {str(e)}")
+            print(f"[CELERY TASK] ERROR processing user {user.username}: {str(e)}")
     print(f"[CELERY TASK] run_daily_timeline_checks completed")
 
 def daily_timeline_check(user):
@@ -151,6 +152,8 @@ def daily_timeline_check(user):
                 extra_context={'username': user.username, 'participant_id': participant.participant_id, 'survey_link': survey1_link},
                 mark_as='sent_wave1_survey'
             )
+            participant.wave1_survey_email_sent = True
+            participant.save()
             print(f"[EMAIL] ✓ Successfully sent Wave 1 survey email to {participant.participant_id}")
         except Exception as e:
             # If email fails, send_email will set status to 'failed', so we can retry later
@@ -162,6 +165,8 @@ def daily_timeline_check(user):
     # CRITICAL: Only send during Wave 1 period (Days 8-28). After Day 29 (randomization), don't send Wave 1 emails.
     # After randomization, email_status may be overwritten to 'sent_intervention_access', so we check if randomization_completed
     if (today and 8 <= today < 29 and  # Only during Wave 1 period, before randomization
+        not participant.wave1_survey_email_sent and
+        not participant.wave1_monitor_email_sent and
         not participant.code_entry_date and 
         not participant.randomization_completed and  # Don't send if already randomized (past Day 29)
         participant.email_status not in ['sent_wave1_monitor', 'sent_wave1_missing', 'sending']):
@@ -174,6 +179,8 @@ def daily_timeline_check(user):
                 extra_context={'username': user.username, 'participant_id': participant.participant_id},
                 mark_as='sent_wave1_monitor'
             )
+            participant.wave1_monitor_email_sent = True
+            participant.save()
             print(f"[INFO 10] ✓ Successfully sent Wave 1 monitoring email to {participant.participant_id}")
         except Exception as e:
             print(f"[INFO 10] ERROR: Failed to send Wave 1 monitoring email to {participant.participant_id}: {str(e)}")
@@ -189,7 +196,8 @@ def daily_timeline_check(user):
     # Whether they enter code or not, they move to randomization (Info 15) on Day 29.
     # CRITICAL: Only send during Wave 1 period (Days 22-28). After Day 29 (randomization), don't send Wave 1 emails.
     if (today and 22 <= today < 29 and  # Only during Wave 1 period, before randomization
-        not participant.code_entered and 
+        not participant.code_entered and
+        not participant.wave1_missing_code_email_sent and
         not participant.randomization_completed and  # Don't send if already randomized (past Day 29)
         participant.email_status not in ['sent_wave1_missing', 'sending']):
         # send_email() will handle atomic status updates internally
@@ -202,6 +210,8 @@ def daily_timeline_check(user):
                 extra_context={'username': user.username, 'participant_id': participant.participant_id},
                 mark_as='sent_wave1_missing'
             )
+            participant.wave1_missing_code_email_sent = True
+            participant.save()
             print(f"[INFO 14] Successfully sent Wave 1 missing code email to {participant.participant_id}")
         except Exception as e:
             print(f"[INFO 14] ERROR: Failed to send Wave 1 missing code email: {str(e)}")
@@ -253,7 +263,7 @@ def daily_timeline_check(user):
     #########################################################################################################################       
     #     if today and today >= target_day and participant.email_status not in ['sent_wave1_survey_return', 'sending']:
     # IMPORTANT: Check code_entry_day (not code_entered flag) and only send if NOT already sent
-    if participant.code_entry_day is not None and participant.email_status not in ['sent_wave1_survey_return', 'sending']:
+    if participant.code_entry_day is not None and participant.email_status not in ['sent_wave1_survey_return', 'sending'] and not participant.wave1_survey_return_email_sent:
         code_day = participant.code_entry_day  # Use stored timeline day directly
         target_day = code_day + 7
         
@@ -267,6 +277,8 @@ def daily_timeline_check(user):
                     extra_context={'username': user.username, 'participant_id': participant.participant_id},
                     mark_as='sent_wave1_survey_return'
                 )
+                participant.wave1_survey_return_email_sent = True
+                participant.save()
                 print(f"[SEND] ✓ Successfully sent Return Monitor email to {participant.participant_id}")
             except Exception as e:
                 print(f"[SEND] ERROR: Failed to send Return Monitor email to {participant.participant_id}: {str(e)}")
@@ -351,8 +363,8 @@ def daily_timeline_check(user):
                 second_participant.save()
                 # Log the randomization result
                 print(f"[2-BLOCK RANDOMIZE] Pair {participant.randomization_pair_id}: "
-                      f"First participant (ID {first_participant.id}) already in Group {first_group}, "
-                      f"Second participant (ID {second_participant.id}) -> Group {second_group}")
+                      f"First participant (ID {first_participant.participant_id}) already in Group {first_group}, "
+                      f"Second participant (ID {second_participant.participant_id}) -> Group {second_group}")
                 
                 # Send email to second participant only (first already received theirs)
                 try:
@@ -395,8 +407,8 @@ def daily_timeline_check(user):
                 second_participant.save()
                 
                 print(f"[2-BLOCK RANDOMIZE] Pair {participant.randomization_pair_id}: "
-                      f"First participant (ID {first_participant.id}) -> Group {first_group}, "
-                      f"Second participant (ID {second_participant.id}) -> Group {second_group}")
+                      f"First participant (ID {first_participant.participant_id}) -> Group {first_group}, "
+                      f"Second participant (ID {second_participant.participant_id}) -> Group {second_group}")
                 
                 # Send notification emails to both
                 try:
@@ -453,7 +465,7 @@ def daily_timeline_check(user):
             single_participant.save()
             
             print(f"[2-BLOCK RANDOMIZE] Single participant in Pair {participant.randomization_pair_id}: "
-                  f"Participant (ID {single_participant.id}) -> Group {assigned_group} (waiting for pair)")
+                  f"Participant (ID {single_participant.participant_id}) -> Group {assigned_group} (waiting for pair)")
             
             # Send notification email to the single participant
             try:
@@ -523,6 +535,8 @@ def daily_timeline_check(user):
                         "survey_link": survey2_link,
                     }
                 )
+                participant.wave2_survey_email_sent = True
+                participant.save()
                 print(f"[INFO 18] Successfully sent Wave 2 survey email to {participant.participant_id}")
             except Exception as e:
                 # If email fails, reset the flag so it can be retried
@@ -569,7 +583,7 @@ def daily_timeline_check(user):
     (Email) Wave 3 Physical Activity Monitoring Ready. On Day 120, send this email to every participant from any group.
     Allow catch-up if missed (send if on Day 120 or later but not sent yet).
     """
-    if today and today >= 120 and not participant.wave3_monitor_ready_sent:
+    if today and today >= 120 and not participant.wave3_monitor_ready_sent and participant.wave3_survey_email_sent:
         try:
             print(f"[INFO 23] Sending Wave 3 Monitoring Ready email to {participant.participant_id} (Day {today})")
             participant.send_email("wave3_monitoring_ready", extra_context={"username": user.username})

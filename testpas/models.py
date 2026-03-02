@@ -136,6 +136,9 @@ class Participant(models.Model):
     engagement_tracked = models.BooleanField(default=False)
     email = models.EmailField(null=True, blank=True)  
     wave1_survey_email_sent = models.BooleanField(default=False)
+    wave1_monitor_email_sent = models.BooleanField(default=False)
+    wave1_missing_code_email_sent = models.BooleanField(default=False)
+    wave1_survey_return_email_sent = models.BooleanField(default=False)
     wave2_survey_email_sent = models.BooleanField(default=False)
     wave2_monitoring_notice_sent = models.BooleanField(default=False)
     ## Wave 3
