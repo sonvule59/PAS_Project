@@ -11,6 +11,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from django.utils.crypto import get_random_string
 from django.contrib.auth import login, authenticate, logout
+from django.db import IntegrityError, transaction
 from django.contrib import messages
 from django.http import HttpResponse
 from django.contrib.admin.views.decorators import staff_member_required
@@ -46,6 +47,19 @@ def landing(request):
         return redirect('dashboard')
     return render(request, 'landing.html')
 
+def _generate_next_participant_id():
+    """Generate the next unique participant ID (P###), safe for concurrent signups."""
+    last_participant = Participant.objects.select_for_update().order_by('-id').first()
+    if last_participant and last_participant.participant_id:
+        raw_id = last_participant.participant_id
+        if raw_id.startswith('P') and raw_id[1:].isdigit():
+            next_num = int(raw_id[1:]) + 1
+        else:
+            next_num = last_participant.id + 1
+    else:
+        next_num = 1
+    return f"P{next_num:03d}"
+
 def account_confirmation_pending(request):
     """Show confirmation pending message after account creation"""
     if request.user.is_authenticated:
@@ -79,21 +93,33 @@ def create_account(request):
                         email=form.cleaned_data['email'],
                         password=form.cleaned_data['password']
                     )
-                    participant = Participant.objects.create(
-                        user=user,
-                        email=user.email,
-                        phone_number=form.cleaned_data['phone_number'],
-                        full_name=form.cleaned_data['full_name'],
-                        address_line1=form.cleaned_data['address_line1'],
-                        address_line2=form.cleaned_data.get('address_line2', ''),
-                        city=form.cleaned_data['city'],
-                        state=form.cleaned_data['state'],
-                        zip_code=form.cleaned_data['zip_code'],
-                        confirmation_token=str(uuid.uuid4()),
-                        participant_id=f"P{Participant.objects.count():03d}",
-                        enrollment_date=timezone.now().date(),
-                        is_confirmed=False
-                    )
+                    participant = None
+                    for attempt in range(5):
+                        try:
+                            with transaction.atomic():
+                                participant_id = _generate_next_participant_id()
+                                participant = Participant.objects.create(
+                                    user=user,
+                                    email=user.email,
+                                    phone_number=form.cleaned_data['phone_number'],
+                                    full_name=form.cleaned_data['full_name'],
+                                    address_line1=form.cleaned_data['address_line1'],
+                                    address_line2=form.cleaned_data.get('address_line2', ''),
+                                    city=form.cleaned_data['city'],
+                                    state=form.cleaned_data['state'],
+                                    zip_code=form.cleaned_data['zip_code'],
+                                    confirmation_token=str(uuid.uuid4()),
+                                    participant_id=participant_id,
+                                    enrollment_date=timezone.now().date(),
+                                    is_confirmed=False
+                                )
+                            break
+                        except IntegrityError:
+                            if attempt == 4:
+                                raise
+                    if participant is None:
+                        user.delete()
+                        raise Exception("Failed to create participant record. Please try again.")
                     # Send confirmation email asynchronously using Celery
                     # This prevents account creation from hanging on email sending
                     # Use atomic update to prevent duplicate emails if account is created multiple times
