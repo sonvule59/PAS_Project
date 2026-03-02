@@ -1022,6 +1022,20 @@ def dashboard(request):
             }
         )
     
+    # Information 12: Show message after Wave 1 code entry (same as email)
+    show_information_12 = False
+    information_12_content = None
+    if participant and participant.code_entered and participant.code_entry_date:
+        show_information_12 = True
+        code_date = participant.code_entry_date
+        start_date = code_date + timedelta(days=1)
+        end_date = code_date + timedelta(days=7)
+        information_12_content = {
+            'code_date': code_date.strftime('%m/%d/%Y'),
+            'start_date': start_date.strftime('%m/%d/%Y'),
+            'end_date': end_date.strftime('%m/%d/%Y'),
+        }
+
     # Information 25: Show message after Wave 3 code entry (same as email)
     show_information_25 = False
     information_25_content = None
@@ -1078,6 +1092,8 @@ def dashboard(request):
         'information_20_content': information_20_content,
         'show_wave3_survey': show_wave3_survey,
         'wave3_survey_content': wave3_survey_content,
+        'show_information_12': show_information_12,
+        'information_12_content': information_12_content,
         'show_information_25': show_information_25,
         'information_25_content': information_25_content,
         'show_information_27': show_information_27,
