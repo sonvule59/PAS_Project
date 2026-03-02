@@ -11,6 +11,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from django.utils.crypto import get_random_string
 from django.contrib.auth import login, authenticate, logout
+from django.db import IntegrityError, transaction
 from django.contrib import messages
 from django.http import HttpResponse
 from django.contrib.admin.views.decorators import staff_member_required
@@ -46,6 +47,19 @@ def landing(request):
         return redirect('dashboard')
     return render(request, 'landing.html')
 
+def _generate_next_participant_id():
+    """Generate the next unique participant ID (P###), safe for concurrent signups."""
+    last_participant = Participant.objects.select_for_update().order_by('-id').first()
+    if last_participant and last_participant.participant_id:
+        raw_id = last_participant.participant_id
+        if raw_id.startswith('P') and raw_id[1:].isdigit():
+            next_num = int(raw_id[1:]) + 1
+        else:
+            next_num = last_participant.id + 1
+    else:
+        next_num = 1
+    return f"P{next_num:03d}"
+
 def account_confirmation_pending(request):
     """Show confirmation pending message after account creation"""
     if request.user.is_authenticated:
@@ -79,21 +93,33 @@ def create_account(request):
                         email=form.cleaned_data['email'],
                         password=form.cleaned_data['password']
                     )
-                    participant = Participant.objects.create(
-                        user=user,
-                        email=user.email,
-                        phone_number=form.cleaned_data['phone_number'],
-                        full_name=form.cleaned_data['full_name'],
-                        address_line1=form.cleaned_data['address_line1'],
-                        address_line2=form.cleaned_data.get('address_line2', ''),
-                        city=form.cleaned_data['city'],
-                        state=form.cleaned_data['state'],
-                        zip_code=form.cleaned_data['zip_code'],
-                        confirmation_token=str(uuid.uuid4()),
-                        participant_id=f"P{Participant.objects.count():03d}",
-                        enrollment_date=timezone.now().date(),
-                        is_confirmed=False
-                    )
+                    participant = None
+                    for attempt in range(5):
+                        try:
+                            with transaction.atomic():
+                                participant_id = _generate_next_participant_id()
+                                participant = Participant.objects.create(
+                                    user=user,
+                                    email=user.email,
+                                    phone_number=form.cleaned_data['phone_number'],
+                                    full_name=form.cleaned_data['full_name'],
+                                    address_line1=form.cleaned_data['address_line1'],
+                                    address_line2=form.cleaned_data.get('address_line2', ''),
+                                    city=form.cleaned_data['city'],
+                                    state=form.cleaned_data['state'],
+                                    zip_code=form.cleaned_data['zip_code'],
+                                    confirmation_token=str(uuid.uuid4()),
+                                    participant_id=participant_id,
+                                    enrollment_date=timezone.now().date(),
+                                    is_confirmed=False
+                                )
+                            break
+                        except IntegrityError:
+                            if attempt == 4:
+                                raise
+                    if participant is None:
+                        user.delete()
+                        raise Exception("Failed to create participant record. Please try again.")
                     # Send confirmation email asynchronously using Celery
                     # This prevents account creation from hanging on email sending
                     # Use atomic update to prevent duplicate emails if account is created multiple times
@@ -712,6 +738,8 @@ def dashboard(request):
     user_progress = UserSurveyProgress.objects.filter(user=request.user, survey__title="Eligibility Criteria").first()
     participant = Participant.objects.filter(user=request.user).first()
     progress_percentage = 0  # Default if not eligible or study_day not set
+    code_error = request.GET.get('code_error')
+    code_error_wave = request.GET.get('code_error_wave')
     
     # Fix data inconsistency: if randomization_completed is True but randomized_group is None
     if participant and participant.randomization_completed and participant.randomized_group is None:
@@ -996,6 +1024,20 @@ def dashboard(request):
             }
         )
     
+    # Information 12: Show message after Wave 1 code entry (same as email)
+    show_information_12 = False
+    information_12_content = None
+    if participant and participant.code_entered and participant.code_entry_date:
+        show_information_12 = True
+        code_date = participant.code_entry_date
+        start_date = code_date + timedelta(days=1)
+        end_date = code_date + timedelta(days=7)
+        information_12_content = {
+            'code_date': code_date.strftime('%m/%d/%Y'),
+            'start_date': start_date.strftime('%m/%d/%Y'),
+            'end_date': end_date.strftime('%m/%d/%Y'),
+        }
+
     # Information 25: Show message after Wave 3 code entry (same as email)
     show_information_25 = False
     information_25_content = None
@@ -1052,10 +1094,14 @@ def dashboard(request):
         'information_20_content': information_20_content,
         'show_wave3_survey': show_wave3_survey,
         'wave3_survey_content': wave3_survey_content,
+        'show_information_12': show_information_12,
+        'information_12_content': information_12_content,
         'show_information_25': show_information_25,
         'information_25_content': information_25_content,
         'show_information_27': show_information_27,
         'information_27_content': information_27_content,
+        'code_error': code_error,
+        'code_error_wave': code_error_wave,
         # Debug info for intervention button visibility
         'debug_intervention': {
             'randomized_group': participant.randomized_group if participant else None,
@@ -1201,9 +1247,9 @@ def enter_code(request, wave):
                 messages.success(request, "Code entered successfully!")
                 return redirect('code_success', wave=wave)
             else:
-                # Incorrect code - redirect to dashboard with error message
-                messages.error(request, "Incorrect code. Please try again.")
-                return redirect('home')
+                # Incorrect code - show warning under the code entry box
+                error_message = "Incorrect code entered. Please try again."
+                return redirect(f"{reverse('dashboard')}?code_error={error_message}&code_error_wave={wave}")
     else:
         form = CodeEntryForm()
     context = {
@@ -1211,7 +1257,7 @@ def enter_code(request, wave):
         'wave': wave,
         'days_remaining': 20 - study_day if wave == 1 else 104 - study_day,
     }
-    return render(request, 'monitoring/enter_code.html', context)
+    return render(request, 'enter_code.html', context)
 
 def download_data(request):
     response = HttpResponse(content_type='text/csv')

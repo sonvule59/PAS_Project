@@ -410,7 +410,7 @@
                                 </div>
                                 <button type="submit" class="btn btn-primary">Submit Code</button>
                             </form>
-                            {% if code_error %}
+                            {% if code_error and code_error_wave == '1' %}
                                 <p style="color: #dc3545; margin-top: 1rem;">{{ code_error }}</p>
                             {% endif %}
                             <p style="margin-top: 1rem; font-style: italic; color: #666;">If you need any assistance, contact Seungmin Lee at svu23@iastate.edu or 517-898-0020.</p>
@@ -435,6 +435,22 @@
                         </div>
                     </div>
                 {% endif %}
+            {% endif %}
+
+            <!-- Information 12: Physical Activity Monitoring Tomorrow (Wave 1) - After code entry -->
+            {% if show_information_12 and information_12_content %}
+                <div class="card">
+                    <div class="alert alert-success">
+                        <h3>✅ Wave 1 Code Entry Successful</h3>
+                        <p><strong>Hi {{ participant.user.username }},</strong></p>
+                        <p>You have successfully entered the access code for physical activity monitoring. Thank you!</p>
+                        <p>Please start wearing the monitor tomorrow for seven consecutive days. For example, if you entered the code on {{ information_12_content.code_date }}, please wear the monitor starting on {{ information_12_content.start_date }} and continue wearing it until {{ information_12_content.end_date }}.</p>
+                        <p>Please wear the monitor as much as possible during the seven consecutive days. To earn $30 in Amazon gift cards, please wear the monitor for at least 3 days with at least 10 hours each day. If this requirement is not met, we may not be able to provide the incentive.</p>
+                        <p>Please keep the yellow prepaid envelope. You will use it to return the monitor after the 7 days.</p>
+                        <p style="margin-top: 1rem;">If you need any assistance or have any questions at any time, please contact Seungmin Lee (Principal Investigator) at <a href="mailto:seunglee@iastate.edu">seunglee@iastate.edu</a> or <a href="tel:517-898-0020">517-898-0020</a>.</p>
+                        <p><strong>Sincerely,</strong><br>The Confident Moves Research Team</p>
+                    </div>
+                </div>
             {% endif %}
 
 
@@ -485,15 +501,6 @@
                             <h3>📱 Wave 3 Physical Activity Code Entry</h3>
                             <p>You need to enter a code on the website within 14 days to complete the physical activity monitoring. The code can be found in the mail package that will arrive at your address (the one you provided) in a few days.</p>
                             <p>Please enter the code:</p>
-                            {% if messages %}
-                                {% for message in messages %}
-                                    {% if message.tags == 'error' %}
-                                        <div class="alert alert-danger" style="margin-top: 1rem; margin-bottom: 1rem;">
-                                            {{ message }}
-                                        </div>
-                                    {% endif %}
-                                {% endfor %}
-                            {% endif %}
                             <form method="POST" action="{% url 'enter_code' wave=3 %}">
                                 {% csrf_token %}
                                 <div class="form-group">
@@ -502,7 +509,7 @@
                                 </div>
                                 <button type="submit" class="btn btn-primary">Submit Code</button>
                             </form>
-                            {% if code_error %}
+                            {% if code_error and code_error_wave == '3' %}
                                 <p style="color: #dc3545; margin-top: 1rem;">{{ code_error }}</p>
                             {% endif %}
                             <p style="margin-top: 1rem;">If you need any assistance or have any questions at any time, please contact Seungmin ("Seung") Lee (Principal Investigator) at <a href="mailto:seunglee@iastate.edu">seunglee@iastate.edu</a> or <a href="tel:517-898-0020">517-898-0020</a>.</p>
