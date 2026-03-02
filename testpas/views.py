@@ -738,6 +738,8 @@ def dashboard(request):
     user_progress = UserSurveyProgress.objects.filter(user=request.user, survey__title="Eligibility Criteria").first()
     participant = Participant.objects.filter(user=request.user).first()
     progress_percentage = 0  # Default if not eligible or study_day not set
+    code_error = request.GET.get('code_error')
+    code_error_wave = request.GET.get('code_error_wave')
     
     # Fix data inconsistency: if randomization_completed is True but randomized_group is None
     if participant and participant.randomization_completed and participant.randomized_group is None:
@@ -1098,6 +1100,8 @@ def dashboard(request):
         'information_25_content': information_25_content,
         'show_information_27': show_information_27,
         'information_27_content': information_27_content,
+        'code_error': code_error,
+        'code_error_wave': code_error_wave,
         # Debug info for intervention button visibility
         'debug_intervention': {
             'randomized_group': participant.randomized_group if participant else None,
@@ -1243,14 +1247,9 @@ def enter_code(request, wave):
                 messages.success(request, "Code entered successfully!")
                 return redirect('code_success', wave=wave)
             else:
-                # Incorrect code - show warning without revealing the code
-                messages.error(request, "Incorrect code entered. Please try again.")
-                context = {
-                    'form': form,
-                    'wave': wave,
-                    'days_remaining': 20 - study_day if wave == 1 else 104 - study_day,
-                }
-                return render(request, 'enter_code.html', context)
+                # Incorrect code - show warning under the code entry box
+                error_message = "Incorrect code entered. Please try again."
+                return redirect(f"{reverse('dashboard')}?code_error={error_message}&code_error_wave={wave}")
     else:
         form = CodeEntryForm()
     context = {
