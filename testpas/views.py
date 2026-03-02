@@ -1201,9 +1201,14 @@ def enter_code(request, wave):
                 messages.success(request, "Code entered successfully!")
                 return redirect('code_success', wave=wave)
             else:
-                # Incorrect code - redirect to dashboard with error message
-                messages.error(request, "Incorrect code. Please try again.")
-                return redirect('home')
+                # Incorrect code - show warning without revealing the code
+                messages.error(request, "Incorrect code entered. Please try again.")
+                context = {
+                    'form': form,
+                    'wave': wave,
+                    'days_remaining': 20 - study_day if wave == 1 else 104 - study_day,
+                }
+                return render(request, 'enter_code.html', context)
     else:
         form = CodeEntryForm()
     context = {
@@ -1211,7 +1216,7 @@ def enter_code(request, wave):
         'wave': wave,
         'days_remaining': 20 - study_day if wave == 1 else 104 - study_day,
     }
-    return render(request, 'monitoring/enter_code.html', context)
+    return render(request, 'enter_code.html', context)
 
 def download_data(request):
     response = HttpResponse(content_type='text/csv')
