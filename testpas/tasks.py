@@ -102,7 +102,7 @@ def daily_timeline_check(user):
     
     # Skip participants who have completed the study (Day 134+)
     # Note: Information 24 is sent on Day 120, Information 27 is sent on Day 134
-    if today and today > 134:
+    if today and today > 140: # Skips users that are past the end of the study 
         print(f"[SKIP] User {user.id} completed study (Day {today} > 134)")
         return
     
@@ -606,8 +606,8 @@ def daily_timeline_check(user):
     Note: Information 24 is the website display for Wave 3 code entry (Days 120-133), not an email.
     """
     if participant.wave3_code_entered and participant.wave3_code_entry_day:
-        # Calculate target day: code entry day + 8 days
-        target_day = participant.wave3_code_entry_day + 8
+        # Calculate target day: code entry day + 7 days
+        target_day = participant.wave3_code_entry_day + 7
         if today and today >= target_day and not participant.wave3_survey_monitor_return_sent:
             try:
                 print(f"[STUDY END] Sending Study End Survey & Monitor Return email to {participant.participant_id} (Day {today}, code entered on Day {participant.wave3_code_entry_day})")
