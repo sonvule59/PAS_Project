@@ -2,6 +2,15 @@
 from django.core.management.base import BaseCommand
 from testpas.models import EmailTemplate
 
+def to_html(body: str) -> str:
+    """Preserve original line breaks while allowing HTML tags like <b> and <u>."""
+    if not body:
+        return ""
+    # If it already looks like HTML, keep as-is.
+    if "<p" in body or "<br" in body or "<div" in body:
+        return body
+    return f"<div style=\"white-space: pre-line;\">{body}</div>"
+
 EMAIL_TEMPLATES = [
     {
         "name": "account_confirmation",
@@ -16,7 +25,8 @@ EMAIL_TEMPLATES = [
         "subject": "Wave 1 Online Survey Set – Ready",
         "body": "Hi {username},\n\nCongratulations! You are now enrolled as a participant in the study."
         "\n\nYour next task is to complete the Wave 1 Online Survey Set within 7 days. You will earn $5 in your Amazon electronic gift card account for completing this task. You will receive the accrued incentives after this study ends. After 7 days, this task will expire (i.e., no Amazon gift card for this task)."
-        "\n\n· Link: {survey_link}\n\nYou may click the following link to view and download the consent document for your records:[a link that will be updated by researchers]\n\nIf you need any assistance or have any questions at any time, please contact Seungmin (“Seung”) Lee (Principal Investigator) at seunglee@iastate.edu or 517-898-0020.\n\nSincerely,\n\nThe Confident Moves Research Team"
+        "\n\n· Link: {survey_link}\n\nYou may need to remember your username to complete the survey. Your username is: {username}."
+        "\n\nYou may click the following link to view and download the consent document for your records:[a link that will be updated by researchers]\n\nIf you need any assistance or have any questions at any time, please contact Seungmin (“Seung”) Lee (Principal Investigator) at seunglee@iastate.edu or 517-898-0020.\n\nSincerely,\n\nThe Confident Moves Research Team"
     },
     {
         "name": "wave1_monitor_ready",
@@ -208,15 +218,16 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         for template in EMAIL_TEMPLATES:
+            html_body = to_html(template["body"])
             obj, created = EmailTemplate.objects.get_or_create(
                 name=template["name"],
-                defaults={'subject': template["subject"], 'body': template["body"]}
+                defaults={'subject': template["subject"], 'body': html_body}
             )
             if created:
                 self.stdout.write(self.style.SUCCESS(f"Added email template: {template['name']}"))
             else:
                 # Update existing template to ensure correct subject and body
                 obj.subject = template["subject"]
-                obj.body = template["body"]
+                obj.body = html_body
                 obj.save()
                 self.stdout.write(self.style.WARNING(f"Updated template: {template['name']}"))

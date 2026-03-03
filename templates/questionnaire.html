@@ -302,9 +302,6 @@
                 <div class="form-group">
                     <label for="bmi_display">Your BMI (auto-calculated)</label>
                     <input type="text" id="bmi_display" readonly placeholder="Enter height and weight above">
-                    <p id="bmi_eligibility" style="margin-top: 0.75rem; font-weight: 600; color: #666;">
-                        BMI eligibility will appear here.
-                    </p>
                 </div>
 
                 <div class="form-group">
@@ -413,12 +410,9 @@
             const heightValue = document.getElementById('height')?.value;
             const weightValue = document.getElementById('weight')?.value;
             const bmiDisplay = document.getElementById('bmi_display');
-            const bmiEligibility = document.getElementById('bmi_eligibility');
 
             if (!heightValue || !weightValue) {
                 bmiDisplay.value = '';
-                bmiEligibility.textContent = 'BMI eligibility will appear here.';
-                bmiEligibility.style.color = '#666';
                 return;
             }
 
@@ -427,20 +421,11 @@
 
             if (!height || !weight) {
                 bmiDisplay.value = '';
-                bmiEligibility.textContent = 'BMI eligibility will appear here.';
-                bmiEligibility.style.color = '#666';
                 return;
             }
 
             const bmi = (weight / (height ** 2)) * 703;
             bmiDisplay.value = bmi.toFixed(2);
-            if (bmi < 25) {
-                bmiEligibility.textContent = 'Your BMI is not eligible';
-                bmiEligibility.style.color = '#c62828';
-            } else {
-                bmiEligibility.textContent = 'Your BMI is eligible';
-                bmiEligibility.style.color = '#2e7d32';
-            }
         }
 
         function toggleDominantHand() {
