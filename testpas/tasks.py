@@ -165,7 +165,7 @@ def daily_timeline_check(user):
     # CRITICAL: Only send during Wave 1 period (Days 8-28). After Day 29 (randomization), don't send Wave 1 emails.
     # After randomization, email_status may be overwritten to 'sent_intervention_access', so we check if randomization_completed
     if (today and 8 <= today < 29 and  # Only during Wave 1 period, before randomization
-        not participant.wave1_survey_email_sent and
+        participant.wave1_survey_email_sent and
         not participant.wave1_monitor_email_sent and
         not participant.code_entry_date and 
         not participant.randomization_completed and  # Don't send if already randomized (past Day 29)
