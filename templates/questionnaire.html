@@ -435,10 +435,10 @@
             const bmi = (weight / (height ** 2)) * 703;
             bmiDisplay.value = bmi.toFixed(2);
             if (bmi < 25) {
-                bmiEligibility.textContent = 'Ineligible: BMI < 25.00';
+                bmiEligibility.textContent = 'Your BMI is not eligible';
                 bmiEligibility.style.color = '#c62828';
             } else {
-                bmiEligibility.textContent = 'Eligible: BMI is larger or equal to 25.00';
+                bmiEligibility.textContent = 'Your BMI is eligible';
                 bmiEligibility.style.color = '#2e7d32';
             }
         }
