@@ -22,6 +22,7 @@ from testpas import views, settings
 from testpas.views import *
 
 urlpatterns = [
+    path('admin/', admin.site.urls),
     # Landing page and authentication
     path('', views.landing, name='landing'),
     path('account/confirmation-pending/', views.account_confirmation_pending, name='account_confirmation_pending'),
