@@ -15,18 +15,19 @@
         p { color: #444; }
         .actions { margin-top: 1.25rem; display: flex; gap: 10px; flex-wrap: wrap; }
         .btn { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #fff; padding: 10px 16px; border-radius: 8px; text-decoration: none; font-weight: 600; border: none; cursor: pointer; }
-        .video-container { margin: 2rem 0; text-align: center; }
+        .video-container { margin: 2rem 0; text-align: left; }
         .video-wrapper { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 800px; margin: 0 auto; }
         .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; border-radius: 12px; }
-        .caption-toggle { margin: 1rem 0; text-align: center; }
-        .caption-toggle button { background: #f8f9fa; border: 2px solid #e0e0e0; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: 600; color: #333; }
-        .caption-toggle button:hover { background: #e9ecef; }
-        .caption-toggle button.active { background: #667eea; color: white; border-color: #667eea; }
-        .captions { background: #f8f9fa; border: 1px solid #e0e0e0; border-radius: 12px; padding: 1.5rem; margin: 1rem 0; display: none; }
+        .caption-toggle { margin: 1rem 0; text-align: left; }
+        .caption-toggle button { background: #ff6b35; border: none; padding: 10px 14px; border-radius: 8px; cursor: pointer; font-weight: 600; color: #fff; }
+        .caption-toggle button:hover { background: #e85c2b; }
+        .caption-toggle button.active { background: #ff6b35; color: #fff; }
+        .caption-actions { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; justify-content: flex-start; }
+        .captions { background: #f8f9fa; border: 1px solid #e0e0e0; border-radius: 12px; padding: 1.5rem; margin: 1rem auto; display: none; text-align: left; max-width: 800px; }
         .captions.show { display: block; }
         .captions h3 { margin: 0 0 1rem 0; color: #333; }
         .captions p { margin: 0.5rem 0; line-height: 1.6; }
-        .captions ul { margin: 0.5rem 0; padding-left: 1.5rem; }
+        .captions ul { margin: 0.5rem 0; padding-left: 1.5rem; text-align: left; }
         .captions li { margin: 0.25rem 0; color: #666; }
         .learning-info { background: #f8f9fa; border-left: 4px solid #667eea; padding: 1.5rem; margin: 1.5rem 0; border-radius: 0 12px 12px 0; }
         .learning-info h3 { margin: 0 0 1rem 0; color: #333; }
@@ -56,34 +57,41 @@
                 </div>
                 
                 <div class="caption-toggle">
-                    <button onclick="toggleCaptions()" id="captionBtn">Show Captions</button>
+                    <div class="caption-actions">
+                        <button onclick="toggleCaptions()" id="captionBtn">Show Captions</button>
+                        <a class="btn" href="{% url 'intervention_access' %}" style="text-decoration: none;">Back to Intervention Access</a>
+                    </div>
                 </div>
                 
                 <div class="captions" id="captions">
-                    <h3>Domestic-Related Physical Activity: Learning</h3>
                     <p>Domestic-related physical activity refers to physical activity done in and around your home, like housework, gardening, yard work, general maintenance work, caring for your family, etc. The physical demands of housework often require a lot of bending, lifting, and other forms of movement. Chores you do around the house and yard can burn calories and tone muscles. Studies have shown that domestic physical activity at a self-selected pace can be moderate intensity for adults with obesity although there is variability between individuals. This type of physical activity is useful if you lack time for leisure-related physical activity, such as playing sports.</p>
-                    
-                    <p>Your busy schedules may not leave much room for daily physical activity. Here are a few tips to increase your domestic-related physical activity:</p>
-                    
+                    <p>Your busy schedules may not leave much room for daily physical activity. Here are a few tips to increase your domestic-related physical activity.</p>
                     <ul>
-                        <li><strong>Add household duties to your daily schedule.</strong> Adding household duties to your daily schedule not only takes care of your needs for physical activity, but it also makes you look after your place better and be more conscious about maintaining cleanliness and hygiene.</li>
-                        <li><strong>Break it up.</strong> Domestic-related physical activity can be demanding, so you might not be able to do a ton of it at once - especially if you are doing something demanding and strenuous, for example, mowing the lawn.</li>
-                        <li><strong>Tailor it to your needs.</strong> While different forms of housework can be physically challenging, you can make them even more strenuous by adding different kinds of physical movements while doing them. For instance, you may do lunges while vacuuming.</li>
-                        <li><strong>Keep your expectations realistic.</strong> If housework and yardwork are your only forms of physical activity, they are probably not going to make you lose substantial weight. However, domestic-related physical activity can still boost your endurance and provide health benefits.</li>
+                        <li>Add household duties to your daily schedule. Adding household duties to your daily schedule not only takes care of your needs for physical activity, but it also makes you look after your place better and be more conscious about maintaining cleanliness and hygiene.</li>
+                        <li>Break it up. Domestic-related physical activity can be demanding, so you might not be able to do a ton of it at once - especially if you are doing something demanding and strenuous, for example, mowing the lawn.</li>
+                        <li>Tailor it to your needs. While different forms of housework can be physically challenging, you can make them even more strenuous by adding different kinds of physical movements while doing them. For instance, you may do lunges while vacuuming.</li>
+                        <li>Keep your expectations realistic. If housework and yardwork are your only forms of physical activity, they are probably not going to make you lose substantial weight. However, domestic-related physical activity can still boost your endurance and provide health benefits.</li>
                     </ul>
-                    
                     <p>Domestic-related physical activity may include:</p>
                     <ul>
-                        <li>Mopping the floor, Scrubbing the floor, bathroom, mirrors, doors, and windows, Vacuuming, Sweeping, Dusting, Ironing, Laundry by hand, Painting, Raking leaves, Weeding, Cleaning the garage, and Caring for your family</li>
+                        <li>Mopping the floor,</li>
+                        <li>Scrubbing the floor, bathroom, mirrors, doors, and windows,</li>
+                        <li>Vacuuming,</li>
+                        <li>Sweeping,</li>
+                        <li>Dusting,</li>
+                        <li>Ironing,</li>
+                        <li>Laundry by hand,</li>
+                        <li>Painting,</li>
+                        <li>Raking leaves,</li>
+                        <li>Weeding,</li>
+                        <li>Cleaning the garage, and</li>
+                        <li>Caring for your family</li>
                     </ul>
-                    
                     <p>Some physical activity at home is better than none for your health. Remember, alone, Domestic-related physical activity may not be enough to meet the physical activity recommendation. Therefore, it is important to have other types of physical activity as well, for example, work-, transport-, and leisure-related physical activity.</p>
                 </div>
             </div>
             
-            <div class="actions">
-                <a class="btn" href="{% url 'intervention_access' %}" style="text-decoration: none;">Back to Intervention Access</a>
-            </div>
+            <div class="actions"></div>
         </div>
     </div>
 

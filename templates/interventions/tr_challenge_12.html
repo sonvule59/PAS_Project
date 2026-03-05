@@ -15,14 +15,15 @@
         p { color: #444; }
         .actions { margin-top: 1.25rem; display: flex; gap: 10px; flex-wrap: wrap; }
         .btn { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #fff; padding: 10px 16px; border-radius: 8px; text-decoration: none; font-weight: 600; border: none; cursor: pointer; }
-        .video-container { margin: 2rem 0; text-align: center; }
+        .video-container { margin: 2rem 0; text-align: left; }
         .video-wrapper { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 800px; margin: 0 auto; }
         .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; border-radius: 12px; }
-        .caption-toggle { margin: 1rem 0; text-align: center; }
-        .caption-toggle button { background: #f8f9fa; border: 2px solid #e0e0e0; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: 600; color: #333; }
-        .caption-toggle button:hover { background: #e9ecef; }
-        .caption-toggle button.active { background: #667eea; color: white; border-color: #667eea; }
-        .captions { background: #f8f9fa; border: 1px solid #e0e0e0; border-radius: 12px; padding: 1.5rem; margin: 1rem 0; display: none; }
+        .caption-toggle { margin: 1rem 0; text-align: left; }
+        .caption-toggle button { background: #ff6b35; border: none; padding: 10px 14px; border-radius: 8px; cursor: pointer; font-weight: 600; color: #fff; }
+        .caption-toggle button:hover { background: #e85c2b; }
+        .caption-toggle button.active { background: #ff6b35; color: #fff; }
+        .caption-actions { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; justify-content: flex-start; }
+        .captions { background: #f8f9fa; border: 1px solid #e0e0e0; border-radius: 12px; padding: 1.5rem; margin: 1rem auto; display: none; text-align: left; max-width: 800px; }
         .captions.show { display: block; }
         .captions h3 { margin: 0 0 1rem 0; color: #333; }
         .captions p { margin: 0.5rem 0; line-height: 1.6; }
@@ -59,7 +60,10 @@
                 </div>
                 
                 <div class="caption-toggle">
-                    <button onclick="toggleCaptions()" id="captionBtn">Show Captions</button>
+                    <div class="caption-actions">
+                        <button onclick="toggleCaptions()" id="captionBtn">Show Captions</button>
+                        <a class="btn" href="{% url 'intervention_access' %}" style="text-decoration: none;">Back to Intervention Access</a>
+                    </div>
                 </div>
                 
                 <div class="captions" id="captions">
@@ -75,7 +79,7 @@
             </div>
             
             <div class="intensity-examples">
-                <h4>Physical Activity Intensity Examples</h4>
+                <h4>Here are examples of light-, moderate-, and vigorous-intensity physical activity</h4>
                 <p><strong>Light-intensity physical activity includes:</strong></p>
                 <ul>
                     <li>Walking slowly, bicycling slowly, making the bed, preparing food, washing dishes, stretching, dancing slowly, golf-using cart, fishing, housework that involves light scrubbing/cleaning, etc.</li>
@@ -97,7 +101,7 @@
                     <div class="form-group">
                         <label>
                             <span class="question-number">1</span>
-                            Provide any transport-related physical activity that is an easy-to-perform task for you. For example, you can walk to a nearby place when the weather is ok. [8.7 graded tasks]
+                            Provide any transport-related physical activity that is an easy-to-perform task for you. For example, you can walk to a nearby place when the weather is ok.    
                         </label>
                         <textarea name="answer1" id="answer1" placeholder="Think of a simple transport-related activity you can do easily, like walking to a nearby store or parking farther away."></textarea>
                     </div>
@@ -105,7 +109,7 @@
                     <div class="form-group">
                         <label>
                             <span class="question-number">2</span>
-                            Provide any transport related physical activity that is increasingly difficult but achievable. For example, you can bike to a distant place when the weather is ok. [8.7 graded tasks]
+                            Provide any transport related physical activity that is increasingly difficult but achievable. For example, you can bike to a distant place when the weather is ok. 
                         </label>
                         <textarea name="answer2" id="answer2" placeholder="Think of a more challenging transport-related activity that's still achievable, like biking to work or walking a longer distance."></textarea>
                     </div>
@@ -113,7 +117,7 @@
                     <div class="form-group">
                         <label>
                             <span class="question-number">3</span>
-                            Make a specific plan that defines a context, time, frequency, duration, intensity for the transport-related physical activity that you listed. For example, on the weekends, you may walk to stores or restaurants with your family if the weather is ok. [1.4 action planning]
+                            Make a specific plan that defines a context, time, frequency, duration, intensity for the transport-related physical activity that you listed. For example, on the weekends, you may walk to stores or restaurants with your family if the weather is ok.
                         </label>
                         <textarea name="answer3" id="answer3" placeholder="Create a detailed plan with specific details about when, where, how often, and for how long you'll do your transport-related physical activity."></textarea>
                     </div>
@@ -121,7 +125,7 @@
                     <div class="form-group">
                         <label>
                             <span class="question-number">4</span>
-                            Make a flexible habit for the transport-related physical activity. For example, as your habit that is flexible (i.e., without strict time constraints), you can bike instead of drive to move whenever possible. [8.3 habit formation]
+                            Make a flexible habit for the transport-related physical activity. For example, as your habit that is flexible (i.e., without strict time constraints), you can bike instead of drive to move whenever possible.
                         </label>
                         <textarea name="answer4" id="answer4" placeholder="Create a flexible habit that you can incorporate into your daily routine without strict time constraints."></textarea>
                     </div>
@@ -130,9 +134,7 @@
                 </form>
             </div>
             
-            <div class="actions">
-                <a class="btn" href="{% url 'intervention_access' %}" style="text-decoration: none;">Back to Intervention Access</a>
-            </div>
+            <div class="actions"></div>
         </div>
     </div>
 

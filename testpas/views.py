@@ -1566,7 +1566,7 @@ def ge_challenge_1(request):
     participant = get_object_or_404(Participant, user=request.user)
     mark_challenge_completed(request.user, 1, "General Education 1")
     context = { 'participant': participant }
-    return render(request, 'interventions/ge_challenge_1.html', context)
+    return render(request, 'interventions/orientation_challenge_1.html', context)
 
 @login_required
 def ge_challenge_2(request):
@@ -1574,7 +1574,7 @@ def ge_challenge_2(request):
     participant = get_object_or_404(Participant, user=request.user)
     mark_challenge_completed(request.user, 2, "General Education 2")
     context = { 'participant': participant }
-    return render(request, 'interventions/ge_challenge_2.html', context)
+    return render(request, 'interventions/orientation_challenge_2.html', context)
 
 @login_required
 def ge_challenge_3(request):
@@ -1582,7 +1582,7 @@ def ge_challenge_3(request):
     participant = get_object_or_404(Participant, user=request.user)
     mark_challenge_completed(request.user, 3, "General Education 3")
     context = { 'participant': participant }
-    return render(request, 'interventions/ge_challenge_3_game.html', context)
+    return render(request, 'interventions/orientation_challenge_3_game.html', context)
 
 @login_required
 def ge_challenge_4(request):
@@ -1590,7 +1590,7 @@ def ge_challenge_4(request):
     participant = get_object_or_404(Participant, user=request.user)
     mark_challenge_completed(request.user, 4, "General Education 4")
     context = { 'participant': participant }
-    return render(request, 'interventions/ge_challenge_4.html', context)
+    return render(request, 'interventions/orientation_challenge_4.html', context)
 
 @login_required
 def ge_challenge_5(request):
@@ -1608,7 +1608,7 @@ def ge_challenge_5(request):
             q7 = int(request.POST.get('q7'))
         except (TypeError, ValueError):
             messages.error(request, 'Please answer all questions before submitting.')
-            return redirect('ge_challenge_5')
+            return redirect('orientation_challenge_5')
 
         from .models import Challenge5Response
         Challenge5Response.objects.create(
@@ -1620,7 +1620,7 @@ def ge_challenge_5(request):
         return redirect('intervention_access')
 
     context = { 'participant': participant }
-    return render(request, 'interventions/ge_challenge_5.html', context)
+    return render(request, 'interventions/orientation_challenge_5.html', context)
 
 @login_required
 def wr_challenge_6(request):
@@ -1969,7 +1969,7 @@ def mindfulness_challenge_31(request):
         'participant': participant,
         'current_points': participant.intervention_points if participant else 0
     }
-    return render(request, 'interventions/mindfulness_challenge_31_game.html', context)
+    return render(request, 'interventions/mindfulness_challenge_31.html', context)
 
 @login_required
 def mindfulness_challenge_32(request):
