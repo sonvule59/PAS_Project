@@ -22,7 +22,6 @@ from testpas.settings import *
 from hashlib import sha256
 from testpas.tasks import send_wave1_monitoring_email, send_wave1_code_entry_email, send_wave3_code_entry_email, send_confirmation_email_task, send_password_reset_email_task
 # from testpas.settings import DEFAULT_FROM_EMAIL
-from testpas.schedule_emails import schedule_wave1_monitoring_email
 from .models import *
 from .utils import validate_token
 import uuid
@@ -33,7 +32,6 @@ import pytz
 from .models import Participant, SurveyProgress, Survey, UserSurveyProgress, Content
 from .forms import CodeEntryForm, InterestForm, EligibilityForm, ConsentForm, UserRegistrationForm, PasswordResetForm, PasswordResetConfirmForm
 import csv
-from testpas.schedule_emails import schedule_wave1_monitoring_email
 from testpas.utils import get_current_time
 from .timeline import get_timeline_day, get_study_day
 from testpas.tasks import send_wave1_code_entry_email, send_wave3_code_entry_email
@@ -640,14 +638,6 @@ def consent_form(request, survey_id=None):
                 print(f"[ERROR] Failed to save progress for {user.username}: {e}")
                 messages.error(request, "Failed to save consent data. Please try again.")
                 return render(request, "consent_form.html", {"form": form})
-
-            # Trigger timeline automation
-            try:
-                schedule_wave1_monitoring_email(participant.pk)
-                print(f"[SEND] Triggered timeline email scheduling for participant {participant.participant_id}")
-            except Exception as e:
-                print(f"[ERROR] Failed to trigger timeline email scheduling for {participant.participant_id}: {e}")
-                messages.warning(request, "Consent saved, but email scheduling failed. Contact support.")
 
             print(f"[SEND] Consent processed successfully for {user.username}")
             return redirect("dashboard")
