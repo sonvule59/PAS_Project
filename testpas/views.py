@@ -52,7 +52,7 @@ def _generate_next_participant_id():
         raw_id = last_participant.participant_id
         if raw_id.startswith('P') and raw_id[1:].isdigit():
             next_num = int(raw_id[1:]) + 1
-        else:
+            else:
             next_num = last_participant.id + 1
     else:
         next_num = 1
@@ -79,38 +79,38 @@ def create_account(request):
     is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
     
     try:
-        if request.method == "POST":
-            form = UserRegistrationForm(request.POST)
-            if form.is_valid():
-                try:
-                    # Clear any existing session data to prevent user confusion
-                    request.session.flush()
-                    
-                    user = User.objects.create_user(
-                        username=form.cleaned_data['username'],
-                        email=form.cleaned_data['email'],
-                        password=form.cleaned_data['password']
-                    )
+    if request.method == "POST":
+        form = UserRegistrationForm(request.POST)
+        if form.is_valid():
+            try:
+                # Clear any existing session data to prevent user confusion
+                request.session.flush()
+                
+                user = User.objects.create_user(
+                    username=form.cleaned_data['username'],
+                    email=form.cleaned_data['email'],
+                    password=form.cleaned_data['password']
+                )
                     participant = None
                     for attempt in range(5):
                         try:
                             with transaction.atomic():
                                 participant_id = _generate_next_participant_id()
-                                participant = Participant.objects.create(
-                                    user=user,
-                                    email=user.email,
-                                    phone_number=form.cleaned_data['phone_number'],
+                participant = Participant.objects.create(
+                    user=user,
+                    email=user.email,
+                    phone_number=form.cleaned_data['phone_number'],
                                     full_name=form.cleaned_data['full_name'],
                                     address_line1=form.cleaned_data['address_line1'],
                                     address_line2=form.cleaned_data.get('address_line2', ''),
                                     city=form.cleaned_data['city'],
                                     state=form.cleaned_data['state'],
                                     zip_code=form.cleaned_data['zip_code'],
-                                    confirmation_token=str(uuid.uuid4()),
+                    confirmation_token=str(uuid.uuid4()),
                                     participant_id=participant_id,
-                                    enrollment_date=timezone.now().date(),
-                                    is_confirmed=False
-                                )
+                    enrollment_date=timezone.now().date(),
+                    is_confirmed=False
+                )
                             break
                         except IntegrityError:
                             if attempt == 4:
@@ -130,7 +130,7 @@ def create_account(request):
                             print(f"[SEND] Queued confirmation email for participant {participant.participant_id}")
                         else:
                             print(f"[SKIP] Skipping confirmation email for participant {participant.participant_id} - already confirmed or email already sent")
-                    except Exception as e:
+                except Exception as e:
                         # If Celery is not available, try synchronous sending as fallback
                         print(f"[ERROR] Celery task failed, trying synchronous email: {e}")
                         try:
@@ -149,38 +149,38 @@ def create_account(request):
                     
                     # Handle AJAX
                     if is_ajax:
-                        return JsonResponse({
-                            'status': 'success',
-                            'message': 'Account created. Please check your email to confirm.',
+                    return JsonResponse({
+                        'status': 'success',
+                        'message': 'Account created. Please check your email to confirm.',
                             'redirect': '/account/confirmation-pending/'
-                        })
-                    messages.success(request, "Account created. Please check your email to confirm.")
+                    })
+                messages.success(request, "Account created. Please check your email to confirm.")
                     return redirect("account_confirmation_pending")
-                except Exception as e:
+            except Exception as e:
                     import traceback
                     error_trace = traceback.format_exc()
                     print(f"[ERROR] Error creating account for username {form.cleaned_data.get('username')}: {e}\n{error_trace}")
                     if is_ajax:
-                        return JsonResponse({
-                            'status': 'error',
-                            'message': f"Failed to create account: {str(e)}"
-                        }, status=500)
-                    messages.error(request, f"Failed to create account: {str(e)}")
-            else:
-                print(f"[ERROR] Invalid form submission: {form.errors}")
-                if is_ajax:
                     return JsonResponse({
                         'status': 'error',
-                        'message': 'Please correct the errors below.',
-                        'errors': form.errors
-                    }, status=400)
-                messages.error(request, "Please correct the errors below.")
+                        'message': f"Failed to create account: {str(e)}"
+                    }, status=500)
+                    messages.error(request, f"Failed to create account: {str(e)}")
         else:
-            form = UserRegistrationForm()
+                print(f"[ERROR] Invalid form submission: {form.errors}")
+                if is_ajax:
+                return JsonResponse({
+                    'status': 'error',
+                    'message': 'Please correct the errors below.',
+                    'errors': form.errors
+                }, status=400)
+            messages.error(request, "Please correct the errors below.")
+    else:
+        form = UserRegistrationForm()
             
         if is_ajax:
-            return JsonResponse({'status': 'error', 'message': 'Invalid request method.'}, status=405)
-        return render(request, "create_account.html", {'form': form})
+        return JsonResponse({'status': 'error', 'message': 'Invalid request method.'}, status=405)
+    return render(request, "create_account.html", {'form': form})
         
     except Exception as e:
         # Catch any unexpected errors and always return JSON for AJAX requests
@@ -724,7 +724,7 @@ def dashboard(request):
     survey_progress = SurveyProgress.objects.filter(user=request.user).first()
     if survey_progress and survey_progress.consent_submitted and survey_progress.consented is False:
         return redirect('exit_screen_not_interested')
-
+    
     user_progress = UserSurveyProgress.objects.filter(user=request.user, survey__title="Eligibility Criteria").first()
     participant = Participant.objects.filter(user=request.user).first()
     progress_percentage = 0  # Default if not eligible or study_day not set
@@ -820,9 +820,9 @@ def dashboard(request):
                 # Start of Wave 1 code entry is Day 8 => +7 days from Day 1
                 day_11 = user_progress.day_1 + timedelta(days=7)
                 # End of Wave 1 code entry is Day 21 => +20 days from Day 1
-                day_21 = user_progress.day_1 + timedelta(days=20)
-                day_95 = user_progress.day_1 + timedelta(days=94)
-                day_104 = user_progress.day_1 + timedelta(days=103)
+            day_21 = user_progress.day_1 + timedelta(days=20)
+            day_95 = user_progress.day_1 + timedelta(days=94)
+            day_104 = user_progress.day_1 + timedelta(days=103)
                 day_120 = user_progress.day_1 + timedelta(days=119)
                 day_133 = user_progress.day_1 + timedelta(days=132)
                 
@@ -859,8 +859,8 @@ def dashboard(request):
                 start_date_wave3 = f"Study Day 120"
                 end_date_wave3 = f"Study Day 133"
             else:
-                start_date_wave1 = day_11
-                end_date_wave1 = day_21
+            start_date_wave1 = day_11
+            end_date_wave1 = day_21
                 start_date_wave3 = day_120
                 end_date_wave3 = day_133
 
@@ -1308,7 +1308,7 @@ def waiting_screen(request):
         content = Content.objects.get(content_type='waiting_screen')
         return render(request, "waiting_screen.html", {'content': content})
     except Content.DoesNotExist:
-        return render(request, "waiting_screen.html")
+    return render(request, "waiting_screen.html")
 
 def logout_view(request):
     print(f"[DEBUG] Logging out user: {request.user.username}")

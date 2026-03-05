@@ -85,6 +85,12 @@ def daily_timeline_check(user):
     
     # Calculate study day based on day_1 (which is set when consent is given)
     # CRITICAL: Use get_study_day with day_1, not get_timeline_day with user.date_joined
+    if compressed and not user_progress.timeline_reference_timestamp:
+        # Backfill missing reference timestamp to avoid inflated study days in time compression.
+        user_progress.timeline_reference_timestamp = now
+        user_progress.save(update_fields=['timeline_reference_timestamp'])
+        print(f"[FIXUP] Backfilled timeline_reference_timestamp for user {user.id}")
+
     # today = get_timeline_day(
     #     user, 
     today = get_study_day(
