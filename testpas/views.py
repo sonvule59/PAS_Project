@@ -52,7 +52,7 @@ def _generate_next_participant_id():
         raw_id = last_participant.participant_id
         if raw_id.startswith('P') and raw_id[1:].isdigit():
             next_num = int(raw_id[1:]) + 1
-            else:
+        else:
             next_num = last_participant.id + 1
     else:
         next_num = 1
