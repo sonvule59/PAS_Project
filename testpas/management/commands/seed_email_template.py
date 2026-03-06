@@ -111,7 +111,7 @@ EMAIL_TEMPLATES = [
         "subject": "Wave 2 Online Survey Set – Ready",
         "body": (
             "Hi {username},\n\n"
-            "Your next task is to complete <b>the Wave 2 Online Survey Set</b> within <b>7 days<b>. You will earn $5 in your Amazon electronic gift card account for completing this task. "
+            "Your next task is to complete <b>the Wave 2 Online Survey Set</b> within <b>7 days</b>. You will earn $5 in your Amazon electronic gift card account for completing this task. "
             "You will receive the accrued incentives after this study ends. <b>After 7 days</b>, this task will expire (i.e., no Amazon gift card for this task).\n"
             "· Link: {survey_link}\n\n"
             "If you need any assistance or have any questions at any time, please contact Seungmin Lee (Principal Investigator) at seunglee@iastate.edu or 517-898-0020.\n\n"
