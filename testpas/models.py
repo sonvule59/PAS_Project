@@ -28,25 +28,26 @@ class Question(models.Model):
     def __str__(self):
         return self.question_text
 
-class CustomUser(AbstractUser):
-    middle_name = models.CharField(max_length=30, null=True, blank=True)
-    registration_code = models.CharField(max_length=15, null=True, blank=True)
-    consented = models.BooleanField(null=True, blank=True)
-    consent_response = models.TextField(null=True, blank=True)
+# class CustomUser(AbstractUser):
+#     middle_name = models.CharField(max_length=30, null=True, blank=True)
+#     registration_code = models.CharField(max_length=15, null=True, blank=True)
+#     consented = models.BooleanField(null=True, blank=True)
+#     consent_response = models.TextField(null=True, blank=True)
 
-    # Avoid conflicts with default 'User' model by adding related_name
-    groups = models.ManyToManyField(
-        "auth.Group",
-        related_name="customuser_set",
-        blank=True,
-        help_text="The groups this user belongs to.",
-    )
-    user_permissions = models.ManyToManyField(
-        "auth.Permission",
-        related_name="customuser_set",
-        blank=True,
-        help_text="Specific permissions for this user.",
-    )
+#     # Avoid conflicts with default 'User' model by adding related_name
+#     groups = models.ManyToManyField(
+#         "auth.Group",
+#         related_name="customuser_set",
+#         blank=True,
+#         help_text="The groups this user belongs to.",
+#     )
+#     user_permissions = models.ManyToManyField(
+#         "auth.Permission",
+#         related_name="customuser_set",
+#         blank=True,
+#         help_text="Specific permissions for this user.",
+#     )
+
 class Response(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
@@ -638,6 +639,38 @@ class LeisureRelatedChallenge27Response(models.Model):
 
     def __str__(self):
         return f"LeisureRelatedChallenge27Response(user={self.user.username}, created_at={self.created_at:%Y-%m-%d %H:%M})"
+
+class MindfulnessRelatedChallenge29Response(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    participant = models.ForeignKey(Participant, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    answer1 = models.TextField(blank=True, null=True)  # Thought 1
+    answer2 = models.TextField(blank=True, null=True)  # Thought 2
+    answer3 = models.TextField(blank=True, null=True)  # Thought 3
+    answer4 = models.TextField(blank=True, null=True)  # Thought 4
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"MindfulnessRelatedChallenge29Response(user={self.user.username}, created_at={self.created_at:%Y-%m-%d %H:%M})"
+
+class MindfulnessRelatedChallenge32Response(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    participant = models.ForeignKey(Participant, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    answer1 = models.TextField(blank=True, null=True)  # List the occasions
+    answer2 = models.TextField(blank=True, null=True)  # Imagine practice
+    answer3 = models.TextField(blank=True, null=True)  # Develop a plan
+    answer4 = models.TextField(blank=True, null=True)  # General Goal
+    answer5 = models.TextField(blank=True, null=True)  # Outcome Goal
+    answer6 = models.TextField(blank=True, null=True)  # Social Support
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"MindfulnessRelatedChallenge32Response(user={self.user.username}, created_at={self.created_at:%Y-%m-%d %H:%M})"
 
 class ChallengeCompletion(models.Model):
     """Track which challenges each user has completed"""

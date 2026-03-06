@@ -1948,6 +1948,21 @@ def mindfulness_challenge_28(request):
 def mindfulness_challenge_29(request):
     """Mindfulness - Challenge 29: Easy Task"""
     participant = get_object_or_404(Participant, user=request.user)
+    
+    if request.method == 'POST':
+        from .models import MindfulnessRelatedChallenge29Response
+    # Save responses
+        MindfulnessRelatedChallenge29Response.objects.create(
+            user=request.user,
+            participant=participant,
+            answer1=request.POST.get('answer1', ''),
+            answer2=request.POST.get('answer2', ''),
+            answer3=request.POST.get('answer3', ''),
+            answer4=request.POST.get('answer4', ''),
+        )
+        messages.success(request, "Your mindfulness responses have been recorded. Thank you!")
+        return redirect('intervention_access')
+    
     mark_challenge_completed(request.user, 29, "Mindfulness Easy Task")
     context = {'participant': participant}
     return render(request, 'interventions/mindfulness_challenge_29.html', context)
@@ -1975,6 +1990,20 @@ def mindfulness_challenge_31(request):
 def mindfulness_challenge_32(request):
     """Mindfulness - Challenge 32: Technique"""
     participant = get_object_or_404(Participant, user=request.user)
+    if request.method == 'POST':
+        from .models import MindfulnessRelatedChallenge32Response
+    # Save responses
+        MindfulnessRelatedChallenge32Response.objects.create(
+            user=request.user,
+            participant=participant,
+            answer1=request.POST.get('answer1', ''),
+            answer2=request.POST.get('answer2', ''),
+            answer3=request.POST.get('answer3', ''),
+            answer4=request.POST.get('answer4', ''),
+        )
+        messages.success(request, "Your mindfulness responses have been recorded. Thank you!")
+        return redirect('intervention_access')
+    
     mark_challenge_completed(request.user, 32, "Mindfulness Technique")
     context = {'participant': participant}
     return render(request, 'interventions/mindfulness_challenge_32.html', context)
