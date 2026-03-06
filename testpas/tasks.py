@@ -85,6 +85,12 @@ def daily_timeline_check(user):
     
     # Calculate study day based on day_1 (which is set when consent is given)
     # CRITICAL: Use get_study_day with day_1, not get_timeline_day with user.date_joined
+    if compressed and not user_progress.timeline_reference_timestamp:
+        # Backfill missing reference timestamp to avoid inflated study days in time compression.
+        user_progress.timeline_reference_timestamp = now
+        user_progress.save(update_fields=['timeline_reference_timestamp'])
+        print(f"[FIXUP] Backfilled timeline_reference_timestamp for user {user.id}")
+
     # today = get_timeline_day(
     #     user, 
     today = get_study_day(
@@ -723,15 +729,12 @@ def send_wave1_monitoring_email(participant_id):
     """Information 10: Wave 1 Physical Activity Monitoring Ready"""
     try:
         participant = Participant.objects.get(id=participant_id)
-        template = EmailTemplate.objects.get(name='wave1_monitor_ready')
-        context = {'participant_id': participant.participant_id}
-        body = template.body.format(**context)
-        send_mail(
-            template.subject,
-            body,
-            settings.DEFAULT_FROM_EMAIL,
-            [participant.email or participant.user.email, 'svu23@iastate.edu', 'vuleson59@gmail.com', 'projectpas2024@gmail.com'],
-            fail_silently=False,
+        participant.send_email(
+            'wave1_monitor_ready',
+            extra_context={
+                'username': participant.user.username,
+                'participant_id': participant.participant_id,
+            }
         )
         participant.email_status = 'sent'
         participant.email_send_date = timezone.now().date()

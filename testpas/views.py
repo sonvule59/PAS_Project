@@ -22,7 +22,6 @@ from testpas.settings import *
 from hashlib import sha256
 from testpas.tasks import send_wave1_monitoring_email, send_wave1_code_entry_email, send_wave3_code_entry_email, send_confirmation_email_task, send_password_reset_email_task
 # from testpas.settings import DEFAULT_FROM_EMAIL
-from testpas.schedule_emails import schedule_wave1_monitoring_email
 from .models import *
 from .utils import validate_token
 import uuid
@@ -33,7 +32,6 @@ import pytz
 from .models import Participant, SurveyProgress, Survey, UserSurveyProgress, Content
 from .forms import CodeEntryForm, InterestForm, EligibilityForm, ConsentForm, UserRegistrationForm, PasswordResetForm, PasswordResetConfirmForm
 import csv
-from testpas.schedule_emails import schedule_wave1_monitoring_email
 from testpas.utils import get_current_time
 from .timeline import get_timeline_day, get_study_day
 from testpas.tasks import send_wave1_code_entry_email, send_wave3_code_entry_email
@@ -81,38 +79,38 @@ def create_account(request):
     is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
     
     try:
-        if request.method == "POST":
-            form = UserRegistrationForm(request.POST)
-            if form.is_valid():
-                try:
-                    # Clear any existing session data to prevent user confusion
-                    request.session.flush()
-                    
-                    user = User.objects.create_user(
-                        username=form.cleaned_data['username'],
-                        email=form.cleaned_data['email'],
-                        password=form.cleaned_data['password']
-                    )
+    if request.method == "POST":
+        form = UserRegistrationForm(request.POST)
+        if form.is_valid():
+            try:
+                # Clear any existing session data to prevent user confusion
+                request.session.flush()
+                
+                user = User.objects.create_user(
+                    username=form.cleaned_data['username'],
+                    email=form.cleaned_data['email'],
+                    password=form.cleaned_data['password']
+                )
                     participant = None
                     for attempt in range(5):
                         try:
                             with transaction.atomic():
                                 participant_id = _generate_next_participant_id()
-                                participant = Participant.objects.create(
-                                    user=user,
-                                    email=user.email,
-                                    phone_number=form.cleaned_data['phone_number'],
+                participant = Participant.objects.create(
+                    user=user,
+                    email=user.email,
+                    phone_number=form.cleaned_data['phone_number'],
                                     full_name=form.cleaned_data['full_name'],
                                     address_line1=form.cleaned_data['address_line1'],
                                     address_line2=form.cleaned_data.get('address_line2', ''),
                                     city=form.cleaned_data['city'],
                                     state=form.cleaned_data['state'],
                                     zip_code=form.cleaned_data['zip_code'],
-                                    confirmation_token=str(uuid.uuid4()),
+                    confirmation_token=str(uuid.uuid4()),
                                     participant_id=participant_id,
-                                    enrollment_date=timezone.now().date(),
-                                    is_confirmed=False
-                                )
+                    enrollment_date=timezone.now().date(),
+                    is_confirmed=False
+                )
                             break
                         except IntegrityError:
                             if attempt == 4:
@@ -132,7 +130,7 @@ def create_account(request):
                             print(f"[SEND] Queued confirmation email for participant {participant.participant_id}")
                         else:
                             print(f"[SKIP] Skipping confirmation email for participant {participant.participant_id} - already confirmed or email already sent")
-                    except Exception as e:
+                except Exception as e:
                         # If Celery is not available, try synchronous sending as fallback
                         print(f"[ERROR] Celery task failed, trying synchronous email: {e}")
                         try:
@@ -151,38 +149,38 @@ def create_account(request):
                     
                     # Handle AJAX
                     if is_ajax:
-                        return JsonResponse({
-                            'status': 'success',
-                            'message': 'Account created. Please check your email to confirm.',
+                    return JsonResponse({
+                        'status': 'success',
+                        'message': 'Account created. Please check your email to confirm.',
                             'redirect': '/account/confirmation-pending/'
-                        })
-                    messages.success(request, "Account created. Please check your email to confirm.")
+                    })
+                messages.success(request, "Account created. Please check your email to confirm.")
                     return redirect("account_confirmation_pending")
-                except Exception as e:
+            except Exception as e:
                     import traceback
                     error_trace = traceback.format_exc()
                     print(f"[ERROR] Error creating account for username {form.cleaned_data.get('username')}: {e}\n{error_trace}")
                     if is_ajax:
-                        return JsonResponse({
-                            'status': 'error',
-                            'message': f"Failed to create account: {str(e)}"
-                        }, status=500)
-                    messages.error(request, f"Failed to create account: {str(e)}")
-            else:
-                print(f"[ERROR] Invalid form submission: {form.errors}")
-                if is_ajax:
                     return JsonResponse({
                         'status': 'error',
-                        'message': 'Please correct the errors below.',
-                        'errors': form.errors
-                    }, status=400)
-                messages.error(request, "Please correct the errors below.")
+                        'message': f"Failed to create account: {str(e)}"
+                    }, status=500)
+                    messages.error(request, f"Failed to create account: {str(e)}")
         else:
-            form = UserRegistrationForm()
+                print(f"[ERROR] Invalid form submission: {form.errors}")
+                if is_ajax:
+                return JsonResponse({
+                    'status': 'error',
+                    'message': 'Please correct the errors below.',
+                    'errors': form.errors
+                }, status=400)
+            messages.error(request, "Please correct the errors below.")
+    else:
+        form = UserRegistrationForm()
             
         if is_ajax:
-            return JsonResponse({'status': 'error', 'message': 'Invalid request method.'}, status=405)
-        return render(request, "create_account.html", {'form': form})
+        return JsonResponse({'status': 'error', 'message': 'Invalid request method.'}, status=405)
+    return render(request, "create_account.html", {'form': form})
         
     except Exception as e:
         # Catch any unexpected errors and always return JSON for AJAX requests
@@ -641,14 +639,6 @@ def consent_form(request, survey_id=None):
                 messages.error(request, "Failed to save consent data. Please try again.")
                 return render(request, "consent_form.html", {"form": form})
 
-            # Trigger timeline automation
-            try:
-                schedule_wave1_monitoring_email(participant.pk)
-                print(f"[SEND] Triggered timeline email scheduling for participant {participant.participant_id}")
-            except Exception as e:
-                print(f"[ERROR] Failed to trigger timeline email scheduling for {participant.participant_id}: {e}")
-                messages.warning(request, "Consent saved, but email scheduling failed. Contact support.")
-
             print(f"[SEND] Consent processed successfully for {user.username}")
             return redirect("dashboard")
         else:
@@ -734,7 +724,7 @@ def dashboard(request):
     survey_progress = SurveyProgress.objects.filter(user=request.user).first()
     if survey_progress and survey_progress.consent_submitted and survey_progress.consented is False:
         return redirect('exit_screen_not_interested')
-
+    
     user_progress = UserSurveyProgress.objects.filter(user=request.user, survey__title="Eligibility Criteria").first()
     participant = Participant.objects.filter(user=request.user).first()
     progress_percentage = 0  # Default if not eligible or study_day not set
@@ -830,9 +820,9 @@ def dashboard(request):
                 # Start of Wave 1 code entry is Day 8 => +7 days from Day 1
                 day_11 = user_progress.day_1 + timedelta(days=7)
                 # End of Wave 1 code entry is Day 21 => +20 days from Day 1
-                day_21 = user_progress.day_1 + timedelta(days=20)
-                day_95 = user_progress.day_1 + timedelta(days=94)
-                day_104 = user_progress.day_1 + timedelta(days=103)
+            day_21 = user_progress.day_1 + timedelta(days=20)
+            day_95 = user_progress.day_1 + timedelta(days=94)
+            day_104 = user_progress.day_1 + timedelta(days=103)
                 day_120 = user_progress.day_1 + timedelta(days=119)
                 day_133 = user_progress.day_1 + timedelta(days=132)
                 
@@ -869,8 +859,8 @@ def dashboard(request):
                 start_date_wave3 = f"Study Day 120"
                 end_date_wave3 = f"Study Day 133"
             else:
-                start_date_wave1 = day_11
-                end_date_wave1 = day_21
+            start_date_wave1 = day_11
+            end_date_wave1 = day_21
                 start_date_wave3 = day_120
                 end_date_wave3 = day_133
 
@@ -1318,7 +1308,7 @@ def waiting_screen(request):
         content = Content.objects.get(content_type='waiting_screen')
         return render(request, "waiting_screen.html", {'content': content})
     except Content.DoesNotExist:
-        return render(request, "waiting_screen.html")
+    return render(request, "waiting_screen.html")
 
 def logout_view(request):
     print(f"[DEBUG] Logging out user: {request.user.username}")
@@ -1566,7 +1556,7 @@ def ge_challenge_1(request):
     participant = get_object_or_404(Participant, user=request.user)
     mark_challenge_completed(request.user, 1, "General Education 1")
     context = { 'participant': participant }
-    return render(request, 'interventions/ge_challenge_1.html', context)
+    return render(request, 'interventions/orientation_challenge_1.html', context)
 
 @login_required
 def ge_challenge_2(request):
@@ -1574,7 +1564,7 @@ def ge_challenge_2(request):
     participant = get_object_or_404(Participant, user=request.user)
     mark_challenge_completed(request.user, 2, "General Education 2")
     context = { 'participant': participant }
-    return render(request, 'interventions/ge_challenge_2.html', context)
+    return render(request, 'interventions/orientation_challenge_2.html', context)
 
 @login_required
 def ge_challenge_3(request):
@@ -1582,7 +1572,7 @@ def ge_challenge_3(request):
     participant = get_object_or_404(Participant, user=request.user)
     mark_challenge_completed(request.user, 3, "General Education 3")
     context = { 'participant': participant }
-    return render(request, 'interventions/ge_challenge_3_game.html', context)
+    return render(request, 'interventions/orientation_challenge_3_game.html', context)
 
 @login_required
 def ge_challenge_4(request):
@@ -1590,7 +1580,7 @@ def ge_challenge_4(request):
     participant = get_object_or_404(Participant, user=request.user)
     mark_challenge_completed(request.user, 4, "General Education 4")
     context = { 'participant': participant }
-    return render(request, 'interventions/ge_challenge_4.html', context)
+    return render(request, 'interventions/orientation_challenge_4.html', context)
 
 @login_required
 def ge_challenge_5(request):
@@ -1608,7 +1598,7 @@ def ge_challenge_5(request):
             q7 = int(request.POST.get('q7'))
         except (TypeError, ValueError):
             messages.error(request, 'Please answer all questions before submitting.')
-            return redirect('ge_challenge_5')
+            return redirect('orientation_challenge_5')
 
         from .models import Challenge5Response
         Challenge5Response.objects.create(
@@ -1620,7 +1610,7 @@ def ge_challenge_5(request):
         return redirect('intervention_access')
 
     context = { 'participant': participant }
-    return render(request, 'interventions/ge_challenge_5.html', context)
+    return render(request, 'interventions/orientation_challenge_5.html', context)
 
 @login_required
 def wr_challenge_6(request):
@@ -1984,7 +1974,7 @@ def mindfulness_challenge_31(request):
         'participant': participant,
         'current_points': participant.intervention_points if participant else 0
     }
-    return render(request, 'interventions/mindfulness_challenge_31_game.html', context)
+    return render(request, 'interventions/mindfulness_challenge_31.html', context)
 
 @login_required
 def mindfulness_challenge_32(request):

@@ -64,7 +64,7 @@
 
         .video-container {
             margin: 2rem 0;
-            text-align: center;
+            text-align: left;
         }
 
         .video-wrapper {
@@ -88,27 +88,34 @@
 
         .caption-toggle {
             margin: 1rem 0;
-            text-align: center;
+            text-align: left;
         }
 
         .caption-toggle button {
-            background: #f8f9fa;
-            border: 2px solid #e0e0e0;
-            padding: 8px 16px;
+            background: #ff6b35;
+            border: none;
+            padding: 10px 14px;
             border-radius: 8px;
             cursor: pointer;
             font-weight: 600;
-            color: #333;
+            color: #fff;
         }
 
         .caption-toggle button:hover {
-            background: #e9ecef;
+            background: #e85c2b;
         }
 
         .caption-toggle button.active {
-            background: #667eea;
-            color: white;
-            border-color: #667eea;
+            background: #ff6b35;
+            color: #fff;
+        }
+
+        .caption-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: flex-start;
         }
 
         .captions {
@@ -116,8 +123,10 @@
             border: 1px solid #e0e0e0;
             border-radius: 12px;
             padding: 1.5rem;
-            margin: 1rem 0;
+            margin: 1rem auto;
             display: none;
+            text-align: left;
+            max-width: 800px;
         }
 
         .captions.show {
@@ -238,7 +247,10 @@
                 </div>
 
                 <div class="caption-toggle">
-                    <button onclick="toggleCaptions()" id="captionBtn">Show Captions</button>
+                    <div class="caption-actions">
+                        <button onclick="toggleCaptions()" id="captionBtn">Show Captions</button>
+                        <a class="btn" href="{% url 'intervention_access' %}" style="text-decoration: none;">Back to Intervention Access</a>
+                    </div>
                 </div>
 
                 <div class="captions" id="captions">
@@ -320,10 +332,7 @@
                 </form>
             </div>
 
-            <div class="actions">
-                <a class="btn" href="{% url 'intervention_access' %}" style="text-decoration: none;">Back to
-                    Intervention Access</a>
-            </div>
+            <div class="actions"></div>
         </div>
     </div>
 
@@ -337,6 +346,15 @@
                 btn.textContent = 'Show Captions';
                 btn.classList.remove('active');
             } else {
+                captions.classList.add('show');
+                btn.textContent = 'Hide Captions';
+                btn.classList.add('active');
+            }
+        }
+    </script>
+</body>
+
+</html>
                 captions.classList.add('show');
                 btn.textContent = 'Hide Captions';
                 btn.classList.add('active');

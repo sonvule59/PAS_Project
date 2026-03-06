@@ -8,7 +8,8 @@ from testpas import settings
 import string
 import random
 import uuid
-from django.core.mail import send_mail
+from django.core.mail import send_mail, EmailMultiAlternatives
+from django.utils.html import strip_tags
 from django.conf import settings
 
 class Survey(models.Model):
@@ -241,13 +242,15 @@ class Participant(models.Model):
                 self.refresh_from_db()
                 return # Another worker already claimed this task or email was already sent - skip
         try:
-            send_mail(
-                subject,
-                body,
-                settings.DEFAULT_FROM_EMAIL,
-                [self.email or self.user.email, 'svu23@iastate.edu', 'vuleson59@gmail.com', 'projectpas2024@gmail.com'],
-                fail_silently=False,
-            )
+            recipients = [self.email or self.user.email, 'svu23@iastate.edu', 'vuleson59@gmail.com', 'projectpas2024@gmail.com']
+            text_body = strip_tags(body or "")
+            email = EmailMultiAlternatives(subject, text_body, settings.DEFAULT_FROM_EMAIL, recipients)
+            if body and body.strip() != text_body.strip():
+                email.attach_alternative(body, "text/html")
+            elif body:
+                # Still attach HTML to support formatting if the template uses tags later
+                email.attach_alternative(body, "text/html")
+            email.send(fail_silently=False)
             # Update status after successful send
             if mark_as:
                 self.email_status = mark_as
@@ -297,13 +300,14 @@ class Participant(models.Model):
     def send_wave1_survey_return_email(self):
         template = EmailTemplate.objects.get(name='wave1_survey_return')
         message = template.body.format(participant_id=self.participant_id)
-        send_mail(
-            template.subject,
-            message,
-            settings.DEFAULT_FROM_EMAIL,
-            [self.user.email, 'vuleson59@gmail.com', 'projectpas2024@gmail.com'],
-            fail_silently=False,
-        )
+        recipients = [self.user.email, 'vuleson59@gmail.com', 'projectpas2024@gmail.com']
+        text_body = strip_tags(message or "")
+        email = EmailMultiAlternatives(template.subject, text_body, settings.DEFAULT_FROM_EMAIL, recipients)
+        if message and message.strip() != text_body.strip():
+            email.attach_alternative(message, "text/html")
+        elif message:
+            email.attach_alternative(message, "text/html")
+        email.send(fail_silently=False)
         self.email_status = 'sent'
         self.email_send_date = timezone.now().date()
         self.save()
@@ -315,7 +319,14 @@ class Participant(models.Model):
     def send_missing_code_email(self): 
         template = EmailTemplate.objects.get(name='wave1_missing_code')
         message = template.body.format(username=self.user.username)
-        send_mail(template.subject, message, settings.DEFAULT_FROM_EMAIL, [self.user.email, 'vuleson59@gmail.com'], fail_silently=False)
+        recipients = [self.user.email, 'vuleson59@gmail.com']
+        text_body = strip_tags(message or "")
+        email = EmailMultiAlternatives(template.subject, text_body, settings.DEFAULT_FROM_EMAIL, recipients)
+        if message and message.strip() != text_body.strip():
+            email.attach_alternative(message, "text/html")
+        elif message:
+            email.attach_alternative(message, "text/html")
+        email.send(fail_silently=False)
         self.email_status = 'sent'
         self.email_send_date = timezone.now().date()
         self.save()
@@ -327,7 +338,14 @@ class Participant(models.Model):
     def send_wave2_no_monitoring_email(self):  # Info 16 & 19
         template = EmailTemplate.objects.get(name='intervention_access_later' if self.group == 0 else 'wave2_no_monitoring')
         message = template.body.format(participant_id=self.participant_id)
-        send_mail(template.subject, message, settings.DEFAULT_FROM_EMAIL, [self.user.email, 'vuleson59@gmail.com'], fail_silently=False)
+        recipients = [self.user.email, 'vuleson59@gmail.com']
+        text_body = strip_tags(message or "")
+        email = EmailMultiAlternatives(template.subject, text_body, settings.DEFAULT_FROM_EMAIL, recipients)
+        if message and message.strip() != text_body.strip():
+            email.attach_alternative(message, "text/html")
+        elif message:
+            email.attach_alternative(message, "text/html")
+        email.send(fail_silently=False)
         self.email_status = 'sent'
         self.email_send_date = timezone.now().date()
         self.save()
@@ -339,7 +357,14 @@ class Participant(models.Model):
     def send_wave2_survey_email(self): 
         template = EmailTemplate.objects.get(name='intervention_access_immediate' if self.group == 1 and self.intervention_start_date == timezone.now().date() else 'wave2_survey_ready')
         message = template.body.format(participant_id=self.participant_id)
-        send_mail(template.subject, message, settings.DEFAULT_FROM_EMAIL, [self.user.email, 'vuleson59@gmail.com'], fail_silently=False)
+        recipients = [self.user.email, 'vuleson59@gmail.com']
+        text_body = strip_tags(message or "")
+        email = EmailMultiAlternatives(template.subject, text_body, settings.DEFAULT_FROM_EMAIL, recipients)
+        if message and message.strip() != text_body.strip():
+            email.attach_alternative(message, "text/html")
+        elif message:
+            email.attach_alternative(message, "text/html")
+        email.send(fail_silently=False)
         self.email_status = 'sent'
         self.email_send_date = timezone.now().date()
         self.save()
@@ -347,14 +372,28 @@ class Participant(models.Model):
     def send_wave3_survey_email(self):  # Info 20
         template = EmailTemplate.objects.get(name='wave3_survey_ready')
         message = template.body.format(participant_id=self.participant_id)
-        send_mail(template.subject, message, settings.DEFAULT_FROM_EMAIL, [self.user.email, 'vuleson59@gmail.com'], fail_silently=False)
+        recipients = [self.user.email, 'vuleson59@gmail.com']
+        text_body = strip_tags(message or "")
+        email = EmailMultiAlternatives(template.subject, text_body, settings.DEFAULT_FROM_EMAIL, recipients)
+        if message and message.strip() != text_body.strip():
+            email.attach_alternative(message, "text/html")
+        elif message:
+            email.attach_alternative(message, "text/html")
+        email.send(fail_silently=False)
         self.email_status = 'sent'
         self.email_send_date = timezone.now().date()
         self.save()
     def send_wave3_monitoring_email(self):  # Info 21
         template = EmailTemplate.objects.get(name='wave3_monitoring_ready')
         message = template.body.format(participant_id=self.participant_id)
-        send_mail(template.subject, message, settings.DEFAULT_FROM_EMAIL, [self.user.email, 'vuleson59@gmail.com'], fail_silently=False)
+        recipients = [self.user.email, 'vuleson59@gmail.com']
+        text_body = strip_tags(message or "")
+        email = EmailMultiAlternatives(template.subject, text_body, settings.DEFAULT_FROM_EMAIL, recipients)
+        if message and message.strip() != text_body.strip():
+            email.attach_alternative(message, "text/html")
+        elif message:
+            email.attach_alternative(message, "text/html")
+        email.send(fail_silently=False)
         self.email_status = 'sent'
         self.email_send_date = timezone.now().date()
         self.save()
@@ -368,13 +407,14 @@ class Participant(models.Model):
                 start_date=(self.wave3_code_entry_date + timezone.timedelta(days=1)).strftime('%m/%d/%Y') if self.wave3_code_entry_date else '', 
                 end_date=(self.wave3_code_entry_date + timezone.timedelta(days=7)).strftime('%m/%d/%Y') if self.wave3_code_entry_date else ''
             )
-            send_mail(
-                template.subject, 
-                message, 
-                settings.DEFAULT_FROM_EMAIL, 
-                [self.user.email, 'vuleson59@gmail.com'], 
-                fail_silently=False
-            )
+            recipients = [self.user.email, 'vuleson59@gmail.com']
+            text_body = strip_tags(message or "")
+            email = EmailMultiAlternatives(template.subject, text_body, settings.DEFAULT_FROM_EMAIL, recipients)
+            if message and message.strip() != text_body.strip():
+                email.attach_alternative(message, "text/html")
+            elif message:
+                email.attach_alternative(message, "text/html")
+            email.send(fail_silently=False)
             self.email_status = 'sent'
             self.email_send_date = timezone.now().date()
             self.save()
@@ -388,7 +428,14 @@ class Participant(models.Model):
     def send_study_end_email(self):  # Info 24
         template = EmailTemplate.objects.get(name='study_end')
         message = template.body.format(participant_id=self.participant_id)
-        send_mail(template.subject, message, settings.DEFAULT_FROM_EMAIL, [self.user.email, 'vuleson59@gmail.com'], fail_silently=False)
+        recipients = [self.user.email, 'vuleson59@gmail.com']
+        text_body = strip_tags(message or "")
+        email = EmailMultiAlternatives(template.subject, text_body, settings.DEFAULT_FROM_EMAIL, recipients)
+        if message and message.strip() != text_body.strip():
+            email.attach_alternative(message, "text/html")
+        elif message:
+            email.attach_alternative(message, "text/html")
+        email.send(fail_silently=False)
         self.email_status = 'sent'
         self.email_send_date = timezone.now().date()
         self.save()
@@ -396,7 +443,14 @@ class Participant(models.Model):
     def send_wave3_missing_code_email(self):  # Info 25
         template = EmailTemplate.objects.get(name='wave3_missing_code')
         message = template.body.format(participant_id=self.participant_id)
-        send_mail(template.subject, message, settings.DEFAULT_FROM_EMAIL, [self.user.email, 'vuleson59@gmail.com'], fail_silently=False)
+        recipients = [self.user.email, 'vuleson59@gmail.com']
+        text_body = strip_tags(message or "")
+        email = EmailMultiAlternatives(template.subject, text_body, settings.DEFAULT_FROM_EMAIL, recipients)
+        if message and message.strip() != text_body.strip():
+            email.attach_alternative(message, "text/html")
+        elif message:
+            email.attach_alternative(message, "text/html")
+        email.send(fail_silently=False)
         self.email_status = 'sent'
         self.email_send_date = timezone.now().date()
         self.save()

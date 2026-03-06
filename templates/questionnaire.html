@@ -124,7 +124,7 @@
 <body>
     <div class="container">
         <div class="card">
-            <h1>Eligibility Questionnaire</h1>
+        <h1>Eligibility Questionnaire</h1>
             <h2>Please answer the following questions to determine eligibility</h2>
             <form id="questionnaire-form" action="" method="POST">
                 {% csrf_token %}
@@ -300,6 +300,11 @@
                 </div>
 
                 <div class="form-group">
+                    <label for="bmi_display">Your BMI (auto-calculated)</label>
+                    <input type="text" id="bmi_display" readonly placeholder="Enter height and weight above">
+                </div>
+
+                <div class="form-group">
                     <label>4. Will you have access to a technological device (e.g., computer, smart phone) that can access the online intervention via a web browser throughout this study?</label>
                     <div class="radio-group">
                         <label>
@@ -401,6 +406,28 @@
             heightSelect.dataset.populated = 'true';
         }
 
+        function calculateBmi() {
+            const heightValue = document.getElementById('height')?.value;
+            const weightValue = document.getElementById('weight')?.value;
+            const bmiDisplay = document.getElementById('bmi_display');
+
+            if (!heightValue || !weightValue) {
+                bmiDisplay.value = '';
+                return;
+            }
+
+            const height = heightValue === 'lt48' ? 47 : heightValue === 'gt83' ? 84 : Number(heightValue);
+            const weight = weightValue === 'lt120' ? 119 : weightValue === 'gt500' ? 501 : Number(weightValue);
+
+            if (!height || !weight) {
+                bmiDisplay.value = '';
+                return;
+            }
+
+            const bmi = (weight / (height ** 2)) * 703;
+            bmiDisplay.value = bmi.toFixed(2);
+        }
+
         function toggleDominantHand() {
             const monitoringYes = document.querySelector('input[name="comply_monitoring"][value="yes"]');
             const dominantHandSection = document.getElementById('dominant-hand-section');
@@ -425,6 +452,9 @@
         document.addEventListener('DOMContentLoaded', function() {
             populateHeightOptions();
             toggleDominantHand();
+            calculateBmi();
+            document.getElementById('height')?.addEventListener('change', calculateBmi);
+            document.getElementById('weight')?.addEventListener('change', calculateBmi);
         });
     </script>
 </body>
