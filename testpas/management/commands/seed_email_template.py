@@ -191,7 +191,7 @@ EMAIL_TEMPLATES = [
         "body": (
             "Hi {username},\n\n"
             "You missed the code entry (i.e., no $30 worth of Amazon electronic gift cards).\n\n"
-            "You may have received our mail package—please check your mailbox. Please (a) open the package and (b) return the monitor using the <b><u>yellow prepaid envelope</u></b>. If possible, within 3 days, <b><u>visit a nearby USPS office or drop it in a USPS dropbox</u></b>. The monitor is expensive and important to us.\n\n"
+            "You may have received our mail package—please check your mailbox. Please (a) open the package and (b) return the monitor using <b><u>the yellow prepaid envelope</u></b>. If possible, within 3 days, <b><u>visit a nearby USPS office or drop it in a USPS dropbox</u></b>. The monitor is expensive and important to us.\n\n"
             "<b><u>If you complete the above tasks, no further action is required for this study.</u></b>\n\n"
             "Any funds earned on your Amazon electronic gift card account will be sent to you as soon as possible via your email. Thank you for the time you have contributed to this study!\n\n"
             "Sincerely,\n\n"
