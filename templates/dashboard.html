@@ -386,7 +386,7 @@
                     <div class="alert alert-success">
                         <h3>🎉 Wave 2 Online Survey</h3>
                         <p><strong>Hi {{ participant.user.username }},</strong></p>
-                        <p>Please click the button below to complete your task, Survey 2,<b><u>within 7 days</u></b> to receive a $5 Amazon gift card. We highly recommend completing it as soon as possible before the link expires. You may need to remember your ID from this website and enter it to complete the survey. Your ID is: <strong>{{ participant.participant_id }}</strong></p>
+                        <p>Please click the button below to complete your task, Survey 2,<b><u>within 7 days</u></b> to receive a $5 Amazon gift card. We highly recommend completing it as soon as possible before the link expires. You may need to remember your username and enter it to complete the survey. Your username is: <strong>{{ participant.user.username }}</strong></p>
                         
                         {% if wave2_survey_content %}
                             <div style="margin: 1rem 0;">
