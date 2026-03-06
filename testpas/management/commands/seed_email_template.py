@@ -97,7 +97,7 @@ EMAIL_TEMPLATES = [
             "· Please log in from the following website: (***Login link placeholder, will be updated in production***)\n"
             "· Your ID is: {username}. If you forgot your password, you may reset it on the website.\n\n"
             "If you complete <b><u><span style=\"color: red;\">at least 24 post-introductory challenges</span></u></b> during the 4 weeks, you will earn an additional $20 "
-            "in your Amazon electronic gift card account. Thoughtfully completing <b><u><span style=\"color: red;\">at least 24 post-introductory challenges</span></u></b> "
+            "in your Amazon electronic gift card account. Thoughtfully completing <b><span style=\"color: red;\">at least 24 post-introductory challenges</span></b> "
             "may take approximately 2 hours. You will receive the accrued incentives after this study ends.\n\n"
             "We will also email you again <b><u>in approximately 4 weeks</u></b> for the next task (i.e., completing an online survey set). "
             "Please regularly check your inbox. You will receive the accrued incentives after this study ends.\n\n"
