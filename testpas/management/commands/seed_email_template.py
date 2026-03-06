@@ -24,13 +24,13 @@ EMAIL_TEMPLATES = [
         "name": "wave1_survey_ready",
         "subject": "Wave 1 Online Survey Set – Ready",
         "body": "Hi {username},\n\nCongratulations! You are now enrolled as a participant in the study."
-        "\n\nYour next task is to complete  <b> the Wave 1 Online Survey Set</b> within 7 days. You will earn $5 in your Amazon electronic gift card account for completing this task. You will receive the accrued incentives after this study ends. <b>After 7 days</b>, this task will expire (i.e., no Amazon gift card for this task)."
+        "\n\nYour next task is to complete  <b>the Wave 1 Online Survey Set</b> within 7 days. You will earn $5 in your Amazon electronic gift card account for completing this task. You will receive the accrued incentives after this study ends. <b>After 7 days</b>, this task will expire (i.e., no Amazon gift card for this task)."
         "\n\n· Link: {survey_link}\n\nYou may need to remember your username to complete the survey. Your username is: {username}."
         "\n\nYou may click the following link to view and download the consent document for your records:[a link that will be updated by researchers]\n\nIf you need any assistance or have any questions at any time, please contact Seungmin (“Seung”) Lee (Principal Investigator) at seunglee@iastate.edu or 517-898-0020.\n\nSincerely,\n\nThe Confident Moves Research Team"
     },
     {
         "name": "wave1_monitor_ready",
-        "subject": "Wave 1 Physical Activity Monitoring – Ready",
+        "subject": "Wave 1 Physical Activity Monitoring – Ready to Enter Code",
         "body": (
             "Hi {username},\n\n"
             "Your next task is to complete <b>Wave 1 Physical Activity Monitoring</b>.\n\n"
@@ -51,8 +51,8 @@ EMAIL_TEMPLATES = [
                 'Hi {username},\n\n'
                 'You have successfully entered the access code for physical activity monitoring. Thank you!\n\n'
                 'Please start wearing the monitor <b><u>tomorrow</u></b> for <b><u>seven consecutive days</u></b>. For example, if you enter the code on {code_date} (Fri), please wear <b>the monitor</b> starting on {start_date} (Sat) and continue wearing it until {end_date} (Fri).\n\n'
-                'Please wear the monitor as much as possible during the <b><u>seven consecutive days</u></b>. To earn $25 in Amazon gift cards, please wear the monitor for <b><u>at least 3 days with at least 10 hours each day</u></b>. If this requirement is not met, we may not be able to provide the incentive.\n\n'
-                'Please <b><u>keep the yellow prepaid envelope</u></b>. You will use it to return the monitor after the 7 days.\n\n'
+                'Please wear the monitor as much as possible during the seven consecutive days. To earn $25 in Amazon gift cards, please wear the monitor for <b><u>at least 3 days with at least 10 hours each day</u></b>. If this requirement is not met, we may not be able to provide the incentive.\n\n'
+                'Please keep <b><u>the yellow prepaid envelope</u></b>. You will use it to return the monitor after the 7 days.\n\n'
                 'If you need any assistance or have any questions at any time, please contact Seungmin (“Seung”) Lee (Principal Investigator) at seunglee@iastate.edu or 517-898-0020.\n\n'
                 'Sincerely,\n\n'
                 'The Confident Moves Research Team'
@@ -147,7 +147,7 @@ EMAIL_TEMPLATES = [
     },
     {
         "name": "wave3_monitoring_ready",
-        "subject": "Wave 3 Physical Activity Monitoring – Ready",
+        "subject": "Wave 3 Physical Activity Monitoring – Ready to Enter Code",
         "body": (
             "Hi {username},\n\n"
             "Your next task is to complete <b>Wave 3 Physical Activity Monitoring</b>.\n"
