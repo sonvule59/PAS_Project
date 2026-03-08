@@ -78,39 +78,39 @@ def home(request):
 def create_account(request):
     is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
     try:
-    if request.method == "POST":
-        form = UserRegistrationForm(request.POST)
-        if form.is_valid():
-            try:
-                # Clear any existing session data to prevent user confusion
-                request.session.flush()
-                
-                user = User.objects.create_user(
-                    username=form.cleaned_data['username'],
-                    email=form.cleaned_data['email'],
-                    password=form.cleaned_data['password']
-                )
+        if request.method == "POST":
+            form = UserRegistrationForm(request.POST)
+            if form.is_valid():
+                try:
+                    # Clear any existing session data to prevent user confusion
+                    request.session.flush()
+
+                    user = User.objects.create_user(
+                        username=form.cleaned_data['username'],
+                        email=form.cleaned_data['email'],
+                        password=form.cleaned_data['password']
+                    )
                     participant = None
                     for attempt in range(5):
                         try:
                             with transaction.atomic():
                                 participant_id = _generate_next_participant_id()
-                participant = Participant.objects.create(
-                    user=user,
-                    email=user.email,
-                    phone_number=form.cleaned_data['phone_number'],
+                                participant = Participant.objects.create(
+                                    user=user,
+                                    email=user.email,
+                                    phone_number=form.cleaned_data['phone_number'],
                                     full_name=form.cleaned_data['full_name'],
                                     address_line1=form.cleaned_data['address_line1'],
                                     address_line2=form.cleaned_data.get('address_line2', ''),
                                     city=form.cleaned_data['city'],
                                     state=form.cleaned_data['state'],
                                     zip_code=form.cleaned_data['zip_code'],
-                    confirmation_token=str(uuid.uuid4()),
+                                    confirmation_token=str(uuid.uuid4()),
                                     participant_id=participant_id,
-                    enrollment_date=timezone.now().date(),
-                    is_confirmed=False
-                )
-                break  # Exit the loop if participant creation succeeds
+                                    enrollment_date=timezone.now().date(),
+                                    is_confirmed=False
+                                )
+                            break  # Exit the loop if participant creation succeeds
                         except IntegrityError:
                             if attempt == 4:
                                 raise
@@ -126,7 +126,7 @@ def create_account(request):
                             print(f"[SEND] Queued confirmation email for participant {participant.participant_id}")
                         else:
                             print(f"[SKIP] Skipping confirmation email for participant {participant.participant_id} - already confirmed or email already sent")
-                except Exception as e:
+                    except Exception as e:
                         # If Celery is not available, try synchronous sending as fallback
                         print(f"[ERROR] Celery task failed, trying synchronous email: {e}")
                         try:
@@ -143,51 +143,51 @@ def create_account(request):
                             # Don't fail account creation if email fails - log it and continue
 
                     if is_ajax:
-                    return JsonResponse({
-                        'status': 'success',
-                        'message': 'Account created. Please check your email to confirm.',
+                        return JsonResponse({
+                            'status': 'success',
+                            'message': 'Account created. Please check your email to confirm.',
                             'redirect': '/account/confirmation-pending/'
-                    })
-                messages.success(request, "Account created. Please check your email to confirm.")
+                        })
+                    messages.success(request, "Account created. Please check your email to confirm.")
                     return redirect("account_confirmation_pending")
-            except Exception as e:
+                except Exception as e:
                     import traceback
                     error_trace = traceback.format_exc()
                     print(f"[ERROR] Error creating account for username {form.cleaned_data.get('username')}: {e}\n{error_trace}")
                     if is_ajax:
-                    return JsonResponse({
-                        'status': 'error',
-                        'message': f"Failed to create account: {str(e)}"
-                    }, status=500)
+                        return JsonResponse({
+                            'status': 'error',
+                            'message': f"Failed to create account: {str(e)}"
+                        }, status=500)
                     messages.error(request, f"Failed to create account: {str(e)}")
-        else:
+            else:
                 print(f"[ERROR] Invalid form submission: {form.errors}")
                 if is_ajax:
-                return JsonResponse({
-                    'status': 'error',
-                    'message': 'Please correct the errors below.',
-                    'errors': form.errors
-                }, status=400)
-            messages.error(request, "Please correct the errors below.")
-    else:
-        form = UserRegistrationForm()
+                    return JsonResponse({
+                        'status': 'error',
+                        'message': 'Please correct the errors below.',
+                        'errors': form.errors
+                    }, status=400)
+                messages.error(request, "Please correct the errors below.")
+        else:
+            form = UserRegistrationForm()
 
         if is_ajax:
             return JsonResponse({'status': 'error', 'message': 'Invalid request method.'}, status=405)
-    return render(request, "create_account.html", {'form': form})
+        return render(request, "create_account.html", {'form': form})
 
-        # except Exception as e:
-        # # Catch any unexpected errors and always return JSON for AJAX requests
-        # import traceback
-        # error_trace = traceback.format_exc()
-        # print(f"[ERROR] Unexpected error in create_account: {e}\n{error_trace}")
-        # if is_ajax:
-        #     return JsonResponse({
-        #         'status': 'error',
-        #         'message': f"An unexpected error occurred: {str(e)}"
-        #     }, status=500)
-        # # For non-AJAX requests, re-raise to show Django error page
-        # raise
+    except Exception as e:
+        # Catch any unexpected errors and always return JSON for AJAX requests
+        import traceback
+        error_trace = traceback.format_exc()
+        print(f"[ERROR] Unexpected error in create_account: {e}\n{error_trace}")
+        if is_ajax:
+            return JsonResponse({
+                'status': 'error',
+                'message': f"An unexpected error occurred: {str(e)}"
+            }, status=500)
+        # For non-AJAX requests, re-raise to show Django error page
+        raise
 
 """Information 3: Email Confirmation to Activate Account"""
 @csrf_exempt
