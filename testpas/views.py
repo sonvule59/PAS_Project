@@ -52,7 +52,7 @@ def _generate_next_participant_id():
         raw_id = last_participant.participant_id
         if raw_id.startswith('P') and raw_id[1:].isdigit():
             next_num = int(raw_id[1:]) + 1
-            else:
+        else:
             next_num = last_participant.id + 1
     else:
         next_num = 1
@@ -77,7 +77,6 @@ def home(request):
 @csrf_exempt
 def create_account(request):
     is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
-
     try:
     if request.method == "POST":
         form = UserRegistrationForm(request.POST)
@@ -111,7 +110,7 @@ def create_account(request):
                     enrollment_date=timezone.now().date(),
                     is_confirmed=False
                 )
-                            break
+                break  # Exit the loop if participant creation succeeds
                         except IntegrityError:
                             if attempt == 4:
                                 raise
@@ -174,21 +173,21 @@ def create_account(request):
         form = UserRegistrationForm()
 
         if is_ajax:
-        return JsonResponse({'status': 'error', 'message': 'Invalid request method.'}, status=405)
+            return JsonResponse({'status': 'error', 'message': 'Invalid request method.'}, status=405)
     return render(request, "create_account.html", {'form': form})
 
-    except Exception as e:
-        # Catch any unexpected errors and always return JSON for AJAX requests
-        import traceback
-        error_trace = traceback.format_exc()
-        print(f"[ERROR] Unexpected error in create_account: {e}\n{error_trace}")
-        if is_ajax:
-            return JsonResponse({
-                'status': 'error',
-                'message': f"An unexpected error occurred: {str(e)}"
-            }, status=500)
-        # For non-AJAX requests, re-raise to show Django error page
-        raise
+        # except Exception as e:
+        # # Catch any unexpected errors and always return JSON for AJAX requests
+        # import traceback
+        # error_trace = traceback.format_exc()
+        # print(f"[ERROR] Unexpected error in create_account: {e}\n{error_trace}")
+        # if is_ajax:
+        #     return JsonResponse({
+        #         'status': 'error',
+        #         'message': f"An unexpected error occurred: {str(e)}"
+        #     }, status=500)
+        # # For non-AJAX requests, re-raise to show Django error page
+        # raise
 
 """Information 3: Email Confirmation to Activate Account"""
 @csrf_exempt
@@ -815,9 +814,9 @@ def dashboard(request):
                 # Start of Wave 1 code entry is Day 8 => +7 days from Day 1
                 day_11 = user_progress.day_1 + timedelta(days=7)
                 # End of Wave 1 code entry is Day 21 => +20 days from Day 1
-            day_21 = user_progress.day_1 + timedelta(days=20)
-            day_95 = user_progress.day_1 + timedelta(days=94)
-            day_104 = user_progress.day_1 + timedelta(days=103)
+                day_21 = user_progress.day_1 + timedelta(days=20)
+                day_95 = user_progress.day_1 + timedelta(days=94)
+                day_104 = user_progress.day_1 + timedelta(days=103)
                 day_120 = user_progress.day_1 + timedelta(days=119)
                 day_133 = user_progress.day_1 + timedelta(days=132)
                 
@@ -854,8 +853,8 @@ def dashboard(request):
                 start_date_wave3 = f"Study Day 120"
                 end_date_wave3 = f"Study Day 133"
             else:
-            start_date_wave1 = day_11
-            end_date_wave1 = day_21
+                start_date_wave1 = day_11
+                end_date_wave1 = day_21
                 start_date_wave3 = day_120
                 end_date_wave3 = day_133
 
@@ -1261,7 +1260,7 @@ def waiting_screen(request):
         content = Content.objects.get(content_type='waiting_screen')
         return render(request, "waiting_screen.html", {'content': content})
     except Content.DoesNotExist:
-    return render(request, "waiting_screen.html")
+        return render(request, "waiting_screen.html")
 
 def logout_view(request):
     print(f"[DEBUG] Logging out user: {request.user.username}")
