@@ -887,19 +887,6 @@ def dashboard(request):
         participant and participant.randomized_group == 0):
         show_information_16 = True
         print(f"[DEBUG] Showing Information 16 for Group 0 participant on Day {study_day}")
-        information_16_content, _ = Content.objects.get_or_create(
-            content_type='information_16',
-            defaults={
-                'title': 'Next Task in Approximately 4 Weeks',
-                'content': (
-                    '<div>'
-                    '<p>We recommend that you maintain your usual daily routines. We will email you again in approximately 4 weeks for the next task (i.e., completing an online survey set). Please regularly check your inbox. You will receive the accrued incentives after this study ends.</p>'
-                    '<p>If you need any assistance or have any questions at any time, please contact Seungmin ("Seung") Lee (Principal Investigator) at <a href="mailto:seunglee@iastate.edu">seunglee@iastate.edu</a> or <a href="tel:517-898-0020">517-898-0020</a>.</p>'
-                    '<p><strong>Sincerely,</strong><br>The Confident Moves Research Team</p>'
-                    '</div>'
-                )
-            }
-        )
 
     # Check if Information 17 should be shown for Group 1 (Days 29-56)
     # Information 17: Intervention group sees this message from Day 29 to Day 56, removed on Day 57
@@ -909,21 +896,6 @@ def dashboard(request):
         participant and participant.randomized_group is not None and participant.randomized_group == 1):
         show_information_17 = True
         print(f"[DEBUG] Showing Information 17 for Group 1 participant on Day {study_day}")
-        information_17_content, _ = Content.objects.get_or_create(
-            content_type='information_17',
-            defaults={
-                'title': 'Intervention Access Available',
-                'content': (
-                    '<div>'
-                    '<p>Congratulations! You have been assigned to the intervention group (Group 1).</p>'
-                    '<p>You now have access to the physical activity intervention from Day 29 to Day 56. You can access the intervention by clicking the button below.</p>'
-                    '<p>If you complete 24 or more challenges within 4 weeks, you will receive a $20 Amazon gift card.</p>'
-                    '<p>If you need any assistance or have any questions at any time, please contact Seungmin ("Seung") Lee (Principal Investigator) at <a href="mailto:seunglee@iastate.edu">seunglee@iastate.edu</a> or <a href="tel:517-898-0020">517-898-0020</a>.</p>'
-                    '<p><strong>Sincerely,</strong><br>The Confident Moves Research Team</p>'
-                    '</div>'
-                )
-            }
-        )
 
     # Check if Wave 2 survey should be shown (Days 57-63)
     show_wave2_survey = False
@@ -973,20 +945,6 @@ def dashboard(request):
     information_20_content = None
     if study_day and 64 <= study_day <= 112:
         show_information_20 = True
-        information_20_content, _ = Content.objects.get_or_create(
-            content_type='information_20',
-            defaults={
-                'title': 'Information 20 - No Wave 2 Physical Activity Monitoring',
-                'content': (
-                    '<div>'
-                    '<p>There is no Wave 2 Physical Activity Monitoring.</p>'
-                    '<p>We will email you again in approximately 4 weeks for the next task (i.e., completing an online survey set). Please regularly check your inbox. You will receive the accrued incentives after this study ends.</p>'
-                    '<p>If you need any assistance or have any questions at any time, please contact Seungmin ("Seung") Lee (Principal Investigator) at <a href="mailto:svu23@iastate.edu">svu23@iastate.edu</a> or <a href="tel:517-898-0020">517-898-0020</a>.</p>'
-                    '<p><strong>Sincerely,</strong><br>The Confident Moves Research Team</p>'
-                    '</div>'
-                )
-            }
-        )
 
     # Check if Wave 3 survey should be shown (Days 113-119)
     show_wave3_survey = False
