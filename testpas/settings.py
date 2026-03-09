@@ -108,7 +108,7 @@ if not BASE_URL:
             UserWarning
         )
         # BASE_URL = 'https://testpas-web.onrender.com'
-        BASE_URL = 'https://testpas-web.onrender.com'
+        BASE_URL = 'https://confidentmoves.onrender.com'
     else:
         # Local development default
         BASE_URL = 'http://127.0.0.1:8000'
