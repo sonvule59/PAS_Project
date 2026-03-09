@@ -165,7 +165,7 @@ EMAIL_TEMPLATES = [
             "Hi {username},\n\n"
             "You have successfully entered the access code for physical activity monitoring. Thank you!\n\n"
             "Please start wearing the monitor <b><u>tomorrow</u></b> for <b><u>seven consecutive days</u></b>. For example, if you enter the code on {code_date} (Fri), please wear the monitor starting on {start_date} (Sat) and continue wearing it until {end_date} (Fri).\n\n"
-            "Please wear the monitor as much as possible during the <b><u>seven consecutive days</u></b>. To earn $30 in Amazon gift cards, please wear the monitor for <b><u>at least 3 days with at least 10 hours each day</u></b>. If this requirement is not met, we may not be able to provide the incentive.\n\n"
+            "Please wear the monitor as much as possible during the seven consecutive days. To earn $30 in Amazon gift cards, please wear the monitor for <b><u>at least 3 days with at least 10 hours each day</u></b>. If this requirement is not met, we may not be able to provide the incentive.\n\n"
             "Please <b><u>keep the yellow prepaid envelope</u></b>. You will use it to return the monitor after the 7 days.\n\n"
             "If you need any assistance or have any questions at any time, please contact Seungmin Lee (Principal Investigator) at seunglee@iastate.edu or 517-898-0020.\n\n"
             "Sincerely,\n\n"
