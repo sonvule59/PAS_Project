@@ -1,7 +1,7 @@
 services:
   # --- Django Web App ---
   - type: web
-    name: testpas-web
+    name: confidentmoves
     env: python
     plan: starter
     buildCommand: |
