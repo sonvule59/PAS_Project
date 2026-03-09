@@ -26,7 +26,7 @@ services:
       - key: EMAIL_HOST_PASSWORD
         sync: false
       - key: BASE_URL
-        value: https://confidentmoves.onrender.com/
+        value: https://testpas-web.onrender.com
 
   # --- Celery Worker ---
   - type: worker
@@ -48,7 +48,7 @@ services:
       - key: EMAIL_HOST_PASSWORD
         sync: false
       - key: BASE_URL
-        value: https://confidentmoves.onrender.com/
+        value: https://testpas-web.onrender.com
 
   # --- Celery Beat (scheduler, optional) ---
   - type: worker
@@ -70,4 +70,4 @@ services:
       - key: EMAIL_HOST_PASSWORD
         sync: false
       - key: BASE_URL
-        value: https://confidentmoves.onrender.com/
+        value: https://testpas-web.onrender.com
