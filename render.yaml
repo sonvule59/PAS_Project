@@ -8,7 +8,8 @@ services:
       pip install -r requirements.txt
       python manage.py collectstatic --noinput
     preDeployCommand: |
-      python manage.py migrate
+      python manage.py migrate --noinput
+      python manage.py makemigrations
       python manage.py seed_email_template
     startCommand: gunicorn config.wsgi:application --bind 0.0.0.0:$PORT --log-file -
     # startCommand: gunicorn config.wsgi:application --log-file -
