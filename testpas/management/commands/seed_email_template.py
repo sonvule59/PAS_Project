@@ -52,7 +52,7 @@ EMAIL_TEMPLATES = [
                 'You have successfully entered the access code for physical activity monitoring. Thank you!\n\n'
                 'Please start wearing the monitor <b><u>tomorrow</u></b> for <b><u>seven consecutive days</u></b>. For example, if you enter the code on {code_date} (Fri), please wear the monitor starting on {start_date} (Sat) and continue wearing it until {end_date} (Fri).\n\n'
                 'Please wear the monitor as much as possible during the seven consecutive days. To earn $25 in Amazon gift cards, please wear the monitor for <b><u>at least 3 days with at least 10 hours each day</u></b>. If this requirement is not met, we may not be able to provide the incentive.\n\n'
-                'Please keep <b><u>the yellow prepaid envelope</u></b>. You will use it to return the monitor after the 7 days.\n\n'
+                'Please <b><u>keep the yellow prepaid envelope</u></b>. You will use it to return the monitor after the 7 days.\n\n'
                 'If you need any assistance or have any questions at any time, please contact Seungmin (“Seung”) Lee (Principal Investigator) at seunglee@iastate.edu or 517-898-0020.\n\n'
                 'Sincerely,\n\n'
                 'The Confident Moves Research Team'
@@ -97,7 +97,7 @@ EMAIL_TEMPLATES = [
             "· Please log in from the following website: (***Login link placeholder, will be updated in production***)\n"
             "· Your ID is: {username}. If you forgot your password, you may reset it on the website.\n\n"
             "If you complete <b><u><span style=\"color: red;\">at least 24 post-introductory challenges</span></u></b> during the 4 weeks, you will earn an additional $20 "
-            "in your Amazon electronic gift card account. Thoughtfully completing <b><span style=\"color: red;\">at least 24 post-introductory challenges</span></b> "
+            "in your Amazon electronic gift card account. Thoughtfully completing at least 24 post-introductory challenges "
             "may take approximately 2 hours. You will receive the accrued incentives after this study ends.\n\n"
             "We will also email you again <b><u>in approximately 4 weeks</u></b> for the next task (i.e., completing an online survey set). "
             "Please regularly check your inbox. You will receive the accrued incentives after this study ends.\n\n"
@@ -150,7 +150,7 @@ EMAIL_TEMPLATES = [
         "subject": "Wave 3 Physical Activity Monitoring – Ready to Enter Code",
         "body": (
             "Hi {username},\n\n"
-            "Your next task is to complete <b>Wave 3 Physical Activity Monitoring</b>.\n"
+            "Your next task is to complete <b>Wave 3 Physical Activity Monitoring</b>.\n\n"
             "You need to enter <b><u>a code</u></b> on the website <b><u>within 14 days</u></b> to complete the physical activity monitoring. The code can be found in the <b><u>mail package that will arrive at your address</u></b> (the one you provided) in a few days.\n\n"
             "You will earn an additional $30 in your Amazon electronic gift card account for completing this task. You will receive the accrued incentives after this study ends. <b><u>After 14 days</u></b>, this task will expire (i.e., no Amazon gift card for this task).\n\n"
             "If you need any assistance or have any questions at any time, please contact Seungmin Lee (Principal Investigator) at seunglee@iastate.edu or 517-898-0020.\n\n"

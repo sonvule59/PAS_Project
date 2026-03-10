@@ -359,7 +359,7 @@
                         <p>Your access to the online physical activity intervention will begin immediately. You may access the online physical activity intervention whenever you wish throughout approximately 4 weeks.</p>
                         <p>• Please log in from the following website: <a href="{% url 'login' %}">{% url 'login' %}</a>.</p>
                         <p>• Your ID is: <strong>{{ participant.user.username }}</strong>. If you forgot your password, you may reset it on the website.</p>
-                        <p>If you complete at least 24 post-introductory challenges during the 4 weeks, you will earn additional $20 in your Amazon electronic gift card account. Thoughtfully completing at least 24 post-introductory challenges may take approximately 2 hours. You will receive the accrued incentives after this study ends.</p>
+                        <p>If you complete <b><u>at least 24 post-introductory challenges</u></b> during the 4 weeks, you will earn additional $20 in your Amazon electronic gift card account. Thoughtfully completing at least 24 post-introductory challenges may take approximately 2 hours. You will receive the accrued incentives after this study ends.</p>
                         <p>We will also email you again <b><u>in approximately 4 weeks</u></b> for the next task (i.e., completing an online survey set). Please regularly check your inbox. You will receive the accrued incentives after this study ends.</p>
                         <p>If you need any assistance or have any questions at any time, please contact Seungmin ("Seung") Lee (Principal Investigator) at <a href="mailto:seunglee@iastate.edu">seunglee@iastate.edu</a> or <a href="tel:517-898-0020">517-898-0020</a>.</p>
                         <p>Sincerely,<br>The Confident Moves Research Team</p>
@@ -470,7 +470,7 @@
                     <div class="alert alert-success">
                         <h3>🎉 Wave 3 Online Survey</h3>
                         <p><strong>Hi {{ participant.user.username }},</strong></p>
-                        <p>Please click the button below to complete your task, Survey 3, <b><u>within 7 days</u></b> to receive a $5 Amazon gift card. We highly recommend completing it as soon as possible before the link expires. You may need to remember your ID from this website and enter it to complete the survey. Your ID is: <strong>{{ participant.participant_id }}</strong></p>
+                        <p>Please click the button below to complete your task, Survey 3, <b><u>within 7 days</u></b> to receive a $5 Amazon gift card. We highly recommend completing it as soon as possible before the link expires. You may need to remember your ID from this website and enter it to complete the survey. Your ID is: <strong>{{ participant.user.username }}</strong></p>
                         
                         {% if wave3_survey_content %}
                             <div style="margin: 1rem 0;">
