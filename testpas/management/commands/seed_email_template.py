@@ -64,7 +64,7 @@ EMAIL_TEMPLATES = [
             'body': (
                 'Hi {username},\n\n'
                 'The timeline for wearing the physical activity monitor is complete for this wave.\n\n'
-                'Please return the monitor using the <b><u>yellow prepaid envelope</u></b> that was included in the mail package. If possible, within 3 days, <b><u>visit a nearby USPS office or drop it in a USPS dropbox</u></b>. The monitor is expensive and important to us.\n\n'
+                'Please return the monitor using <b><u>the yellow prepaid envelope</u></b> that was included in the mail package. If possible, within 3 days, <b><u>visit a nearby USPS office or drop it in a USPS dropbox</u></b>. The monitor is expensive and important to us.\n\n'
                 'If you need any assistance or have any questions at any time, please contact Seungmin (“Seung”) Lee (Principal Investigator) at seunglee@iastate.edu or 517-898-0020.\n\n'
                 'Sincerely,\n\n'
                 'The Confident Moves Research Team'
@@ -76,7 +76,7 @@ EMAIL_TEMPLATES = [
             'body': (
                 'Hi {username},\n\n'
                 'You missed the code entry (i.e., no $25 worth of Amazon electronic gift cards). However, you will still have more tasks now and in the future.\n\n'
-                'You may have received our mail package—please check your mailbox. Please (a) open the package and (b) return the monitor using the <b><u>yellow prepaid envelope</u></b>. If possible, within 3 days, <b><u>visit a nearby USPS office or drop it in a USPS dropbox</u></b>. The monitor is expensive and important to us.\n\n'
+                'You may have received our mail package—please check your mailbox. Please (a) open the package and (b) return the monitor using  <b><u>the yellow prepaid envelope</u></b>. If possible, within 3 days, <b><u>visit a nearby USPS office or drop it in a USPS dropbox</u></b>. The monitor is expensive and important to us.\n\n'
                 'If you need any assistance or have any questions at any time, please contact Seungmin (“Seung”) Lee (Principal Investigator) at seunglee@iastate.edu or 517-898-0020.\n\n'
                 'Sincerely,\n\n'
                 'The Confident Moves Research Team'
@@ -96,7 +96,7 @@ EMAIL_TEMPLATES = [
             "You may access the online physical activity intervention whenever you wish throughout approximately 4 weeks.\n\n"
             "· Please log in from the following website: (***Login link placeholder, will be updated in production***)\n"
             "· Your ID is: {username}. If you forgot your password, you may reset it on the website.\n\n"
-            "If you complete <b><u><span style=\"color: red;\">at least 24 post-introductory challenges</span></u></b> during the 4 weeks, you will earn an additional $20 "
+            "If you complete <b><u>at least 24 post-introductory challenges</u></b> during the 4 weeks, you will earn an additional $20 "
             "in your Amazon electronic gift card account. Thoughtfully completing at least 24 post-introductory challenges "
             "may take approximately 2 hours. You will receive the accrued incentives after this study ends.\n\n"
             "We will also email you again <b><u>in approximately 4 weeks</u></b> for the next task (i.e., completing an online survey set). "
@@ -178,7 +178,7 @@ EMAIL_TEMPLATES = [
         "body": (
             "Hi {username},\n\n"
             "The timeline for wearing the physical activity monitor is complete for this wave.\n\n"
-            "Please return the monitor using the <b><u>yellow prepaid envelope</u></b> that was included in the mail package. If possible, within 3 days, <b><u>visit a nearby USPS office or drop it in a USPS dropbox</u></b>. The monitor is expensive and important to us.\n\n"
+            "Please return the monitor using  <b><u> the yellow prepaid envelope</u></b> that was included in the mail package. If possible, within 3 days, <b><u>visit a nearby USPS office or drop it in a USPS dropbox</u></b>. The monitor is expensive and important to us.\n\n"
             "<b><u>If you complete the above tasks, no further action is required for this study.</u></b>\n\n"
             "Any funds earned on your Amazon electronic gift card account will be sent to you as soon as possible via your email. Thank you for the time you have contributed to this study!\n\n"
             "Sincerely,\n\n"
@@ -204,7 +204,7 @@ EMAIL_TEMPLATES = [
         "body": (
             "Hi {username},\n\n"
             "The timeline for wearing the physical activity monitor is complete for this wave.\n\n"
-            "Please return the monitor using the <b><u>yellow prepaid envelope</u></b> that was included in the mail package. If possible, within 3 days, <b><u>visit a nearby USPS office or drop it in a USPS dropbox</u></b>. The monitor is expensive and important to us.\n\n"
+            "Please return the monitor using <b><u>the yellow prepaid envelope</u></b> that was included in the mail package. If possible, within 3 days, <b><u>visit a nearby USPS office or drop it in a USPS dropbox</u></b>. The monitor is expensive and important to us.\n\n"
             "<b><u>If you complete the above tasks, no further action is required for this study.</u></b>\n\n"
             "Any funds earned on your Amazon electronic gift card account will be sent to you as soon as possible via your email. Thank you for the time you have contributed to this study!\n\n"
             "Sincerely,\n\n"
