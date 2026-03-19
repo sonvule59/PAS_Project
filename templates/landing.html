@@ -3,122 +3,92 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Confident Moves Intervention 2.0 - Welcome</title>
+    <title>Confident Moves - Home</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'styles.css' %}">
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            margin: 0;
-            padding: 0;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        body { margin: 0; background: #ebe4db; }
+        .page { width: 100%; overflow: hidden; }
+        .container { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+        img { max-width: 100%; display: block; height: auto; }
+        .top-nav { padding-top: 28px; display: flex; justify-content: space-between; align-items: center; }
+        .logo-link { display: inline-block; width: 182px; }
+        .login-link { display: inline-block; width: 116px; }
+        .hero { padding-top: 24px; display: grid; grid-template-columns: minmax(0, 1fr) 420px; gap: 24px; align-items: center; }
+        .hero-copy { max-width: 660px; }
+        .hero-title { width: 636px; max-width: 100%; }
+        .hero-subtitle { width: 599px; max-width: 100%; margin-top: 8px; }
+        .journey-link { display: inline-block; width: 260px; margin-top: 16px; }
+        .hero-image { width: 392px; max-width: 100%; justify-self: center; }
+        .journey { padding-top: 16px; display: flex; flex-direction: column; align-items: center; gap: 18px; }
+        .journey-title { width: 374px; max-width: 100%; }
+        .journey-graphic { width: 971px; max-width: 100%; }
+        .expect { margin-top: 18px; background: #93a287; padding: 34px 0 36px; }
+        .expect-title { width: 238px; margin: 0 auto 18px; max-width: 100%; }
+        .expect-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; align-items: start; }
+        .expect-grid img { width: 100%; max-width: 313px; margin: 0 auto; }
+        .audience { position: relative; padding: 26px 0 0; min-height: 292px; }
+        .audience-title { width: 240px; max-width: 100%; margin-bottom: 14px; }
+        .audience-copy { width: 1033px; max-width: 100%; position: relative; z-index: 2; }
+        .bottom-wave { position: absolute; left: 50%; transform: translateX(-50%); bottom: 0; width: 100%; min-width: 1200px; z-index: 1; }
+        @media (max-width: 980px) {
+            .hero { grid-template-columns: 1fr; }
+            .hero-image { justify-self: start; }
+            .expect-grid { grid-template-columns: 1fr; }
+            .audience { min-height: 360px; }
+            .bottom-wave { min-width: 980px; }
         }
-        .container {
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            padding: 3rem;
-            max-width: 600px;
-            width: 90%;
-            text-align: center;
-        }
-        h1 {
-            color: #333;
-            margin-bottom: 1.5rem;
-            font-size: 2.5rem;
-            font-weight: 300;
-        }
-        .description {
-            font-size: 1.2rem;
-            color: #666;
-            margin-bottom: 2.5rem;
-            line-height: 1.8;
-        }
-        .cta-buttons {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-        .btn {
-            padding: 12px 30px;
-            border: none;
-            border-radius: 25px;
-            font-size: 1.1rem;
-            font-weight: 500;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            display: inline-block;
-        }
-        .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
-        }
-        .btn-secondary {
-            background: #f8f9fa;
-            color: #333;
-            border: 2px solid #e9ecef;
-        }
-        .btn-secondary:hover {
-            background: #e9ecef;
-            transform: translateY(-2px);
-        }
-        .footer {
-            margin-top: 2rem;
-            padding-top: 2rem;
-            border-top: 1px solid #eee;
-            color: #888;
-            font-size: 0.9rem;
-        }
-        @media (max-width: 768px) {
-            .container {
-                padding: 2rem;
-                margin: 1rem;
-            }
-            h1 {
-                font-size: 2rem;
-            }
-            .description {
-                font-size: 1.1rem;
-            }
-            .cta-buttons {
-                flex-direction: column;
-                align-items: center;
-            }
-            .btn {
-                width: 100%;
-                max-width: 300px;
-            }
+        @media (max-width: 620px) {
+            .container { padding: 0 16px; }
+            .logo-link { width: 152px; }
+            .login-link { width: 102px; }
+            .journey-link { width: 220px; }
+            .bottom-wave { min-width: 760px; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Welcome to Confident Moves Intervention</h1>
-        
-        <div class="description">
-            Confident Moves Intervention is an online behavioral intervention specifically designed to promote physical activity in adults with obesity by providing capability-enhancing learning opportunities.
+    <main class="page">
+        <div class="container">
+            <div class="top-nav">
+                <a href="{% url 'landing' %}" class="logo-link" aria-label="Confident Moves home">
+                    <img src="{% static 'design/landing/Logo_Text 1.svg' %}" alt="Confident Moves">
+                </a>
+                <a href="{% url 'login' %}" class="login-link" aria-label="Login">
+                    <img src="{% static 'design/landing/Component 2.svg' %}" alt="Login">
+                </a>
+            </div>
+            <section class="hero">
+                <div class="hero-copy">
+                    <img class="hero-title" src="{% static 'design/landing/Build Your Confidence. Own Your Movement..svg' %}" alt="Build Your Confidence. Own Your Movement.">
+                    <img class="hero-subtitle" src="{% static 'design/landing/A guided journey to be healthy and feel better, designed to help you build sustainable physical activity..svg' %}" alt="A guided journey to be healthy and feel better, designed to help you build sustainable physical activity.">
+                    <a href="{% url 'create_account' %}" class="journey-link" aria-label="Start your journey">
+                        <img src="{% static 'design/landing/Component 1.svg' %}" alt="Start Your Journey">
+                    </a>
+                </div>
+                <img class="hero-image" src="{% static 'design/landing/Mask group.svg' %}" alt="Person exercising">
+            </section>
+            <section class="journey">
+                <img class="journey-title" src="{% static 'design/landing/Your Path to the Journey.svg' %}" alt="Your Path to the Journey">
+                <img class="journey-graphic" src="{% static 'design/landing/Group 6.svg' %}" alt="Journey steps">
+            </section>
         </div>
-        
-        <div class="cta-buttons">
-            <a href="{% url 'create_account' %}" class="btn btn-primary">Join the Study</a>
-            <a href="{% url 'login' %}" class="btn btn-secondary">Participant Login</a>
-        </div>
-        
-        <div class="footer">
-            <p>© Confident Moves Intervention. All rights reserved.</p>
-            <p>For assistance, contact Seungmin ("Seung") Lee at seunglee@iastate.edu or 517-898-0020.</p>
-        </div>
-    </div>
+        <section class="expect">
+            <div class="container">
+                <img class="expect-title" src="{% static 'design/landing/What to Expect.svg' %}" alt="What to Expect">
+                <div class="expect-grid">
+                    <img src="{% static 'design/landing/Group 7.svg' %}" alt="Confident Moves Journey card">
+                    <img src="{% static 'design/landing/Group 8.svg' %}" alt="Research Based Challenges card">
+                    <img src="{% static 'design/landing/Group 9.svg' %}" alt="Track Your Progress card">
+                </div>
+            </div>
+        </section>
+        <section class="audience">
+            <div class="container">
+                <img class="audience-title" src="{% static 'design/landing/Who is this for_.svg' %}" alt="Who is this for?">
+                <img class="audience-copy" src="{% static 'design/landing/Confident Moves Intervention is an online behavioral intervention specifically designed to promote physical activity in adults with obesity by providing capability-enhancing learning opportunities..svg' %}" alt="Confident Moves Intervention is an online behavioral intervention specifically designed to promote physical activity in adults with obesity by providing capability-enhancing learning opportunities.">
+            </div>
+            <img class="bottom-wave" src="{% static 'design/landing/Bottom.svg' %}" alt="" aria-hidden="true">
+        </section>
+    </main>
 </body>
-</html>

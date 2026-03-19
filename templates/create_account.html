@@ -7,241 +7,149 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <title>Confident Moves Intervention - Create Account</title>
+    <title>Confident Moves - Create Account</title>
     <link rel="stylesheet" href="{% static 'styles.css' %}">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            margin: 0;
-            padding: 0;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
+        body { margin: 0; background: #2d2f3c; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #f5f5f5; }
+        .page { min-height: 100vh; position: relative; overflow: hidden; }
+        .container { max-width: 1180px; margin: 0 auto; padding: 24px; position: relative; z-index: 2; }
+        img { max-width: 100%; display: block; height: auto; }
+        .logo { width: 181px; margin-bottom: 20px; }
+        .layout { display: grid; grid-template-columns: minmax(0, 1fr) 420px; gap: 28px; align-items: start; }
+        .form-shell {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 14px;
+            padding: 24px;
+            backdrop-filter: blur(2px);
         }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-        .card {
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            padding: 2.5rem;
-            margin-bottom: 2rem;
-            transition: transform 0.3s ease;
-        }
-        .card:hover {
-            transform: translateY(-5px);
-        }
-        .card h1 {
-            color: #333;
-            margin: 0 0 0.5rem 0;
-            font-size: 2rem;
-            font-weight: 300;
-            text-align: center;
-        }
-        .card h2 {
-            color: #555;
-            margin: 2rem 0 1rem 0;
-            font-size: 1.3rem;
-            font-weight: 500;
-            border-bottom: 2px solid #f0f0f0;
-            padding-bottom: 0.5rem;
-        }
-        .card p {
-            color: #666;
-            text-align: center;
-            margin-bottom: 1.5rem;
-        }
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: #333;
-            font-weight: 500;
-        }
-        .form-group input {
+        .title-svg { width: 593px; max-width: 100%; }
+        .subtitle-svg { width: 351px; max-width: 100%; margin-top: 10px; margin-bottom: 18px; }
+        .form-group { margin-bottom: 14px; }
+        .label-svg { height: 18px; width: auto; max-width: 100%; margin-bottom: 6px; }
+        .field {
             width: 100%;
-            padding: 12px 16px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 1rem;
-            transition: border-color 0.3s ease;
+            height: 42px;
+            padding: 10px 12px;
+            border: 2px solid #919e84;
+            border-radius: 6px;
+            background: #fff;
+            color: #2d2f3c;
             box-sizing: border-box;
+            font-size: 15px;
         }
-        .form-group input:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        .field:focus { outline: none; border-color: #b57957; box-shadow: 0 0 0 3px rgba(181, 121, 87, 0.25); }
+        .section-label { width: 316px; max-width: 100%; margin: 10px 0 8px; }
+        .plain-label { display: block; margin-bottom: 6px; font-size: 14px; color: #e5e7eb; }
+        .actions { margin-top: 16px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+        .submit-btn { border: 0; background: transparent; padding: 0; cursor: pointer; width: 105px; }
+        .submit-btn img { width: 105px; }
+        .login-link { color: #d0d8c7; text-decoration: underline; font-size: 14px; }
+        #create-account-output { margin-top: 12px; }
+        .alert { padding: 0.75rem 0.9rem; border-radius: 8px; margin-bottom: 0.8rem; }
+        .alert-success { background: #e8f5e8; color: #1f6f2f; }
+        .alert-error { background: #ffebee; color: #8d1a1a; }
+        .alert-info { background: #e3f2fd; color: #114a81; }
+        .hero-img { width: 469px; max-width: 100%; justify-self: center; }
+        .bottom-wave { position: absolute; left: 50%; transform: translateX(-50%); bottom: 0; width: 100%; min-width: 1200px; z-index: 1; pointer-events: none; }
+        @media (max-width: 980px) {
+            .layout { grid-template-columns: 1fr; }
+            .hero-img { justify-self: start; width: 360px; }
         }
-        .btn {
-            display: inline-block;
-            padding: 12px 24px;
-            border: none;
-            border-radius: 25px;
-            font-size: 1rem;
-            font-weight: 500;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            width: 100%;
-            text-align: center;
-        }
-        .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            margin-top: 1rem;
-        }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
-        }
-        .btn-link {
-            background: transparent;
-            color: #667eea;
-            text-decoration: underline;
-            padding: 0;
-            width: auto;
-            display: inline;
-        }
-        .btn-link:hover {
-            color: #764ba2;
-            transform: none;
-            box-shadow: none;
-        }
-        .links {
-            text-align: center;
-            margin-top: 1.5rem;
-            color: #666;
-        }
-        .alert {
-            padding: 1rem;
-            border-radius: 10px;
-            margin-bottom: 1.5rem;
-            border-left: 4px solid;
-        }
-        .alert-success {
-            background: #e8f5e8;
-            border-left-color: #4caf50;
-            color: #2e7d32;
-        }
-        .alert-error {
-            background: #ffebee;
-            border-left-color: #f44336;
-            color: #c62828;
-        }
-        .alert-info {
-            background: #e3f2fd;
-            border-left-color: #2196f3;
-            color: #0d47a1;
-        }
-        #create-account-output {
-            margin-top: 1.5rem;
-        }
-        .footer {
-            text-align: center;
-            color: white;
-            margin-top: 2rem;
-            padding: 1rem;
-        }
-        .footer p {
-            margin: 0.5rem 0;
-            opacity: 0.9;
-        }
-        @media (max-width: 768px) {
-            .container {
-                padding: 1rem;
-            }
-            .card {
-                padding: 1.5rem;
-            }
+        @media (max-width: 640px) {
+            .container { padding: 16px; }
+            .form-shell { padding: 16px; }
+            .field { height: 40px; }
+            .bottom-wave { min-width: 760px; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="card">
-            <h1>Create Your Account</h1>
-            <p>Register to Get Started</p>
-            
-            <form id="create-account-form" action="{% url 'create_account' %}" method="post" onsubmit="createAccount(event)">
-                {% csrf_token %}
-                
-                <div class="form-group">
-                    <label for="registration_code">Registration Code*</label>
-                    <input type="text" id="registration_code" name="registration_code" required placeholder="Enter registration code">
-                </div>
+    <main class="page">
+        <div class="container">
+            <a href="{% url 'landing' %}" class="logo" aria-label="Confident Moves home">
+                <img src="{% static 'design/create_account/Logo_Text 1.svg' %}" alt="Confident Moves">
+            </a>
+            <div class="layout">
+                <section class="form-shell">
+                    <img class="title-svg" src="{% static 'design/create_account/Create Your Account..svg' %}" alt="Create Your Account.">
+                    <img class="subtitle-svg" src="{% static 'design/create_account/Register to Get Started.svg' %}" alt="Register to Get Started">
 
-                <div class="form-group">
-                    <label for="username">ID (non-case-sensitive)*</label>
-                    <input type="text" id="username" name="username" required placeholder="Enter your ID">
-                </div>
+                    <form id="create-account-form" action="{% url 'create_account' %}" method="post" onsubmit="createAccount(event)">
+                        {% csrf_token %}
 
-                <div class="form-group">
-                    <label for="password">Password (case-sensitive)*</label>
-                    <input type="password" id="password" name="password" required placeholder="Enter your password">
-                </div>
-                
-                <div class="form-group">
-                    <label for="password_confirm">Password Confirmation (case-sensitive)*</label>
-                    <input type="password" id="password_confirm" name="password_confirm" required placeholder="Confirm your password">
-                </div>
+                        <div class="form-group">
+                            <img class="label-svg" src="{% static 'design/create_account/Registration Code.svg' %}" alt="Registration Code">
+                            <input class="field" type="text" id="registration_code" name="registration_code" required placeholder="Enter registration code">
+                        </div>
 
-                <div class="form-group">
-                    <label for="full_name">Full Name*</label>
-                    <input type="text" id="full_name" name="full_name" required placeholder="Enter your full name">
-                </div>
-                
-                <div class="form-group">
-                    <label for="email">Email Address (non-case-sensitive)*</label>
-                    <input type="email" id="email" name="email" required placeholder="Enter your email address">
-                </div>
-                
-                <div class="form-group">
-                    <label for="phone_number">Phone Number*</label>
-                    <input type="tel" id="phone_number" name="phone_number" required placeholder="Enter your phone number">
-                </div>
-                
-                <h2>Address Information</h2>
-                
-                <div class="form-group">
-                    <label for="address_line1">Address Line 1*</label>
-                    <input type="text" id="address_line1" name="address_line1" required placeholder="Enter street address">
-                </div>
-                
-                <div class="form-group">
-                    <label for="city">City*</label>
-                    <input type="text" id="city" name="city" required placeholder="Enter city">
-                </div>
-                
-                <div class="form-group">
-                    <label for="state">State*</label>
-                    <input type="text" id="state" name="state" required placeholder="Enter state">
-                </div>
-                
-                <div class="form-group">
-                    <label for="zip_code">ZIP Code*</label>
-                    <input type="text" id="zip_code" name="zip_code" required placeholder="Enter ZIP code">
-                </div>
-                
-                <button type="submit" class="btn btn-primary">Create Account</button>
-            </form>
-            
-            <div id="create-account-output"></div>
-            
-            <div class="links">
-                <p>Already have an account? <a href="{% url 'login' %}" class="btn-link">Login</a></p>
+                        <div class="form-group">
+                            <img class="label-svg" src="{% static 'design/create_account/ID (no case-sensitive).svg' %}" alt="ID (non-case-sensitive)">
+                            <input class="field" type="text" id="username" name="username" required placeholder="Enter your ID">
+                        </div>
+
+                        <div class="form-group">
+                            <img class="label-svg" src="{% static 'design/create_account/Password (case-sensitive).svg' %}" alt="Password (case-sensitive)">
+                            <input class="field" type="password" id="password" name="password" required placeholder="Enter your password">
+                        </div>
+
+                        <div class="form-group">
+                            <img class="label-svg" src="{% static 'design/create_account/Password Confirmation (case-sensitive).svg' %}" alt="Password Confirmation (case-sensitive)">
+                            <input class="field" type="password" id="password_confirm" name="password_confirm" required placeholder="Confirm your password">
+                        </div>
+
+                        <div class="form-group">
+                            <img class="label-svg" src="{% static 'design/create_account/Full Name.svg' %}" alt="Full Name">
+                            <input class="field" type="text" id="full_name" name="full_name" required placeholder="Enter your full name">
+                        </div>
+
+                        <div class="form-group">
+                            <img class="label-svg" src="{% static 'design/create_account/Email Address (no case-sensitive).svg' %}" alt="Email Address (non-case-sensitive)">
+                            <input class="field" type="email" id="email" name="email" required placeholder="Enter your email address">
+                        </div>
+
+                        <div class="form-group">
+                            <img class="label-svg" src="{% static 'design/create_account/Phone Number (no case-sensitive).svg' %}" alt="Phone Number">
+                            <input class="field" type="tel" id="phone_number" name="phone_number" required placeholder="Enter your phone number">
+                        </div>
+
+                        <img class="section-label" src="{% static 'design/create_account/Home Address, including ZIP code.svg' %}" alt="Home Address, including ZIP code">
+
+                        <div class="form-group">
+                            <label class="plain-label" for="address_line1">Address Line 1</label>
+                            <input class="field" type="text" id="address_line1" name="address_line1" required placeholder="Enter street address">
+                        </div>
+                        <div class="form-group">
+                            <label class="plain-label" for="city">City</label>
+                            <input class="field" type="text" id="city" name="city" required placeholder="Enter city">
+                        </div>
+                        <div class="form-group">
+                            <label class="plain-label" for="state">State</label>
+                            <input class="field" type="text" id="state" name="state" required placeholder="Enter state">
+                        </div>
+                        <div class="form-group">
+                            <label class="plain-label" for="zip_code">ZIP Code</label>
+                            <input class="field" type="text" id="zip_code" name="zip_code" required placeholder="Enter ZIP code">
+                        </div>
+
+                        <div class="actions">
+                            <button type="submit" class="submit-btn" aria-label="Submit">
+                                <img src="{% static 'design/create_account/Component 1.svg' %}" alt="Submit">
+                            </button>
+                            <a href="{% url 'login' %}" class="login-link">Already have an account? Login</a>
+                        </div>
+                    </form>
+
+                    <div id="create-account-output"></div>
+                </section>
+
+                <img class="hero-img" src="{% static 'design/create_account/Page Image.svg' %}" alt="Create account page illustration">
             </div>
         </div>
-    </div>
 
-    <div class="footer">
-        <p>&copy; Confident Moves Intervention. All rights reserved.</p>
-    </div>
+        <img class="bottom-wave" src="{% static 'design/create_account/Bottom.svg' %}" alt="" aria-hidden="true">
+    </main>
 
     <script>
         async function createAccount(event) {
@@ -251,7 +159,7 @@
             outputDiv.innerHTML = '<div class="alert alert-info">Creating your account...</div>';
 
             try {
-                const response = await fetch('/create-account/', {
+                const response = await fetch(form.action, {
                     method: 'POST',
                     headers: {
                         'X-CSRFToken': getCSRFToken(),
@@ -267,7 +175,7 @@
                 } else {
                     let errorHtml = '<div class="alert alert-error">Error: ' + (result.message || 'Account creation failed.') + '</div>';
                     if (result.errors) {
-                        let errors = '<ul style="margin: 0.5rem 0; padding-left: 1.5rem;">';
+                        let errors = '<ul style="margin:0.5rem 0; padding-left:1.2rem;">';
                         for (let field in result.errors) {
                             result.errors[field].forEach(error => {
                                 errors += '<li>' + field + ': ' + error + '</li>';
