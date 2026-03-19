@@ -46,16 +46,13 @@ def landing(request):
     return render(request, 'landing.html')
 
 def _generate_next_participant_id():
-    """Generate the next unique participant ID (P###), safe for concurrent signups."""
-    last_participant = Participant.objects.select_for_update().order_by('-id').first()
-    if last_participant and last_participant.participant_id:
-        raw_id = last_participant.participant_id
-        if raw_id.startswith('P') and raw_id[1:].isdigit():
-            next_num = int(raw_id[1:]) + 1
-        else:
-            next_num = last_participant.id + 1
-    else:
-        next_num = 1
+    """Generate the next participant ID (P###) from existing valid IDs only."""
+    existing_ids = Participant.objects.select_for_update().values_list("participant_id", flat=True)
+    max_num = 0
+    for raw_id in existing_ids:
+        if raw_id and raw_id.startswith("P") and raw_id[1:].isdigit():
+            max_num = max(max_num, int(raw_id[1:]))
+    next_num = max_num + 1
     return f"P{next_num:03d}"
 
 def account_confirmation_pending(request):
@@ -151,6 +148,9 @@ def create_account(request):
                     messages.success(request, "Account created. Please check your email to confirm.")
                     return redirect("account_confirmation_pending")
                 except Exception as e:
+                    # Avoid leaving an orphaned auth user if participant creation fails.
+                    if 'user' in locals() and user and user.pk:
+                        user.delete()
                     import traceback
                     error_trace = traceback.format_exc()
                     print(f"[ERROR] Error creating account for username {form.cleaned_data.get('username')}: {e}\n{error_trace}")
