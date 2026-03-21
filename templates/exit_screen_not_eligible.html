@@ -40,6 +40,12 @@
             font-size: 1.3rem;
             font-weight: 500;
         }
+        .exit-svg {
+            display: block;
+            width: min(560px, 100%);
+            height: auto;
+            margin-bottom: 1rem;
+        }
         .btn {
             display: inline-block;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -67,7 +73,7 @@
 <body>
     <div class="container">
         <div class="card">
-            <h1>Thank You for Your Interest</h1>
+            <img class="exit-svg" src="{% static 'design/exit_screen/Exit Screen Not Eligible or Interested.svg' %}" alt="Exit Screen Not Eligible or Interested">
             {% if content %}
                 {{ content.content|safe }}
             {% else %}
