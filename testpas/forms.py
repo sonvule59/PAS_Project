@@ -18,10 +18,10 @@ class UserRegistrationForm(forms.Form):
     zip_code = forms.CharField(max_length=10, required=True, label="ZIP Code")
     # Validate unique username
     def clean_username(self):
-        username = self.cleaned_data['username'].strip()
+        username = self.cleaned_data['username'].strip().lower()
         if not username:
             raise forms.ValidationError("Username is required.")
-        if User.objects.filter(username=username).exists():
+        if User.objects.filter(username__iexact=username).exists():
             raise forms.ValidationError("This username is already taken.")
         return username
 

@@ -213,11 +213,13 @@ Once participants create an account, they should be able to reset their password
 @csrf_exempt
 def login_view(request):
     if request.method == 'POST':
-        username = request.POST.get('username')
+        username_input = (request.POST.get('username') or '').strip()
         password = request.POST.get('password')
-        print(f"[DEBUG] Login attempt for username: {username}")
-        
-        user = authenticate(request, username=username, password=password)
+        print(f"[DEBUG] Login attempt for username: {username_input}")
+
+        matched_user = User.objects.filter(username__iexact=username_input).first()
+        auth_username = matched_user.username if matched_user else username_input.lower()
+        user = authenticate(request, username=auth_username, password=password)
         if user is not None:
             participant = Participant.objects.filter(user=user).first()
             if participant and not participant.is_confirmed:
@@ -411,12 +413,12 @@ def questionnaire_interest(request):
 ## Create Membership
 def create_participant(request):
     if request.method == "POST":
-        username = request.POST.get("username").strip()
+        username = request.POST.get("username").strip().lower()
         email = request.POST.get("email").strip()
         password = request.POST.get("password")
         phone_number = request.POST.get("phone_number").strip()
 
-        if User.objects.filter(username=username).exists():
+        if User.objects.filter(username__iexact=username).exists():
             return JsonResponse({"error": "Username already exists"}, status=400)
         if User.objects.filter(email=email).exists():
             return JsonResponse({"error": "Email already in use"}, status=400)
