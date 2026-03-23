@@ -1,5 +1,6 @@
 # type: ignore
 import datetime
+import re
 from django.db import models, migrations
 from django.contrib.auth.models import User, AbstractUser
 from django.utils import timezone
@@ -11,6 +12,37 @@ import uuid
 from django.core.mail import send_mail, EmailMultiAlternatives
 from django.utils.html import strip_tags
 from django.conf import settings
+
+
+def _render_outlook_safe_html(body: str) -> str:
+    """Return email HTML that renders consistently in Outlook and Gmail."""
+    raw = (body or "").replace("\r\n", "\n").replace("\r", "\n").strip()
+    if not raw:
+        return ""
+
+    # If no HTML tags exist, preserve line breaks.
+    has_html_tag = bool(re.search(r"<[a-zA-Z][^>]*>", raw))
+    content = raw if has_html_tag else raw.replace("\n", "<br>")
+
+    # Outlook-friendly table wrapper + inline styles.
+    return f"""<!doctype html>
+<html>
+  <body style="margin:0; padding:0; background:#f6f6f6;">
+    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background:#f6f6f6; margin:0; padding:24px 0;">
+      <tr>
+        <td align="center">
+          <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="640" style="width:640px; max-width:640px; background:#ffffff; border-collapse:collapse;">
+            <tr>
+              <td style="padding:24px; font-family:Arial, Helvetica, sans-serif; font-size:16px; line-height:1.6; color:#222222; mso-line-height-rule:exactly;">
+                {content}
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>"""
 
 class Survey(models.Model):
     title = models.CharField(max_length=255)
@@ -244,12 +276,10 @@ class Participant(models.Model):
         try:
             recipients = [self.email or self.user.email, 'svu23@iastate.edu', 'vuleson59@gmail.com', 'projectpas2024@gmail.com']
             text_body = strip_tags(body or "")
+            html_body = _render_outlook_safe_html(body)
             email = EmailMultiAlternatives(subject, text_body, settings.DEFAULT_FROM_EMAIL, recipients)
-            if body and body.strip() != text_body.strip():
-                email.attach_alternative(body, "text/html")
-            elif body:
-                # Still attach HTML to support formatting if the template uses tags later
-                email.attach_alternative(body, "text/html")
+            if html_body:
+                email.attach_alternative(html_body, "text/html")
             email.send(fail_silently=False)
             # Update status after successful send
             if mark_as:

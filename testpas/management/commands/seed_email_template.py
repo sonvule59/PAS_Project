@@ -3,13 +3,13 @@ from django.core.management.base import BaseCommand
 from testpas.models import EmailTemplate
 
 def to_html(body: str) -> str:
-    """Preserve original line breaks while allowing HTML tags like <b> and <u>."""
+    """Convert plain newlines to <br> for better Outlook compatibility."""
     if not body:
         return ""
-    # If it already looks like HTML, keep as-is.
-    if "<p" in body or "<br" in body or "<div" in body:
-        return body
-    return f"<div style=\"white-space: pre-line;\">{body}</div>"
+    normalized = body.replace("\r\n", "\n").replace("\r", "\n")
+    if "<br" in normalized:
+        return normalized
+    return normalized.replace("\n", "<br>")
 
 EMAIL_TEMPLATES = [
     {
