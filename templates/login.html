@@ -10,178 +10,245 @@
     <title>Confident Moves Intervention - Login</title>
     <link rel="stylesheet" href="{% static 'styles.css' %}">
     <style>
+        :root {
+            --bg-dark: #2d2f3c;
+            --input-border: #919e84;
+            --link-green: #e8dfd4;
+            --link-brown: #b57957;
+        }
+        * { box-sizing: border-box; }
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
             margin: 0;
-            padding: 0;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #f5f5f5;
+            background: var(--bg-dark);
+        }
+        .page {
             min-height: 100vh;
+            position: relative;
+            overflow: hidden;
+            background: var(--bg-dark);
+            display: grid;
+            place-items: center;
+            padding: 24px 16px 120px;
+        }
+        .layer {
+            position: absolute;
+            pointer-events: none;
+            user-select: none;
+        }
+        .layer-middle {
+            width: min(100vw, 1440px);
+            top: clamp(62px, 12vh, 120px);
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0.95;
+        }
+        .layer-bottom {
+            width: 100%;
+            min-width: 1000px;
+            left: 50%;
+            bottom: 0;
+            transform: translateX(-50%);
+        }
+        .layer-page-image {
+            width: min(34vw, 443px);
+            min-width: 240px;
+            right: clamp(12px, 6vw, 78px);
+            bottom: clamp(30px, 10vh, 96px);
+            opacity: 0.95;
+        }
+        .header-row {
             display: flex;
             align-items: center;
-            justify-content: center;
+            justify-content: space-between;
+            gap: 20px;
+            margin-bottom: 14px;
         }
-        .container {
-            max-width: 500px;
-            width: 100%;
-            padding: 2rem;
+        .logo {
+            width: 250px;
+            margin: 0;
+            display: block;
+            flex-shrink: 0;
+        }
+        .header-copy {
+            flex: 1;
+            min-width: 0;
         }
         .card {
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            padding: 2.5rem;
-            transition: transform 0.3s ease;
+            position: relative;
+            z-index: 2;
+            width: min(100%, 700px);
+            background: rgba(45, 47, 60, 0.78);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 16px;
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.28);
+            backdrop-filter: blur(4px);
+            padding: 26px 28px 22px;
         }
-        .card:hover {
-            transform: translateY(-5px);
-        }
-        .card h1 {
-            color: #333;
-            margin: 0 0 0.5rem 0;
-            font-size: 2rem;
-            font-weight: 300;
-            text-align: center;
-        }
-        .card p {
-            color: #666;
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-        .form-group label {
+        .title-svg {
+            width: min(100%, 520px);
             display: block;
-            margin-bottom: 0.5rem;
-            color: #333;
-            font-weight: 500;
+            margin: 0 0 8px;
         }
-        .form-group input {
+        .subtitle-svg {
+            width: min(100%, 244px);
+            display: block;
+            margin: 0;
+        }
+        .form-group { margin-bottom: 14px; }
+        .field-label-svg {
+            height: 15px;
+            display: block;
+            margin-bottom: 6px;
+        }
+        .field-wrap {
+            position: relative;
+            min-height: 40px;
+        }
+        .field-box-svg {
             width: 100%;
-            padding: 12px 16px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 1rem;
-            transition: border-color 0.3s ease;
-            box-sizing: border-box;
+            height: 40px;
+            display: block;
         }
-        .form-group input:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-        .btn {
-            display: inline-block;
-            padding: 12px 24px;
-            border: none;
-            border-radius: 25px;
-            font-size: 1rem;
-            font-weight: 500;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            cursor: pointer;
+        .field-wrap input {
+            position: absolute;
+            inset: 0;
             width: 100%;
-            text-align: center;
-        }
-        .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            margin-bottom: 1rem;
-        }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
-        }
-        .btn-link {
+            height: 100%;
+            border: 0;
             background: transparent;
-            color: #667eea;
-            text-decoration: underline;
-            padding: 0;
-            width: auto;
-            display: inline;
+            padding: 8px 14px;
+            color: #2d2f3c;
+            font-size: 0.95rem;
+            line-height: 1.2;
         }
-        .btn-link:hover {
-            color: #764ba2;
-            transform: none;
-            box-shadow: none;
+        .field-wrap input::placeholder { color: #6f7868; }
+        .field-wrap input:focus { outline: none; }
+        .btn {
+            width: 100%;
+            margin-top: 6px;
+            border: 0;
+            background: transparent;
+            padding: 0;
+            cursor: pointer;
+        }
+        .btn img {
+            width: 100%;
+            height: 50px;
+            display: block;
         }
         .links {
+            margin-top: 14px;
             text-align: center;
-            margin-top: 1.5rem;
-            color: #666;
         }
-        .links p {
-            margin: 0.5rem 0;
+        .link-row {
+            display: inline-flex;
+            align-items: baseline;
+            gap: 6px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 4px 0;
         }
-        .alert {
-            padding: 1rem;
-            border-radius: 10px;
-            margin-bottom: 1.5rem;
-            border-left: 4px solid;
+        .link-label {
+            height: 15px;
+            display: block;
         }
+        .link-label.account { width: 213px; }
+        .link-label.forgot { width: 211px; }
+        .links a {
+            font-size: 0.95rem;
+            font-weight: 600;
+            text-decoration: underline;
+            text-underline-offset: 2px;
+        }
+        .links a.create { color: var(--link-brown); }
+        .links a.reset { color: var(--link-brown); }
+        .links a:hover { filter: brightness(1.1); }
         .alert-error {
-            background: #ffebee;
-            border-left-color: #f44336;
-            color: #c62828;
-        }
-        .footer {
-            text-align: center;
-            color: white;
-            margin-top: 2rem;
-            padding: 1rem;
-        }
-        .footer p {
-            margin: 0.5rem 0;
-            opacity: 0.9;
+            background: rgba(255, 80, 80, 0.16);
+            border: 1px solid rgba(255, 110, 110, 0.65);
+            color: #ffd7d7;
+            border-radius: 8px;
+            padding: 10px 12px;
+            margin-bottom: 12px;
+            font-size: 0.9rem;
         }
         @media (max-width: 768px) {
-            .container {
-                padding: 1rem;
+            .page { padding: 18px 12px 96px; }
+            .card { padding: 18px 16px 16px; width: min(100%, 560px); }
+            .header-row {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                gap: 10px;
             }
-            .card {
-                padding: 1.5rem;
+            .logo { width: 190px; }
+            .title-svg { margin: 0 auto 8px; }
+            .subtitle-svg { margin: 0 auto; }
+            .layer-page-image {
+                width: min(45vw, 280px);
+                opacity: 0.75;
             }
+            .link-label.account,
+            .link-label.forgot { width: min(88vw, 213px); }
         }
     </style>
 </head>
 <body>
-    <div class="container">
+    <main class="page">
+        <img class="layer layer-middle" src="{% static 'design/login/Middle.svg' %}" alt="">
+        <img class="layer layer-bottom" src="{% static 'design/login/Bottom.svg' %}" alt="">
+        <img class="layer layer-page-image" src="{% static 'design/login/Page Image.svg' %}" alt="">
         <div class="card">
-            <h1>Welcome to Confident Moves Intervention</h1>
-            <p>Login to Your Account</p>
+            <div class="header-row">
+                <img class="logo" src="{% static 'design/login/Logo_Text 1.svg' %}" alt="Confident Moves">
+                <div class="header-copy">
+                    <img class="title-svg" src="{% static 'design/login/Welcome to Confident Moves Intervention..svg' %}" alt="Welcome to Confident Moves Intervention">
+                    <img class="subtitle-svg" src="{% static 'design/login/Login to Your Account.svg' %}" alt="Login to your account">
+                </div>
+            </div>
             
-            <!-- {% if messages %}
+            {% if messages %}
                 {% for message in messages %}
                     <div class="alert alert-error">{{ message }}</div>
                 {% endfor %}
-            {% endif %} -->
+            {% endif %}
             
             <form method="POST">
                 {% csrf_token %}
                 <div class="form-group">
-                    <label for="username">Username:</label>
-                    <input type="text" id="username" name="username" required placeholder="Enter your username">
+                    <img class="field-label-svg" src="{% static 'design/login/Username.svg' %}" alt="Username">
+                    <div class="field-wrap">
+                        <img class="field-box-svg" src="{% static 'design/login/Text Box.svg' %}" alt="">
+                        <input type="text" id="username" name="username" required placeholder="Enter your username">
+                    </div>
                 </div>
                 
                 <div class="form-group">
-                    <label for="password">Password:</label>
-                    <input type="password" id="password" name="password" required placeholder="Enter your password">
+                    <img class="field-label-svg" src="{% static 'design/login/Password.svg' %}" alt="Password">
+                    <div class="field-wrap">
+                        <img class="field-box-svg" src="{% static 'design/login/Text Box-1.svg' %}" alt="">
+                        <input type="password" id="password" name="password" required placeholder="Enter your password">
+                    </div>
                 </div>
              
-                <button type="submit" class="btn btn-primary">Login</button>
+                <button type="submit" class="btn" aria-label="Login">
+                    <img src="{% static 'design/login/Component 1.svg' %}" alt="Login">
+                </button>
             </form>
             
             <div class="links">
-                <p>Don't have an account? <a href="{% url 'create_account' %}" class="btn-link">Create Account</a></p>
-                <p>Forgot your password? <a href="{% url 'password_reset' %}" class="btn-link">Reset Password</a></p>
-            </div>
-            <div class="footer">
-                <p>&copy; Confident Moves Intervention. All rights reserved.</p>
+                <div class="link-row">
+                    <img class="link-label account" src="{% static "design/login/Don't have an account_.svg" %}" alt="Don't have an account?">
+                    <a class="create" href="{% url 'create_account' %}">Create Account</a>
+                </div>
+                <div class="link-row">
+                    <img class="link-label forgot" src="{% static 'design/login/Forgot your password_.svg' %}" alt="Forgot your password?">
+                    <a class="reset" href="{% url 'password_reset' %}">Reset Password</a>
+                </div>
             </div>
         </div>
-    </div>
-
-    
+    </main>
 </body>
 </html>

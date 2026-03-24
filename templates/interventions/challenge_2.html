@@ -20,6 +20,7 @@
         .actions { margin-top: 1.25rem; display: flex; gap: 10px; flex-wrap: wrap; }
         .btn { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #fff; padding: 10px 16px; border-radius: 8px; text-decoration: none; font-weight: 600; }
         ul { margin: 0.75rem 0 0 1.2rem; }
+        .challenge-title-svg { max-width: 100%; height: auto; display: block; margin-bottom: 1rem; }
     </style>
     <script>
         function toggleCaption() {
@@ -31,8 +32,7 @@
 <body>
     <div class="container">
         <div class="card">
-            <h1>Introductory Challenge 2</h1>
-            <!-- <div class="meta">Rethinking Movement</div> -->
+            <img class="challenge-title-svg" src="{% static 'design/intervention/Introductory Challenge 2_ Rethinking Movement.svg' %}" alt="Introductory Challenge 2: Rethinking Movement">
             <h2>Rethinking Movement</h2>
             <div class="video-wrapper">
                 <iframe src="https://player.vimeo.com/video/1097880022" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen title="Intro Challenge 2 Video"></iframe>

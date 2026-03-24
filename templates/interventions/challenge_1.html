@@ -30,6 +30,7 @@
         .actions { margin-top: 1.25rem; display: flex; gap: 10px; flex-wrap: wrap; }
         .btn { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #fff; padding: 10px 16px; border-radius: 8px; text-decoration: none; font-weight: 600; }
         .meta { color: #666; margin-bottom: 1rem; }
+        .challenge-title-svg { max-width: 100%; height: auto; display: block; margin-bottom: 1rem; }
     </style>
     <script>
         function toggleCaption() {
@@ -87,9 +88,7 @@
         </div>
 
         <div class="card">
-            <h1>Introductory Challenge 1</h1>
-            <!-- <div class="meta">Physical Activity</div> -->
-            <!-- <h2>What is Physical Activity?</h2> -->
+            <img class="challenge-title-svg" src="{% static 'design/intervention/Introductory Challenge 1_ Physical Activity.svg' %}" alt="Introductory Challenge 1: Physical Activity">
             <div class="video-wrapper">
                 <iframe src="https://player.vimeo.com/video/1041378056" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen title="Challenge 1 Video"></iframe>
             </div>

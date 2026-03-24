@@ -62,8 +62,80 @@ def account_confirmation_pending(request):
     return render(request, 'account_confirmation_pending.html')
 
 def test_all_challenges(request):
-    """Test page with links to all challenges for quick testing"""
-    return render(request, 'test_all_challenges.html')
+    """Test page with links to all challenges for quick testing."""
+    # Only allow this test utility in local/dev mode.
+    if not (settings.TEST_MODE or settings.DEBUG):
+        return HttpResponse("Intervention test mode is disabled.", status=403)
+
+    # Auto-create/login a local tester so all @login_required challenge routes work.
+    test_username = "intervention_tester"
+    test_email = "intervention_tester_local@example.com"
+    test_password = "TestIntervention123!"
+
+    if not request.user.is_authenticated:
+        user, created = User.objects.get_or_create(
+            username=test_username,
+            defaults={"email": test_email},
+        )
+        if created:
+            user.set_password(test_password)
+            user.save()
+        login(request, user)
+    else:
+        user = request.user
+
+    participant, _ = Participant.objects.get_or_create(
+        user=user,
+        defaults={
+            "email": user.email or test_email,
+            "is_confirmed": True,
+            "participant_id": _generate_next_participant_id(),
+            "confirmation_token": str(uuid.uuid4()),
+            "randomized_group": 1,
+            "randomization_completed": True,
+            "enrollment_date": timezone.now().date(),
+        },
+    )
+
+    # Keep participant test-ready for intervention page rendering.
+    participant.is_confirmed = True
+    if participant.randomized_group is None:
+        participant.randomized_group = 1
+    if not participant.enrollment_date:
+        participant.enrollment_date = timezone.now().date()
+    participant.randomization_completed = True
+    participant.save()
+
+    eligibility_survey, _ = Survey.objects.get_or_create(
+        title="Eligibility Criteria",
+        defaults={"description": "Survey to determine participant eligibility"},
+    )
+    progress, _ = UserSurveyProgress.objects.get_or_create(
+        user=user,
+        survey=eligibility_survey,
+        defaults={
+            "eligible": True,
+            "consent_given": True,
+            "day_1": timezone.now().date(),
+            "timeline_reference_timestamp": timezone.now(),
+        },
+    )
+    if not progress.day_1:
+        progress.day_1 = timezone.now().date()
+    progress.eligible = True
+    progress.consent_given = True
+    if not progress.timeline_reference_timestamp:
+        progress.timeline_reference_timestamp = timezone.now()
+    progress.save()
+
+    return render(
+        request,
+        "test_all_challenges.html",
+        {
+            "test_user": user,
+            "test_mode_enabled": settings.TEST_MODE,
+        },
+    )
 
 @login_required
 def home(request):

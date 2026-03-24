@@ -23,6 +23,7 @@
         .progress-banner span { font-size: 1.8rem; }
         .actions { margin-top: 1.25rem; display: flex; gap: 10px; flex-wrap: wrap; }
         .btn { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #fff; padding: 10px 16px; border-radius: 8px; text-decoration: none; font-weight: 600; }
+        .challenge-title-svg { max-width: 100%; height: auto; display: block; margin-bottom: 1rem; }
     </style>
     <script>
         function toggleCaption() {
@@ -34,8 +35,7 @@
 <body>
     <div class="container">
         <div class="card">
-            <h1>Orientation</h1>
-            <div class="meta">Challenge 4: Review</div>
+            <img class="challenge-title-svg" src="{% static 'design/intervention/Challenge 4_ Review.svg' %}" alt="Challenge 4: Review">
             <!-- <h2>Mission Recap</h2> -->
             <p>Please review the following information about the intervention. Collect the badges as you revisit each theme.</p>
 

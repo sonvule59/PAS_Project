@@ -7,143 +7,266 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <title>Consent Form - Confident Moves Intervention</title>
+    <title>Confident Moves - IRB Consent Form</title>
     <link rel="stylesheet" href="{% static 'styles.css' %}">
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            margin: 0;
-            padding: 0;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
+        body { margin: 0; background: #2d2f3c; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #f5f5f5; }
+        .page { min-height: 100vh; position: relative; overflow: hidden; }
+        .middle-bg { position: absolute; left: 0; top: 0; width: 100%; height: 440px; object-fit: cover; z-index: 0; pointer-events: none; }
+        .container { max-width: 1180px; margin: 0 auto; padding: 24px; position: relative; z-index: 2; }
+        img { max-width: 100%; display: block; height: auto; }
+        .logo { width: 181px; margin-bottom: 20px; }
+        .layout { display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 28px; align-items: start; }
+        .form-shell {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 14px;
+            padding: 24px;
+            backdrop-filter: blur(2px);
         }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 2rem;
+        .title-svg { width: 522px; max-width: 100%; margin-bottom: 10px; }
+        .subtitle-svg { width: 951px; max-width: 100%; margin-bottom: 10px; }
+        .desc-svg { width: 100%; max-width: 1020px; margin-bottom: 18px; }
+        .title-svg,
+        .subtitle-svg,
+        .desc-svg,
+        .hero-img {
+            pointer-events: none;
         }
-        .card {
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            padding: 2.5rem;
-            margin-bottom: 2rem;
-            transition: transform 0.3s ease;
-        }
-        .card:hover {
-            transform: translateY(-5px);
-        }
-        .card h1 {
-            color: #333;
-            margin: 0 0 1.5rem 0;
-            font-size: 2rem;
-            font-weight: 300;
-            border-bottom: 2px solid #f0f0f0;
-            padding-bottom: 1rem;
-        }
-        .card h2 {
-            color: #555;
-            margin: 1.5rem 0 1rem 0;
-            font-size: 1.3rem;
-            font-weight: 500;
-        }
-        .card p {
-            color: #666;
-            margin: 1rem 0;
-        }
-        .card ul {
-            color: #666;
-            margin: 1rem 0;
-            padding-left: 2rem;
-        }
-        .card li {
-            margin: 0.5rem 0;
-        }
-        .form-group {
-            margin: 1.5rem 0;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 0.75rem;
-            color: #333;
-            font-weight: 500;
-            font-size: 1.1rem;
-            cursor: pointer;
-        }
-        .form-group input[type="radio"] {
-            margin-right: 0.75rem;
-            width: 18px;
-            height: 18px;
-            cursor: pointer;
-        }
-        .form-group label {
+
+        .choices { display: grid; gap: 10px; margin-bottom: 14px; }
+        .choice {
             display: flex;
             align-items: center;
-            padding: 0.75rem;
-            border-radius: 8px;
-            transition: background-color 0.3s ease;
-        }
-        .form-group label:hover {
-            background-color: #f8f9fa;
-        }
-        .btn {
-            display: inline-block;
-            padding: 12px 32px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            text-decoration: none;
-            border-radius: 25px;
-            font-size: 1rem;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            border: none;
+            gap: 10px;
+            padding: 8px 10px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.08);
             cursor: pointer;
-            margin-top: 1rem;
+            position: relative;
         }
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        .choice:hover { border-color: rgba(181, 121, 87, 0.8); }
+        .choice::before {
+            content: "";
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: 1.6px solid #b57957;
+            background: #ffffff;
+            transform: translateY(-50%);
+            pointer-events: none;
+        }
+        .choice::after {
+            content: "";
+            position: absolute;
+            left: 24px;
+            top: 50%;
+            width: 4px;
+            height: 7px;
+            border-right: 2px solid #ffffff;
+            border-bottom: 2px solid #ffffff;
+            transform: translateY(-58%) rotate(45deg);
+            opacity: 0;
+            pointer-events: none;
+        }
+        .choice.is-selected {
+            border-color: #b57957;
+            background: rgba(181, 121, 87, 0.18);
+            box-shadow: 0 0 0 2px rgba(181, 121, 87, 0.25);
+        }
+        .choice.is-selected::before {
+            background: #875a41;
+            border-color: #875a41;
+        }
+        .choice.is-selected::after { opacity: 1; }
+        .choice input[type="radio"] {
+            appearance: none;
+            -webkit-appearance: none;
+            opacity: 0;
+            width: 0;
+            height: 0;
+            margin: 0;
+            pointer-events: none;
+        }
+        .choice img {
+            height: 24px;
+            width: auto;
+            max-width: min(100%, 600px);
+        }
+
+        .reason-label { width: 159px; margin-bottom: 6px; }
+        .reason-wrap {
+            position: relative;
+            max-width: 640px;
+            width: 100%;
+            margin-bottom: 14px;
+        }
+        .reason-shape {
+            width: 100%;
+            min-height: 84px;
+            opacity: 0.95;
+        }
+        .reason-input {
+            position: absolute;
+            inset: 6px;
+            width: calc(100% - 12px);
+            height: calc(100% - 12px);
+            resize: vertical;
+            min-height: 68px;
+            border: 0;
+            border-radius: 4px;
+            padding: 10px 12px;
+            font-size: 15px;
+            box-sizing: border-box;
+            color: #2d2f3c;
+            background: transparent;
+        }
+        .reason-input:focus { outline: 2px solid rgba(181, 121, 87, 0.55); }
+
+        .actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+        .img-btn { border: 0; background: transparent; padding: 0; cursor: pointer; }
+        .img-btn img { width: auto; height: 50px; }
+
+        .hero-img { width: 329px; max-width: 100%; justify-self: center; }
+        .bottom-wave {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: 0;
+            width: 100%;
+            min-width: 1200px;
+            z-index: 1;
+            pointer-events: none;
+        }
+        .error-text { color: #ffd1d1; margin-top: 12px; }
+        @media (max-width: 980px) {
+            .layout { grid-template-columns: 1fr; }
+            .hero-img { justify-self: start; width: 280px; }
+        }
+        @media (max-width: 640px) {
+            .container { padding: 16px; }
+            .form-shell { padding: 16px; }
+            .img-btn img { height: 44px; }
+            .bottom-wave { min-width: 760px; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="card">
-            <h1>Consent to Participate</h1>
-            <h2>Please read the following information and provide your consent to participate in this study.</h2>
-            <p>
-                By consenting to participate, you agree to comply with the study requirements, including:
-            </p>
-            <ul>
-                <li>Wearing a physical activity monitor for two weeks during the study (e.g., one week at the beginning and one week at the end).</li>
-                <li>Responding to emails and phone contacts from the research team.</li>
-                <li>Following all instructions related to the study.</li>
-            </ul>
-            <p>
-                If you have any questions about the study, feel free to reach out to the research team.
-            </p>
-            <form id="consent-form" action="" method="POST">
-                {% csrf_token %}
-                <div class="form-group">
-                    <label>
-                        <input type="radio" name="consent" value="yes" required> 
-                        <span>I consent to participate in this study.</span>
-                    </label>
-                </div>
-                <div class="form-group">
-                    <label>
-                        <input type="radio" name="consent" value="no" required> 
-                        <span>I do not consent to participate.</span>
-                    </label>
-                </div>
-                <div class="form-group">
-                    <label for="consent_reason">If you do not consent, please provide a brief reason (optional):</label>
-                    <textarea id="consent_reason" name="consent_reason" rows="3" style="width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid #ddd; font-size: 1rem;"></textarea>
-                </div>
-                <button type="submit" class="btn">Submit</button>
-            </form>
+    <main class="page">
+        <img class="middle-bg" src="{% static 'design/create_account/consent_form/Middle.svg' %}" alt="" aria-hidden="true">
+        <div class="container">
+            <a href="{% url 'landing' %}" class="logo" aria-label="Confident Moves home">
+                <img src="{% static 'design/create_account/consent_form/Logo_Text 1.svg' %}" alt="Confident Moves">
+            </a>
+            <div class="layout">
+                <section class="form-shell">
+                    <img class="title-svg" src="{% static 'design/create_account/consent_form/IRB Consent Form..svg' %}" alt="IRB Consent Form">
+                    <img class="subtitle-svg" src="{% static 'design/create_account/consent_form/Congratulations! You are eligible for the study. Please read the following consent form and decide whether you would like to enroll..svg' %}" alt="Congratulations! You are eligible for the study. Please read the following consent form and decide whether you would like to enroll.">
+                    <img class="desc-svg" src="{% static 'design/create_account/consent_form/Clicking the button that says _Consent to Participate_ means that you voluntarily agree to participate in this research study. If you click the button that says _Decline Participation,_ please provide a brief reason, and then you will be directed t.svg' %}" alt="Consent form details">
+
+                    <form id="consent-form" action="" method="POST">
+                        {% csrf_token %}
+
+                        <div class="choices">
+                            <label class="choice choice-yes" for="consent-yes">
+                                <input id="consent-yes" type="radio" name="consent" value="yes" required checked>
+                                <img src="{% static 'design/create_account/consent_form/Group 16.svg' %}" alt="Consent to Participate">
+                            </label>
+                            <label class="choice choice-no" for="consent-no">
+                                <input id="consent-no" type="radio" name="consent" value="no" required>
+                                <img src="{% static 'design/create_account/consent_form/Group 17.svg' %}" alt="Decline Participation">
+                            </label>
+                        </div>
+
+                        <img class="reason-label" src="{% static 'design/create_account/consent_form/Text Box-Place Holder Text.svg' %}" alt="Provide reason if declining">
+                        <div class="reason-wrap">
+                            <img class="reason-shape" src="{% static 'design/create_account/consent_form/Tex Box-Shape.svg' %}" alt="" aria-hidden="true">
+                            <textarea
+                                id="consent_reason"
+                                name="consent_reason"
+                                class="reason-input"
+                                rows="3"
+                                placeholder="Enter your reason here..."
+                            ></textarea>
+                        </div>
+
+                        <div class="actions">
+                            <button type="submit" class="img-btn" id="consent-submit" aria-label="Consent to Participate">
+                                <img src="{% static 'design/create_account/consent_form/Component 1.svg' %}" alt="Consent to Participate">
+                            </button>
+                            <button type="button" class="img-btn" id="decline-submit" aria-label="Decline Participation">
+                                <img src="{% static 'design/create_account/consent_form/Component 3.svg' %}" alt="Decline Participation">
+                            </button>
+                        </div>
+                    </form>
+
+                    {% if messages %}
+                        <div class="error-text">
+                            {% for message in messages %}
+                                <div>{{ message }}</div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                    {% if form.errors %}
+                        <div class="error-text">
+                            {% for field, errors in form.errors.items %}
+                                {% for error in errors %}
+                                    <div>{{ error }}</div>
+                                {% endfor %}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </section>
+
+                <img class="hero-img" src="{% static 'design/create_account/consent_form/Page Image.svg' %}" alt="Consent page illustration">
+            </div>
         </div>
-    </div>
+        <img class="bottom-wave" src="{% static 'design/create_account/consent_form/Bottom.svg' %}" alt="" aria-hidden="true">
+    </main>
+
+    <script>
+        (function () {
+            const choiceLabels = document.querySelectorAll('.choice');
+            const choiceInputs = document.querySelectorAll('.choice input[type="radio"]');
+            const declineButton = document.getElementById('decline-submit');
+            const consentNo = document.getElementById('consent-no');
+            const consentForm = document.getElementById('consent-form');
+
+            function syncChoiceState() {
+                choiceLabels.forEach(function (label) {
+                    const input = label.querySelector('input[type="radio"]');
+                    label.classList.toggle('is-selected', !!(input && input.checked));
+                });
+            }
+
+            choiceLabels.forEach(function (label) {
+                label.addEventListener('click', function () {
+                    const input = label.querySelector('input[type="radio"]');
+                    if (input) {
+                        input.checked = true;
+                        syncChoiceState();
+                    }
+                });
+            });
+
+            choiceInputs.forEach(function (input) {
+                input.addEventListener('change', syncChoiceState);
+            });
+
+            if (declineButton && consentNo && consentForm) {
+                declineButton.addEventListener('click', function () {
+                    consentNo.checked = true;
+                    syncChoiceState();
+                    consentForm.submit();
+                });
+            }
+
+            syncChoiceState();
+        })();
+    </script>
 </body>
 </html>

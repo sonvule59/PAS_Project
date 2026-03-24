@@ -208,3 +208,4 @@ IMPLEMENTATION_SUMMARY.md
 testpas/management/commands/check_randomization.py
 .vscode/
 *.csv
+.DS_Store

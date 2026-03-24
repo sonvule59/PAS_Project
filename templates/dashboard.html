@@ -316,7 +316,7 @@
                     <div class="status-item">
                         <h4>Progress</h4>
                         <div class="progress-bar">
-                            <div class="progress-fill" data-progress="{{ progress_percentage|default:'0' }}" style="width: 0%;"></div>
+                            <div class="progress-fill" style="width: {{ progress_percentage|default:"0" }}%;"></div>
                         </div>
                         <p>{{ progress_percentage|default:"0" }}% Complete</p>
                     </div>
@@ -592,12 +592,5 @@
     <div class="footer">
         <p>&copy; Confident Moves Intervention. All rights reserved.</p>
     </div>
-    <script>
-        document.querySelectorAll('.progress-fill[data-progress]').forEach((bar) => {
-            const raw = Number(bar.dataset.progress || 0);
-            const value = Number.isFinite(raw) ? Math.max(0, Math.min(100, raw)) : 0;
-            bar.style.width = `${value}%`;
-        });
-    </script>
 </body>
 </html>

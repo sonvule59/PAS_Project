@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test All Challenges - Quick Access</title>
+    <title>Intervention Test Mode</title>
     <style>
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
             margin: 0;
             padding: 20px;
@@ -16,44 +16,58 @@
         .container {
             max-width: 1400px;
             margin: 0 auto;
-            background: white;
+            background: #fff;
             border-radius: 15px;
             padding: 2rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
         }
         h1 {
-            color: #333;
+            color: #222;
             text-align: center;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.35rem;
         }
         .subtitle {
             text-align: center;
             color: #666;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .banner {
+            background: #e8f5e9;
+            border: 1px solid #81c784;
+            color: #1b5e20;
+            border-radius: 8px;
+            padding: 12px 14px;
+            margin-bottom: 1.2rem;
+        }
+        .stats {
+            text-align: center;
+            background: #f1f8ff;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.4rem;
         }
         .category {
-            margin-bottom: 2rem;
-            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            padding: 1.2rem;
             background: #f9f9f9;
             border-radius: 10px;
             border-left: 4px solid #667eea;
         }
         .category h2 {
+            margin: 0 0 0.9rem 0;
             color: #333;
-            margin-top: 0;
-            margin-bottom: 1rem;
-            font-size: 1.5rem;
+            font-size: 1.25rem;
         }
         .challenge-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
             gap: 10px;
         }
         .challenge-link {
             display: block;
-            padding: 12px 16px;
+            padding: 11px 14px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            color: #fff;
             text-decoration: none;
             border-radius: 8px;
             transition: transform 0.2s, box-shadow 0.2s;
@@ -61,132 +75,125 @@
         }
         .challenge-link:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.35);
         }
-        .stats {
-            text-align: center;
-            background: #e8f4f8;
-            padding: 1rem;
+        .quick-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 1rem;
+        }
+        .quick-links a {
+            background: #263238;
+            color: white;
+            text-decoration: none;
             border-radius: 8px;
-            margin-bottom: 2rem;
-        }
-        .stats strong {
-            color: #667eea;
-            font-size: 1.2rem;
-        }
-        .note {
-            background: #fff3cd;
-            border: 1px solid #ffc107;
-            padding: 1rem;
-            border-radius: 8px;
-            margin-bottom: 2rem;
+            padding: 9px 12px;
+            font-size: 0.95rem;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🧪 Test All Challenges - Quick Access</h1>
-        <p class="subtitle">Direct links to all 38 intervention challenges for testing</p>
-        
-        <div class="stats">
-            <strong>Total Challenges: 38</strong>
-        </div>
-        
-        <div class="note">
-            <strong>Note:</strong> Make sure your Django server is running on <code>http://127.0.0.1:8000</code> for these links to work.
+        <h1>Intervention Test Mode</h1>
+        <p class="subtitle">Open any intervention directly for design and flow testing.</p>
+
+        <div class="banner">
+            Logged in as test user: <strong>{{ test_user.username }}</strong>.
+            {% if test_mode_enabled %}
+                `TEST_MODE` is enabled.
+            {% else %}
+                Running under local DEBUG mode.
+            {% endif %}
         </div>
 
-        <!-- Introductory Challenges -->
+        <div class="quick-links">
+            <a href="{% url 'intervention_access_test' %}" target="_blank">Open Intervention Access (Test)</a>
+            <a href="{% url 'dashboard' %}" target="_blank">Open Dashboard</a>
+            <a href="{% url 'logout' %}" target="_blank">Logout</a>
+        </div>
+
+        <div class="stats"><strong>Total Challenges: 38</strong></div>
+
         <div class="category">
-            <h2>1. Introductory Challenges (6 challenges)</h2>
+            <h2>Introductory Challenges</h2>
             <div class="challenge-grid">
-                <a href="http://127.0.0.1:8000/intervention/challenge-1/" class="challenge-link" target="_blank">Challenge 1: Physical Activity</a>
-                <a href="http://127.0.0.1:8000/intervention/challenge-2/" class="challenge-link" target="_blank">Challenge 2: Rethinking Movement</a>
-                <a href="http://127.0.0.1:8000/intervention/challenge-3/" class="challenge-link" target="_blank">Challenge 3: Importance</a>
-                <a href="http://127.0.0.1:8000/intervention/challenge-4/" class="challenge-link" target="_blank">Challenge 4: How to do (Part 1)</a>
-                <a href="http://127.0.0.1:8000/intervention/challenge-5/" class="challenge-link" target="_blank">Challenge 5: How to do (Part 2)</a>
-                <a href="http://127.0.0.1:8000/intervention/challenge-6/" class="challenge-link" target="_blank">Challenge 6: How to do (Part 3)</a>
+                <a href="{% url 'intervention_challenge_1' %}" class="challenge-link" target="_blank">Challenge 1: Physical Activity</a>
+                <a href="{% url 'intervention_challenge_2' %}" class="challenge-link" target="_blank">Challenge 2: Rethinking Movement</a>
+                <a href="{% url 'intervention_challenge_3' %}" class="challenge-link" target="_blank">Challenge 3: Importance</a>
+                <a href="{% url 'intervention_challenge_4' %}" class="challenge-link" target="_blank">Challenge 4: How to do (Part 1)</a>
+                <a href="{% url 'intervention_challenge_5' %}" class="challenge-link" target="_blank">Challenge 5: How to do (Part 2)</a>
+                <a href="{% url 'intervention_challenge_6' %}" class="challenge-link" target="_blank">Challenge 6: How to do (Part 3)</a>
             </div>
         </div>
 
-        <!-- General Education Challenges -->
         <div class="category">
-            <h2>2. General Education Challenges (5 challenges)</h2>
+            <h2>General Education Challenges</h2>
             <div class="challenge-grid">
-                <a href="http://127.0.0.1:8000/intervention/ge/challenge-1/" class="challenge-link" target="_blank">Challenge 1: Introduction</a>
-                <a href="http://127.0.0.1:8000/intervention/ge/challenge-2/" class="challenge-link" target="_blank">Challenge 2: Contents</a>
-                <a href="http://127.0.0.1:8000/intervention/ge/challenge-3/" class="challenge-link" target="_blank">Challenge 3: Game</a>
-                <a href="http://127.0.0.1:8000/intervention/ge/challenge-4/" class="challenge-link" target="_blank">Challenge 4: Review</a>
-                <a href="http://127.0.0.1:8000/intervention/ge/challenge-5/" class="challenge-link" target="_blank">Challenge 5: Self-efficacy Survey</a>
+                <a href="{% url 'ge_challenge_1' %}" class="challenge-link" target="_blank">Challenge 1: Introduction</a>
+                <a href="{% url 'ge_challenge_2' %}" class="challenge-link" target="_blank">Challenge 2: Contents</a>
+                <a href="{% url 'ge_challenge_3' %}" class="challenge-link" target="_blank">Challenge 3: Game</a>
+                <a href="{% url 'ge_challenge_4' %}" class="challenge-link" target="_blank">Challenge 4: Review</a>
+                <a href="{% url 'ge_challenge_5' %}" class="challenge-link" target="_blank">Challenge 5: Self-efficacy Survey</a>
             </div>
         </div>
 
-        <!-- Work-related Challenges -->
         <div class="category">
-            <h2>3. Work-related Physical Activity (5 challenges)</h2>
+            <h2>Work-related Physical Activity</h2>
             <div class="challenge-grid">
-                <a href="http://127.0.0.1:8000/intervention/wr/challenge-6/" class="challenge-link" target="_blank">Challenge 6: Learning</a>
-                <a href="http://127.0.0.1:8000/intervention/wr/challenge-7/" class="challenge-link" target="_blank">Challenge 7: Easy Task</a>
-                <a href="http://127.0.0.1:8000/intervention/wr/challenge-8/" class="challenge-link" target="_blank">Challenge 8: Story</a>
-                <a href="http://127.0.0.1:8000/intervention/wr/challenge-9/" class="challenge-link" target="_blank">Challenge 9: Game</a>
-                <a href="http://127.0.0.1:8000/intervention/wr/challenge-10/" class="challenge-link" target="_blank">Challenge 10: Technique</a>
+                <a href="{% url 'wr_challenge_6' %}" class="challenge-link" target="_blank">Challenge 6: Learning</a>
+                <a href="{% url 'wr_challenge_7' %}" class="challenge-link" target="_blank">Challenge 7: Easy Task</a>
+                <a href="{% url 'wr_challenge_8' %}" class="challenge-link" target="_blank">Challenge 8: Story</a>
+                <a href="{% url 'wr_challenge_9' %}" class="challenge-link" target="_blank">Challenge 9: Game</a>
+                <a href="{% url 'wr_challenge_10' %}" class="challenge-link" target="_blank">Challenge 10: Technique</a>
             </div>
         </div>
 
-        <!-- Transport-related Challenges -->
         <div class="category">
-            <h2>4. Transport-related Physical Activity (5 challenges)</h2>
+            <h2>Transport-related Physical Activity</h2>
             <div class="challenge-grid">
-                <a href="http://127.0.0.1:8000/intervention/tr/challenge-11/" class="challenge-link" target="_blank">Challenge 11: Learning</a>
-                <a href="http://127.0.0.1:8000/intervention/tr/challenge-12/" class="challenge-link" target="_blank">Challenge 12: Easy Task</a>
-                <a href="http://127.0.0.1:8000/intervention/tr/challenge-13/" class="challenge-link" target="_blank">Challenge 13: Story</a>
-                <a href="http://127.0.0.1:8000/intervention/tr/challenge-14/" class="challenge-link" target="_blank">Challenge 14: Game</a>
-                <a href="http://127.0.0.1:8000/intervention/tr/challenge-15/" class="challenge-link" target="_blank">Challenge 15: Technique</a>
+                <a href="{% url 'tr_challenge_11' %}" class="challenge-link" target="_blank">Challenge 11: Learning</a>
+                <a href="{% url 'tr_challenge_12' %}" class="challenge-link" target="_blank">Challenge 12: Easy Task</a>
+                <a href="{% url 'tr_challenge_13' %}" class="challenge-link" target="_blank">Challenge 13: Story</a>
+                <a href="{% url 'tr_challenge_14' %}" class="challenge-link" target="_blank">Challenge 14: Game</a>
+                <a href="{% url 'tr_challenge_15' %}" class="challenge-link" target="_blank">Challenge 15: Technique</a>
             </div>
         </div>
 
-        <!-- Domestic-related Challenges -->
         <div class="category">
-            <h2>5. Domestic-related Physical Activity (5 challenges)</h2>
+            <h2>Domestic-related Physical Activity</h2>
             <div class="challenge-grid">
-                <a href="http://127.0.0.1:8000/intervention/dom/challenge-16/" class="challenge-link" target="_blank">Challenge 16: Learning</a>
-                <a href="http://127.0.0.1:8000/intervention/dom/challenge-17/" class="challenge-link" target="_blank">Challenge 17: Easy Task</a>
-                <a href="http://127.0.0.1:8000/intervention/dom/challenge-18/" class="challenge-link" target="_blank">Challenge 18: Story</a>
-                <a href="http://127.0.0.1:8000/intervention/dom/challenge-19/" class="challenge-link" target="_blank">Challenge 19: Game</a>
-                <a href="http://127.0.0.1:8000/intervention/dom/challenge-20/" class="challenge-link" target="_blank">Challenge 20: Technique</a>
+                <a href="{% url 'dom_challenge_16' %}" class="challenge-link" target="_blank">Challenge 16: Learning</a>
+                <a href="{% url 'dom_challenge_17' %}" class="challenge-link" target="_blank">Challenge 17: Easy Task</a>
+                <a href="{% url 'dom_challenge_18' %}" class="challenge-link" target="_blank">Challenge 18: Story</a>
+                <a href="{% url 'dom_challenge_19' %}" class="challenge-link" target="_blank">Challenge 19: Game</a>
+                <a href="{% url 'dom_challenge_20' %}" class="challenge-link" target="_blank">Challenge 20: Technique</a>
             </div>
         </div>
 
-        <!-- Leisure-related Challenges -->
         <div class="category">
-            <h2>6. Leisure-related Physical Activity (7 challenges)</h2>
+            <h2>Leisure-related Physical Activity</h2>
             <div class="challenge-grid">
-                <a href="http://127.0.0.1:8000/intervention/leisure/challenge-21/" class="challenge-link" target="_blank">Challenge 21: Learning</a>
-                <a href="http://127.0.0.1:8000/intervention/leisure/challenge-22/" class="challenge-link" target="_blank">Challenge 22: Easy Task</a>
-                <a href="http://127.0.0.1:8000/intervention/leisure/challenge-23/" class="challenge-link" target="_blank">Challenge 23: Learning Yoga</a>
-                <a href="http://127.0.0.1:8000/intervention/leisure/challenge-24/" class="challenge-link" target="_blank">Challenge 24: Yoga Practice 1</a>
-                <a href="http://127.0.0.1:8000/intervention/leisure/challenge-25/" class="challenge-link" target="_blank">Challenge 25: Yoga Practice 2</a>
-                <a href="http://127.0.0.1:8000/intervention/leisure/challenge-26/" class="challenge-link" target="_blank">Challenge 26: Game</a>
-                <a href="http://127.0.0.1:8000/intervention/leisure/challenge-27/" class="challenge-link" target="_blank">Challenge 27: Technique</a>
+                <a href="{% url 'leisure_challenge_21' %}" class="challenge-link" target="_blank">Challenge 21: Learning</a>
+                <a href="{% url 'leisure_challenge_22' %}" class="challenge-link" target="_blank">Challenge 22: Easy Task</a>
+                <a href="{% url 'leisure_challenge_23' %}" class="challenge-link" target="_blank">Challenge 23: Learning Yoga</a>
+                <a href="{% url 'leisure_challenge_24' %}" class="challenge-link" target="_blank">Challenge 24: Yoga Practice 1</a>
+                <a href="{% url 'leisure_challenge_25' %}" class="challenge-link" target="_blank">Challenge 25: Yoga Practice 2</a>
+                <a href="{% url 'leisure_challenge_26' %}" class="challenge-link" target="_blank">Challenge 26: Game</a>
+                <a href="{% url 'leisure_challenge_27' %}" class="challenge-link" target="_blank">Challenge 27: Technique</a>
             </div>
         </div>
 
-        <!-- Mindfulness Challenges -->
         <div class="category">
-            <h2>7. Mindfulness Challenges (5 challenges)</h2>
+            <h2>Mindfulness Challenges</h2>
             <div class="challenge-grid">
-                <a href="http://127.0.0.1:8000/intervention/mindfulness/challenge-28/" class="challenge-link" target="_blank">Challenge 28: Learning</a>
-                <a href="http://127.0.0.1:8000/intervention/mindfulness/challenge-29/" class="challenge-link" target="_blank">Challenge 29: Easy Task</a>
-                <a href="http://127.0.0.1:8000/intervention/mindfulness/challenge-30/" class="challenge-link" target="_blank">Challenge 30: Mindfulness Practice</a>
-                <a href="http://127.0.0.1:8000/intervention/mindfulness/challenge-31/" class="challenge-link" target="_blank">Challenge 31: Game</a>
-                <a href="http://127.0.0.1:8000/intervention/mindfulness/challenge-32/" class="challenge-link" target="_blank">Challenge 32: Technique</a>
+                <a href="{% url 'mindfulness_challenge_28' %}" class="challenge-link" target="_blank">Challenge 28: Learning</a>
+                <a href="{% url 'mindfulness_challenge_29' %}" class="challenge-link" target="_blank">Challenge 29: Easy Task</a>
+                <a href="{% url 'mindfulness_challenge_30' %}" class="challenge-link" target="_blank">Challenge 30: Mindfulness Practice</a>
+                <a href="{% url 'mindfulness_challenge_31' %}" class="challenge-link" target="_blank">Challenge 31: Game</a>
+                <a href="{% url 'mindfulness_challenge_32' %}" class="challenge-link" target="_blank">Challenge 32: Technique</a>
             </div>
-        </div>
-
-        <div style="text-align: center; margin-top: 2rem; padding-top: 2rem; border-top: 2px solid #eee;">
-            <p style="color: #999; font-size: 0.9rem;">Total: 38 challenges across 7 categories</p>
         </div>
     </div>
 </body>
 </html>
-
