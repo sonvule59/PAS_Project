@@ -217,6 +217,7 @@
         }
         .progress-fill {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            width: 0;
             height: 100%;
             border-radius: 10px;
             transition: width 0.3s ease;
@@ -316,7 +317,7 @@
                     <div class="status-item">
                         <h4>Progress</h4>
                         <div class="progress-bar">
-                            <div class="progress-fill" style="width: {{ progress_percentage|default:"0" }}%;"></div>
+                            <div class="progress-fill" data-progress="{{ progress_percentage|default:'0' }}"></div>
                         </div>
                         <p>{{ progress_percentage|default:"0" }}% Complete</p>
                     </div>
@@ -592,5 +593,14 @@
     <div class="footer">
         <p>&copy; Confident Moves Intervention. All rights reserved.</p>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var progressFill = document.querySelector('.progress-fill[data-progress]');
+            if (!progressFill) return;
+            var raw = parseFloat(progressFill.getAttribute('data-progress'));
+            var clamped = Number.isFinite(raw) ? Math.max(0, Math.min(100, raw)) : 0;
+            progressFill.style.width = clamped + '%';
+        });
+    </script>
 </body>
 </html>
