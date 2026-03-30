@@ -289,7 +289,7 @@ def login_view(request):
         password = request.POST.get('password')
         print(f"[DEBUG] Login attempt for username: {username_input}")
 
-        matched_user = User.objects.filter(username__iexact=username_input).first()it
+        matched_user = User.objects.filter(username__iexact=username_input).first()
         auth_username = matched_user.username if matched_user else username_input.lower()
         user = authenticate(request, username=auth_username, password=password)
         if user is not None:
