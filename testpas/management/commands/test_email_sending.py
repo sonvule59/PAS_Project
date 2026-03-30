@@ -38,11 +38,14 @@ class Command(BaseCommand):
         self.stdout.write('EMAIL CONFIGURATION CHECK')
         self.stdout.write('='*60)
         self.stdout.write(f'EMAIL_BACKEND: {settings.EMAIL_BACKEND}')
-        self.stdout.write(f'EMAIL_HOST: {settings.EMAIL_HOST}')
-        self.stdout.write(f'EMAIL_PORT: {settings.EMAIL_PORT}')
-        self.stdout.write(f'EMAIL_USE_TLS: {settings.EMAIL_USE_TLS}')
-        self.stdout.write(f'EMAIL_HOST_USER: {settings.EMAIL_HOST_USER or "NOT SET"}')
-        self.stdout.write(f'EMAIL_HOST_PASSWORD: {"SET" if settings.EMAIL_HOST_PASSWORD else "NOT SET"}')
+        if hasattr(settings, 'SENDGRID_API_KEY'):
+            self.stdout.write(f'SENDGRID_API_KEY: SET ({"*" * 8}{settings.SENDGRID_API_KEY[-4:] if settings.SENDGRID_API_KEY else ""})')
+        else:
+            self.stdout.write(f'EMAIL_HOST: {getattr(settings, "EMAIL_HOST", "NOT SET")}')
+            self.stdout.write(f'EMAIL_PORT: {getattr(settings, "EMAIL_PORT", "NOT SET")}')
+            self.stdout.write(f'EMAIL_USE_TLS: {getattr(settings, "EMAIL_USE_TLS", "NOT SET")}')
+            self.stdout.write(f'EMAIL_HOST_USER: {getattr(settings, "EMAIL_HOST_USER", None) or "NOT SET"}')
+            self.stdout.write(f'EMAIL_HOST_PASSWORD: {"SET" if getattr(settings, "EMAIL_HOST_PASSWORD", None) else "NOT SET"}')
         self.stdout.write(f'DEFAULT_FROM_EMAIL: {settings.DEFAULT_FROM_EMAIL}')
         
         # Check if email templates exist

@@ -209,7 +209,9 @@ from celery.schedules import crontab
 CELERY_BEAT_SCHEDULE = {
     'run-timeline-checks': {
         'task': 'testpas.tasks.run_daily_timeline_checks',
-        'schedule': 15.0 if TIME_COMPRESSION else 86400.0,
+        # Time compression: every 15 seconds for testing.
+        # Production: fixed crontab at 8 AM CT so restarts don't shift the window.
+        'schedule': 15.0 if TIME_COMPRESSION else crontab(hour=8, minute=0),
     },
 }
 # from celery import Celery
@@ -231,19 +233,26 @@ CELERY_TASK_IGNORE_RESULT = True
 # Define how many seconds represent one simulated "day"
 
 # Email settings
-# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_BACKEND = 'django_smtp_ssl.SSLEmailBackend'
+# Use SendGrid if SENDGRID_API_KEY is set, otherwise fall back to SMTP (Gmail or other).
+if os.environ.get('SENDGRID_API_KEY'):
+    EMAIL_BACKEND = 'sgbackend.SendGridBackend'
+    SENDGRID_API_KEY = os.environ.get('SENDGRID_API_KEY')
+else:
+    # Local dev / fallback: console or SMTP
+    EMAIL_BACKEND = os.environ.get(
+        'EMAIL_BACKEND', 'django.core.mail.backends.smtp.EmailBackend'
+    )
+    EMAIL_HOST = os.environ.get('EMAIL_HOST', 'smtp.gmail.com')
+    EMAIL_PORT = int(os.environ.get('EMAIL_PORT', 587))
+    EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS', 'True') == 'True'
+    EMAIL_USE_SSL = False
+    EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+    EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_USE_SSL = False  
-EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
-DEFAULT_FROM_EMAIL = 'The Confident Moves Research Team <vuleson59@gmail.com>'
-# DEFAULT_FROM_EMAIL = os.environ.get('EMAIL_HOST_USER') ## Change to your email address when run
+DEFAULT_FROM_EMAIL = os.environ.get(
+    'DEFAULT_FROM_EMAIL',
+    'The Confident Moves Research Team <vuleson59@gmail.com>'
+)
 # # WSGI_APPLICATION = "testpas.wsgi.application"
 WSGI_APPLICATION = "config.wsgi.application"
 

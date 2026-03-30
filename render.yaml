@@ -22,9 +22,9 @@ services:
         sync: false
       - key: SECRET_KEY
         sync: false
-      - key: EMAIL_HOST_USER
+      - key: SENDGRID_API_KEY
         sync: false
-      - key: EMAIL_HOST_PASSWORD
+      - key: DEFAULT_FROM_EMAIL
         sync: false
       - key: BASE_URL
         value: https://confidentmoves.onrender.com
@@ -44,9 +44,9 @@ services:
         sync: false
       - key: SECRET_KEY
         sync: false
-      - key: EMAIL_HOST_USER
+      - key: SENDGRID_API_KEY
         sync: false
-      - key: EMAIL_HOST_PASSWORD
+      - key: DEFAULT_FROM_EMAIL
         sync: false
       - key: BASE_URL
         value: https://confidentmoves.onrender.com
@@ -66,9 +66,9 @@ services:
         sync: false
       - key: SECRET_KEY
         sync: false
-      - key: EMAIL_HOST_USER
+      - key: SENDGRID_API_KEY
         sync: false
-      - key: EMAIL_HOST_PASSWORD
+      - key: DEFAULT_FROM_EMAIL
         sync: false
       - key: BASE_URL
         value: https://confidentmoves.onrender.com
