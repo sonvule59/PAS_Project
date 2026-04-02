@@ -188,28 +188,20 @@ def create_account(request):
                         user.delete()
                         raise Exception("Failed to create participant record. Please try again.")
 
-                    # Send confirmation email asynchronously using Celery
+                    # Send confirmation email — synchronously so it arrives immediately,
+                    # not delayed by Celery worker cold start on Render.
                     try:
                         if not participant.is_confirmed and participant.email_status != 'confirmation_email_sent':
-                            send_confirmation_email_task.delay(participant.id)
-                            print(f"[SEND] Queued confirmation email for participant {participant.participant_id}")
+                            print(f"[SEND] Sending confirmation email for participant {participant.participant_id}")
+                            participant.send_confirmation_email()
+                            print(f"[SEND] Successfully sent confirmation email to {participant.email}")
                         else:
                             print(f"[SKIP] Skipping confirmation email for participant {participant.participant_id} - already confirmed or email already sent")
                     except Exception as e:
-                        # If Celery is not available, try synchronous sending as fallback
-                        print(f"[ERROR] Celery task failed, trying synchronous email: {e}")
-                        try:
-                            if not participant.is_confirmed and participant.email_status != 'confirmation_email_sent':
-                                print(f"[SEND] Sending confirmation email synchronously for participant {participant.participant_id}")
-                                participant.send_confirmation_email()
-                                print(f"[SEND] Successfully sent confirmation email to {participant.email}")
-                            else:
-                                print(f"[SKIP] Skipping synchronous confirmation email for participant {participant.participant_id} - already confirmed or email already sent")
-                        except Exception as e2:
-                            print(f"[ERROR] Failed to send account_confirmation email for participant {participant.participant_id}: {e2}")
-                            import traceback
-                            print(f"[ERROR] Traceback: {traceback.format_exc()}")
-                            # Don't fail account creation if email fails - log it and continue
+                        print(f"[ERROR] Failed to send account_confirmation email for participant {participant.participant_id}: {e}")
+                        import traceback
+                        print(f"[ERROR] Traceback: {traceback.format_exc()}")
+                        # Don't fail account creation if email fails - log it and continue
 
                     if is_ajax:
                         return JsonResponse({
@@ -1202,17 +1194,12 @@ def enter_code(request, wave):
                     participant.code_entry_date = timezone.now().date()
                     participant.save()
                     
-                    # Send Information 12 email asynchronously - use participant.id (database ID)
+                    # Send Information 12 email synchronously so it arrives immediately.
                     try:
-                        send_wave1_code_entry_email.delay(participant.id)
-                        print(f"[SEND] Queued Wave 1 code entry email for participant {participant.participant_id}")
+                        send_wave1_code_entry_email(participant.id)
+                        print(f"[SEND] Sent Wave 1 code entry email for participant {participant.participant_id}")
                     except Exception as e:
-                        # If Celery is not available, try synchronous sending as fallback
-                        print(f"[ERROR] Celery task failed for Wave 1 code entry email, trying synchronous: {e}")
-                        try:
-                            send_wave1_code_entry_email(participant.id)
-                        except Exception as e2:
-                            print(f"[ERROR] Failed to send Wave 1 code entry email for participant {participant.participant_id}: {e2}")
+                        print(f"[ERROR] Failed to send Wave 1 code entry email for participant {participant.participant_id}: {e}")
                     
                     messages.success(request, "Code entered successfully!")
                     return redirect('code_success', wave=wave)
@@ -1233,18 +1220,12 @@ def enter_code(request, wave):
                         participant.wave3_code_entry_day = 1
                     participant.save()
                     
-                    # Send Information 25 email - use participant.id (database ID)
-                    # Try async first, fallback to sync if Celery is unavailable
+                    # Send Information 25 email synchronously so it arrives immediately.
                     try:
-                        send_wave3_code_entry_email.delay(participant.id)
-                        print(f"[SEND] Queued wave3_code_entry email for participant {participant.participant_id}")
+                        send_wave3_code_entry_email(participant.id)
+                        print(f"[SEND] Sent wave3_code_entry email for participant {participant.participant_id}")
                     except Exception as e:
-                        print(f"[ERROR] Celery task failed, trying synchronous email: {e}")
-                        try:
-                            send_wave3_code_entry_email(participant.id)
-                            print(f"[SEND] Sent wave3_code_entry email synchronously for participant {participant.participant_id}")
-                        except Exception as e2:
-                            print(f"[ERROR] Failed to send wave3_code_entry email for participant {participant.participant_id}: {e2}")
+                        print(f"[ERROR] Failed to send wave3_code_entry email for participant {participant.participant_id}: {e}")
                     # # Send Information 25 email asynchronously - use participant.id (database ID)
                     # try:
                     #     send_wave3_code_entry_email.delay(participant.id)

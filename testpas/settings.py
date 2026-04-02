@@ -233,12 +233,17 @@ CELERY_TASK_IGNORE_RESULT = True
 # Define how many seconds represent one simulated "day"
 
 # Email settings
-# Use SendGrid if SENDGRID_API_KEY is set, otherwise fall back to SMTP (Gmail or other).
+# Use SendGrid SMTP relay if SENDGRID_API_KEY is set (works on Render and locally).
+# Falls back to Gmail SMTP or console backend for local dev without SendGrid.
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 if os.environ.get('SENDGRID_API_KEY'):
-    EMAIL_BACKEND = 'sgbackend.SendGridBackend'
-    SENDGRID_API_KEY = os.environ.get('SENDGRID_API_KEY')
+    EMAIL_HOST = 'smtp.sendgrid.net'
+    EMAIL_PORT = 587
+    EMAIL_USE_TLS = True
+    EMAIL_USE_SSL = False
+    EMAIL_HOST_USER = 'apikey'
+    EMAIL_HOST_PASSWORD = os.environ.get('SENDGRID_API_KEY')
 else:
-    # Local dev / fallback: console or SMTP
     EMAIL_BACKEND = os.environ.get(
         'EMAIL_BACKEND', 'django.core.mail.backends.smtp.EmailBackend'
     )
