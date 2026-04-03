@@ -177,7 +177,8 @@ def create_account(request):
                                     confirmation_token=str(uuid.uuid4()),
                                     participant_id=participant_id,
                                     enrollment_date=timezone.now().date(),
-                                    is_confirmed=False
+                                    is_confirmed=False,
+                                    registration_code=form.cleaned_data.get('registration_code', '')
                                 )
                             break  # Exit the loop if participant creation succeeds
                         except IntegrityError:
@@ -1270,7 +1271,7 @@ def download_data(request):
     for p in participants:
         survey_progress = SurveyProgress.objects.filter(user=p.user).first()
         writer.writerow([
-            p.participant_id, p.user.username, p.email, p.phone_number, 'wavepa',
+            p.participant_id, p.user.username, p.email, p.phone_number, p.registration_code or '',
             p.is_confirmed and p.token_expiration or '', survey_progress and survey_progress.interest_submitted or False,
             survey_progress and survey_progress.interested or False, survey_progress and survey_progress.eligibility_submitted or False,
             survey_progress and survey_progress.is_eligible or False, survey_progress and survey_progress.consent_submitted or False,

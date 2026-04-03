@@ -38,9 +38,20 @@ class UserRegistrationForm(forms.Form):
         return email
 
     # Validate registration code
+    """
+    New registration codes, all not case-sensitive:
+    wavepa1
+    wavepa2
+    wavepa3
+    wavepa4
+    wavepa5
+    These different codes will allow us to track where participants received the invitation for this research.
+    """
+    VALID_REGISTRATION_CODES = {'wavepa1', 'wavepa2', 'wavepa3', 'wavepa4', 'wavepa5'}
+
     def clean_registration_code(self):
         code = self.cleaned_data.get('registration_code', '').strip().lower()
-        if code != 'wavepa':
+        if code not in self.VALID_REGISTRATION_CODES:
             raise forms.ValidationError("Invalid registration code.")
         return code
 

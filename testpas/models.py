@@ -150,6 +150,7 @@ class Participant(models.Model):
     state = models.CharField(max_length=50, null=True, blank=True)
     zip_code = models.CharField(max_length=10, null=True, blank=True)
     dominant_hand = models.CharField(max_length=10, null=True, blank=True, choices=[('left', 'Left'), ('right', 'Right')], help_text="Non-dominant hand for physical activity monitoring")
+    registration_code = models.CharField(max_length=20, null=True, blank=True)
     confirmation_token = models.CharField(max_length=255, unique=True)
     is_confirmed = models.BooleanField(default=False)
     token_expiration = models.DateTimeField(default=timezone.now)
