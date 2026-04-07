@@ -22,7 +22,9 @@ services:
         sync: false
       - key: SECRET_KEY
         sync: false
-      - key: SENDGRID_API_KEY
+      - key: MAILGUN_SMTP_LOGIN
+        sync: false
+      - key: MAILGUN_SMTP_PASSWORD
         sync: false
       - key: DEFAULT_FROM_EMAIL
         sync: false
@@ -44,7 +46,9 @@ services:
         sync: false
       - key: SECRET_KEY
         sync: false
-      - key: SENDGRID_API_KEY
+      - key: MAILGUN_SMTP_LOGIN
+        sync: false
+      - key: MAILGUN_SMTP_PASSWORD
         sync: false
       - key: DEFAULT_FROM_EMAIL
         sync: false
@@ -66,7 +70,9 @@ services:
         sync: false
       - key: SECRET_KEY
         sync: false
-      - key: SENDGRID_API_KEY
+      - key: MAILGUN_SMTP_LOGIN
+        sync: false
+      - key: MAILGUN_SMTP_PASSWORD
         sync: false
       - key: DEFAULT_FROM_EMAIL
         sync: false
