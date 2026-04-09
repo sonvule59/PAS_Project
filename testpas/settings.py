@@ -104,10 +104,9 @@ if not BASE_URL:
         import warnings
         warnings.warn(
             "BASE_URL not set on Render! Please set BASE_URL environment variable in Render dashboard. "
-            "Using fallback: https://testpas-web.onrender.com",
+            "Using fallback: https://confidentmoves.onrender.com",
             UserWarning
         )
-        # BASE_URL = 'https://testpas-web.onrender.com'
         BASE_URL = 'https://confidentmoves.onrender.com'
     else:
         # Local development default
