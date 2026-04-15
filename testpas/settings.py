@@ -141,7 +141,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'whitenoise.runserver_nostatic',  
+    'whitenoise.runserver_nostatic',
+    'anymail',
     'testpas',
     'django_celery_beat',
 ]
@@ -232,16 +233,14 @@ CELERY_TASK_IGNORE_RESULT = True
 # Define how many seconds represent one simulated "day"
 
 # Email settings
-# Use Mailgun SMTP relay if MAILGUN_SMTP_LOGIN + MAILGUN_SMTP_PASSWORD are set.
+# Use Mailgun HTTP API (via django-anymail) if MAILGUN_API_KEY is set.
 # Falls back to configurable SMTP (Gmail) or console backend for local dev.
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-if os.environ.get('MAILGUN_SMTP_LOGIN') and os.environ.get('MAILGUN_SMTP_PASSWORD'):
-    EMAIL_HOST = 'smtp.mailgun.org'
-    EMAIL_PORT = 587
-    EMAIL_USE_TLS = True
-    EMAIL_USE_SSL = False
-    EMAIL_HOST_USER = os.environ.get('MAILGUN_SMTP_LOGIN')
-    EMAIL_HOST_PASSWORD = os.environ.get('MAILGUN_SMTP_PASSWORD')
+if os.environ.get('MAILGUN_API_KEY'):
+    EMAIL_BACKEND = 'anymail.backends.mailgun.EmailBackend'
+    ANYMAIL = {
+        'MAILGUN_API_KEY': os.environ.get('MAILGUN_API_KEY'),
+        'MAILGUN_SENDER_DOMAIN': os.environ.get('MAILGUN_SENDER_DOMAIN', 'sandboxb5cb1682f976457a8686776c9aad7061.mailgun.org'),
+    }
 else:
     EMAIL_BACKEND = os.environ.get(
         'EMAIL_BACKEND', 'django.core.mail.backends.smtp.EmailBackend'

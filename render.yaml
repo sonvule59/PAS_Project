@@ -22,9 +22,9 @@ services:
         sync: false
       - key: SECRET_KEY
         sync: false
-      - key: MAILGUN_SMTP_LOGIN
+      - key: MAILGUN_API_KEY
         sync: false
-      - key: MAILGUN_SMTP_PASSWORD
+      - key: MAILGUN_SENDER_DOMAIN
         sync: false
       - key: DEFAULT_FROM_EMAIL
         sync: false
@@ -46,9 +46,9 @@ services:
         sync: false
       - key: SECRET_KEY
         sync: false
-      - key: MAILGUN_SMTP_LOGIN
+      - key: MAILGUN_API_KEY
         sync: false
-      - key: MAILGUN_SMTP_PASSWORD
+      - key: MAILGUN_SENDER_DOMAIN
         sync: false
       - key: DEFAULT_FROM_EMAIL
         sync: false
@@ -70,9 +70,9 @@ services:
         sync: false
       - key: SECRET_KEY
         sync: false
-      - key: MAILGUN_SMTP_LOGIN
+      - key: MAILGUN_API_KEY
         sync: false
-      - key: MAILGUN_SMTP_PASSWORD
+      - key: MAILGUN_SENDER_DOMAIN
         sync: false
       - key: DEFAULT_FROM_EMAIL
         sync: false

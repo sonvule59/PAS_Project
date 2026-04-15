@@ -38,11 +38,16 @@ class Command(BaseCommand):
         self.stdout.write('EMAIL CONFIGURATION CHECK')
         self.stdout.write('='*60)
         self.stdout.write(f'EMAIL_BACKEND: {settings.EMAIL_BACKEND}')
-        self.stdout.write(f'EMAIL_HOST: {getattr(settings, "EMAIL_HOST", "NOT SET")}')
-        self.stdout.write(f'EMAIL_PORT: {getattr(settings, "EMAIL_PORT", "NOT SET")}')
-        self.stdout.write(f'EMAIL_USE_TLS: {getattr(settings, "EMAIL_USE_TLS", "NOT SET")}')
-        self.stdout.write(f'EMAIL_HOST_USER: {getattr(settings, "EMAIL_HOST_USER", None) or "NOT SET"}')
-        self.stdout.write(f'EMAIL_HOST_PASSWORD: {"SET" if getattr(settings, "EMAIL_HOST_PASSWORD", None) else "NOT SET"}')
+        if 'anymail' in settings.EMAIL_BACKEND:
+            api_key = (getattr(settings, 'ANYMAIL', {}) or {}).get('MAILGUN_API_KEY', '')
+            self.stdout.write(f'MAILGUN_API_KEY: {"SET" if api_key else "NOT SET"}')
+            self.stdout.write(f'MAILGUN_SENDER_DOMAIN: {(getattr(settings, "ANYMAIL", {}) or {}).get("MAILGUN_SENDER_DOMAIN", "NOT SET")}')
+        else:
+            self.stdout.write(f'EMAIL_HOST: {getattr(settings, "EMAIL_HOST", "NOT SET")}')
+            self.stdout.write(f'EMAIL_PORT: {getattr(settings, "EMAIL_PORT", "NOT SET")}')
+            self.stdout.write(f'EMAIL_USE_TLS: {getattr(settings, "EMAIL_USE_TLS", "NOT SET")}')
+            self.stdout.write(f'EMAIL_HOST_USER: {getattr(settings, "EMAIL_HOST_USER", None) or "NOT SET"}')
+            self.stdout.write(f'EMAIL_HOST_PASSWORD: {"SET" if getattr(settings, "EMAIL_HOST_PASSWORD", None) else "NOT SET"}')
         self.stdout.write(f'DEFAULT_FROM_EMAIL: {settings.DEFAULT_FROM_EMAIL}')
         
         # Check if email templates exist
