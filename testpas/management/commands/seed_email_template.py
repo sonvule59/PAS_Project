@@ -125,7 +125,7 @@ EMAIL_TEMPLATES = [
         "body": (
             "Hi {username},\n\n"
             "There is no Wave 2 Physical Activity Monitoring.\n\n"
-            "We will email you again <b><u>in approximately 4 weeks</u></b> for the next task (i.e., completing an online survey set). Please regularly check your inbox. You will receive the accrued incentives after this study ends.\n\n"
+            "We will email you again <b><u>in approximately 3 weeks</u></b> for the next task (i.e., completing an online survey set). Please regularly check your inbox. You will receive the accrued incentives after this study ends.\n\n"
             "If you need any assistance or have any questions at any time, please contact Seungmin (“Seung”) Lee (Principal Investigator) at seunglee@iastate.edu or 517-898-0020.\n\n"
             "Sincerely,\n\n"
             "The Confident Moves Research Team"

@@ -77,11 +77,11 @@ class Command(BaseCommand):
                 elif study_day == 67:
                     self.stdout.write(f"    → Should send Wave 2 no monitoring email")
                 elif study_day == 85:
-                    self.stdout.write(f"    → Should send Wave 3 survey email")
-                elif study_day == 95:
-                    self.stdout.write(f"    → Should send Wave 3 monitoring email")
-                elif study_day == 105:
-                    self.stdout.write(f"    → Should send Wave 3 missing code email (if applicable)")
+                    self.stdout.write(f"    → Should send Wave 3 survey email (Day 85)")
+                elif study_day == 92:
+                    self.stdout.write(f"    → Should send Wave 3 monitoring email (Day 92)")
+                elif study_day == 106:
+                    self.stdout.write(f"    → Should send Wave 3 missing code email (if applicable) (Day 106)")
                 
                 # Wait for the compressed time to pass
                 if settings.TIME_COMPRESSION:

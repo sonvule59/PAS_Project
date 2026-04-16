@@ -106,10 +106,10 @@ def daily_timeline_check(user):
         print(f"[SKIP] No participant for user {user.id}")
         return
     
-    # Skip participants who have completed the study (Day 134+)
-    # Note: Information 24 is sent on Day 120, Information 27 is sent on Day 134
-    if today and today > 140: # Skips users that are past the end of the study 
-        print(f"[SKIP] User {user.id} completed study (Day {today} > 134)")
+    # Skip participants who have completed the study (Day 106+)
+    # Note: Information 23 email is sent on Day 92, Information 27 is sent on Day 106
+    if today and today > 112: # Skips users that are past the end of the study
+        print(f"[SKIP] User {user.id} completed study (Day {today} > 112)")
         return
     
     # CRITICAL: Refresh participant from database to get latest status
@@ -300,7 +300,7 @@ def daily_timeline_check(user):
     Information 15: (Website) Double-Blind Randomization
  	On Day 29, randomize (i.e., equal chance of being assigned to either group) the participants into either Group 0 (usual care group [i.e., control group]) or Group 1 (intervention group) at 7 AM Central Time (CT).
  
-	    Group 0 (i.e., the usual care group) will be given the access to the intervention after the data collection is done from Day 113. 
+	    Group 0 (i.e., the usual care group) will be given the access to the intervention after the data collection is done from Day 85. 
     There will be no expiration date for the access for Group 0. We will not track their engagement with the intervention (e.g., the number of challenges completed) from Group 0.
 
     	Group 1 (i.e., the intervention group) will be given the access to the intervention from Day 29 to Day 56. We will track their engagement with the intervention (e.g., the number of challenges completed) from Group 1.
@@ -556,7 +556,7 @@ def daily_timeline_check(user):
 
     """
     Information 20: Day 64 – No Wave 2 Physical Activity Monitoring
-    (Email) From Day 64 to Day 112, send this email to every participant from any group (i.e., both control and intervention group).
+    (Email) From Day 64 to Day 84, send this email to every participant from any group (i.e., both control and intervention group).
     Same information should appear on the website.
     """
     # Information 20: Send No Wave 2 Monitoring Email on Day 64
@@ -572,10 +572,10 @@ def daily_timeline_check(user):
         participant.save()
 
     """
-    Information 21: Day 113: Wave 3 Survey Ready
-    (Email) Wave 3 Online Survey Set – Ready. On Day 113, send this email to every participant from any group.  
+    Information 21: Day 85: Wave 3 Survey Ready
+    (Email) Wave 3 Online Survey Set – Ready. On Day 85, send this email to every participant from any group.
     """
-    if today and today == 113 and not participant.wave3_survey_email_sent:
+    if today and today == 85 and not participant.wave3_survey_email_sent:
         participant.send_email(
             "wave3_survey_ready", 
             extra_context={
@@ -585,11 +585,11 @@ def daily_timeline_check(user):
         participant.save()
 
     """
-    Information 23: Day 120: Wave 3 Monitoring Ready
-    (Email) Wave 3 Physical Activity Monitoring Ready. On Day 120, send this email to every participant from any group.
-    Allow catch-up if missed (send if on Day 120 or later but not sent yet).
+    Information 23: Day 92: Wave 3 Monitoring Ready
+    (Email) Wave 3 Physical Activity Monitoring – Ready to Enter Code. On Day 92, send this email to every participant from any group.
+    Allow catch-up if missed (send if on Day 92 or later but not sent yet).
     """
-    if today and today >= 120 and not participant.wave3_monitor_ready_sent and participant.wave3_survey_email_sent:
+    if today and today >= 92 and not participant.wave3_monitor_ready_sent and participant.wave3_survey_email_sent:
         try:
             print(f"[INFO 23] Sending Wave 3 Monitoring Ready email to {participant.participant_id} (Day {today})")
             participant.send_email("wave3_monitoring_ready", extra_context={"username": user.username})
@@ -600,30 +600,29 @@ def daily_timeline_check(user):
             print(f"[INFO 23] ERROR: Failed to send Wave 3 Monitoring Ready email to {participant.participant_id}: {str(e)}")
             # Don't set wave3_monitor_ready_sent = True if email failed, so it can be retried
 
-    # Info 27 – Day 134: Missed Wave 3 Code Entry (Study End)
-    if today and today == 134 and not participant.wave3_code_entered and not participant.wave3_missing_code_sent:
+    # Info 27 – Day 106: Missed Wave 3 Code Entry (Study End)
+    if today and today == 106 and not participant.wave3_code_entered and not participant.wave3_missing_code_sent:
         participant.send_email("wave3_missing_code")
         participant.wave3_missing_code_sent = True
         participant.save()
 
     """
-    Study End Survey & Monitor Return Email
-    Send 8 days after Wave 3 code entry (if code was entered).
-    Note: Information 24 is the website display for Wave 3 code entry (Days 120-133), not an email.
+    Information 26: (Email) Return Monitor (Study End)
+    Send 7 days after Wave 3 code entry (for participants who entered code between Day 92 and Day 105).
     """
     if participant.wave3_code_entered and participant.wave3_code_entry_day:
         # Calculate target day: code entry day + 7 days
         target_day = participant.wave3_code_entry_day + 7
         if today and today >= target_day and not participant.wave3_survey_monitor_return_sent:
             try:
-                print(f"[STUDY END] Sending Study End Survey & Monitor Return email to {participant.participant_id} (Day {today}, code entered on Day {participant.wave3_code_entry_day})")
+                print(f"[INFO 26] Sending Return Monitor (Study End) email to {participant.participant_id} (Day {today}, code entered on Day {participant.wave3_code_entry_day})")
                 participant.send_email("study_end", extra_context={"username": user.username})
                 participant.wave3_survey_monitor_return_sent = True
                 participant.wave3_survey_monitor_return_date = timezone.now().date()
                 participant.save()
-                print(f"[STUDY END] Successfully sent Study End Survey & Monitor Return email to {participant.participant_id}")
+                print(f"[INFO 26] Successfully sent Return Monitor (Study End) email to {participant.participant_id}")
             except Exception as e:
-                print(f"[STUDY END] ERROR: Failed to send Study End Survey & Monitor Return email to {participant.participant_id}: {str(e)}")
+                print(f"[INFO 26] ERROR: Failed to send Return Monitor (Study End) email to {participant.participant_id}: {str(e)}")
                 # Don't set wave3_survey_monitor_return_sent = True if email failed, so it can be retried
 
 @shared_task

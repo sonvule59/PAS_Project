@@ -826,10 +826,8 @@ def dashboard(request):
     study_day = 0
     day_11 = None
     day_21 = None
-    day_95 = None
-    day_104 = None
-    day_120 = None
-    day_133 = None
+    day_92 = None
+    day_105 = None
     # Use compressed timeline calculation consistently
     if user_progress and user_progress.eligible and user_progress.consent_given and participant:
         if not participant.enrollment_date:
@@ -854,18 +852,18 @@ def dashboard(request):
                 # For compressed timeline, we work with study days directly
                 day_11_study_day = 8
                 day_21_study_day = 21
-                day_120_study_day = 120  # Wave 3 code entry starts on Day 120
-                day_133_study_day = 133  # Wave 3 code entry ends on Day 133
+                day_92_study_day = 92   # Wave 3 code entry starts on Day 92
+                day_105_study_day = 105  # Wave 3 code entry ends on Day 105
                 
-                # Set day_120 and day_133 for display (using study day numbers as strings for TIME_COMPRESSION)
-                day_120 = day_120_study_day
-                day_133 = day_133_study_day
+                # Set day_92 and day_105 for display (using study day numbers as strings for TIME_COMPRESSION)
+                day_92 = day_92_study_day
+                day_105 = day_105_study_day
                 
                 # Calculate days until milestones based on study day difference
                 days_until_start_wave1 = max(0, day_11_study_day - study_day)
                 days_until_end_wave1 = max(0, day_21_study_day - study_day)
-                days_until_start_wave3 = max(0, day_120_study_day - study_day)
-                days_until_end_wave3 = max(0, day_133_study_day - study_day)
+                days_until_start_wave3 = max(0, day_92_study_day - study_day)
+                days_until_end_wave3 = max(0, day_105_study_day - study_day)
                 
                 # For display purposes, convert to approximate real time
                 seconds_until_start_wave1 = days_until_start_wave1 * settings.SECONDS_PER_DAY
@@ -882,48 +880,44 @@ def dashboard(request):
                 day_11 = user_progress.day_1 + timedelta(days=7)
                 # End of Wave 1 code entry is Day 21 => +20 days from Day 1
                 day_21 = user_progress.day_1 + timedelta(days=20)
-                day_95 = user_progress.day_1 + timedelta(days=94)
-                day_104 = user_progress.day_1 + timedelta(days=103)
-                day_120 = user_progress.day_1 + timedelta(days=119)
-                day_133 = user_progress.day_1 + timedelta(days=132)
+                day_92 = user_progress.day_1 + timedelta(days=91)
+                day_105 = user_progress.day_1 + timedelta(days=104)
                 
                 days_until_start_wave1 = max(0, (day_11 - current_date).days)
                 days_until_end_wave1 = max(0, (day_21 - current_date).days)
-                days_until_start_wave3 = max(0, (day_120 - current_date).days)
-                days_until_end_wave3 = max(0, (day_133 - current_date).days)
+                days_until_start_wave3 = max(0, (day_92 - current_date).days)
+                days_until_end_wave3 = max(0, (day_105 - current_date).days)
                 
             print(f"[DEBUG] Day 11: {day_11}")
             print(f"[DEBUG] Day 21: {day_21}")
-            print(f"[DEBUG] Day 95: {day_95}")
-            print(f"[DEBUG] Day 104: {day_104}")
-            print(f"[DEBUG] Day 120: {day_120}")
-            print(f"[DEBUG] Day 133: {day_133}")
+            print(f"[DEBUG] Day 92 (wave3 start): {day_92}")
+            print(f"[DEBUG] Day 105 (wave3 end): {day_105}")
             print(f"[DEBUG] Days until start wave 1: {days_until_start_wave1}")
             print(f"[DEBUG] Days until end wave 1: {days_until_end_wave1}")
 
             # ----  Study progress percentage ----
-            total_study_days = 134  # Set this to your full study duration (Day 134 is when Information 27 is sent)
+            total_study_days = 112  # Full study duration (Day 106 is when Information 27 is sent)
             progress_percentage = min(int((study_day / total_study_days) * 100), 100)
             print(f"[DEBUG] Progress percentage: {progress_percentage}")
 
             # Wave 1 code entry window: Days 8-21 inclusive
             within_wave1_period = study_day is not None and 8 <= study_day <= 21 and participant and not participant.code_entered
             print(f"[DEBUG] Within wave 1 period: {within_wave1_period}")
-            # Wave 3 code entry window: Days 120-133 inclusive
-            within_wave3_period = study_day is not None and 120 <= study_day <= 133 and participant and not participant.wave3_code_entered
+            # Wave 3 code entry window: Days 92-105 inclusive
+            within_wave3_period = study_day is not None and 92 <= study_day <= 105 and participant and not participant.wave3_code_entered
             print(f"[DEBUG] Within wave 3 period: {within_wave3_period} (study_day={study_day}, participant={participant is not None}, wave3_code_entered={participant.wave3_code_entered if participant else 'N/A'})")
             
             # Set display dates for template
             if settings.TIME_COMPRESSION:
                 start_date_wave1 = f"Study Day {day_11_study_day}"
                 end_date_wave1 = f"Study Day {day_21_study_day}"
-                start_date_wave3 = f"Study Day 120"
-                end_date_wave3 = f"Study Day 133"
+                start_date_wave3 = f"Study Day 92"
+                end_date_wave3 = f"Study Day 105"
             else:
                 start_date_wave1 = day_11
                 end_date_wave1 = day_21
-                start_date_wave3 = day_120
-                end_date_wave3 = day_133
+                start_date_wave3 = day_92
+                end_date_wave3 = day_105
 
     # Check if Wave 1 survey should be shown (Days 1-7)
     show_wave1_survey = False
@@ -1006,16 +1000,16 @@ def dashboard(request):
         # Wave 2 has no physical activity monitoring according to the requirements
         wave2_monitoring_status = "No Monitoring Required"
 
-    # Information 20: No Wave 2 Physical Activity Monitoring (Days 64-112)
+    # Information 20: No Wave 2 Physical Activity Monitoring (Days 64-84)
     show_information_20 = False
     information_20_content = None
-    if study_day and 64 <= study_day <= 112:
+    if study_day and 64 <= study_day <= 84:
         show_information_20 = True
 
-    # Check if Wave 3 survey should be shown (Days 113-119)
+    # Check if Wave 3 survey should be shown (Days 85-91)
     show_wave3_survey = False
     wave3_survey_content = None
-    if study_day and 113 <= study_day <= 119:
+    if study_day and 85 <= study_day <= 91:
         show_wave3_survey = True
         # Create default content if it doesn't exist
         wave3_survey_content, _ = Content.objects.get_or_create(
@@ -1062,10 +1056,10 @@ def dashboard(request):
             'end_date': end_date.strftime('%m/%d/%Y'),
         }
     
-    # Information 27: Show message on Day 134 if code not entered
+    # Information 27: Show message on Day 106 if code not entered
     show_information_27 = False
     information_27_content = None
-    if study_day and study_day >= 134 and participant and not participant.wave3_code_entered:
+    if study_day and study_day >= 106 and participant and not participant.wave3_code_entered:
         show_information_27 = True
 
     context = {
@@ -1161,10 +1155,10 @@ def enter_code(request, wave):
             messages.info(request, "You have already entered the code for Wave 1.")
             return redirect('home')
     elif wave == 3:
-        # Check if within Wave 3 window (Days 120-133)
-        print(f"[DEBUG] Wave 3 check: 120 <= {study_day} <= 133 = {120 <= study_day <= 133}")
-        if not (120 <= study_day <= 133):
-            messages.error(request, f"Code entry is not available at this time. Current study day: {study_day}, required: 120-133")
+        # Check if within Wave 3 window (Days 92-105)
+        print(f"[DEBUG] Wave 3 check: 92 <= {study_day} <= 105 = {92 <= study_day <= 105}")
+        if not (92 <= study_day <= 105):
+            messages.error(request, f"Code entry is not available at this time. Current study day: {study_day}, required: 92-105")
             return redirect('home')
         if participant.wave3_code_entered:
             messages.info(request, "You have already entered the code for Wave 3.")
