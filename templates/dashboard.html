@@ -312,7 +312,7 @@
                     </div>
                     <div class="status-item">
                         <h4>Study Day</h4>
-                        <p><strong>{{ study_day|default:"N/A" }}</strong> of 134 days</p>
+                        <p><strong>{{ study_day|default:"N/A" }}</strong> of 112 days</p>
                     </div>
                     <div class="status-item">
                         <h4>Progress</h4>
@@ -461,20 +461,20 @@
             {% endif %}
 
 
-            <!-- Information 20 - No Wave 2 Physical Activity Monitoring (Days 64-112) -->
+            <!-- Information 20 - No Wave 2 Physical Activity Monitoring (Days 64-84) -->
             {% if show_information_20 %}
                 <div class="card">
                     <div class="alert alert-info">
                         <img class="section-svg title-svg" src="{% static 'design/wave_info/Wave 2 No Wave 2 Physical Activity Monitoring.svg' %}" alt="Wave 2 No Wave 2 Physical Activity Monitoring">
                         <p>There is no Wave 2 Physical Activity Monitoring.</p>
-                        <p>We will email you again <b><u>in approximately 4 weeks</u></b> for the next task (i.e., completing an online survey set). Please regularly check your inbox. You will receive the accrued incentives after this study ends.</p>
+                        <p>We will email you again <b><u>in approximately 3 weeks</u></b> for the next task (i.e., completing an online survey set). Please regularly check your inbox. You will receive the accrued incentives after this study ends.</p>
                         <p>If you need any assistance or have any questions at any time, please contact Seungmin ("Seung") Lee (Principal Investigator) at <a href="mailto:svu23@iastate.edu">svu23@iastate.edu</a> or <a href="tel:517-898-0020">517-898-0020</a>.</p>
                         <p>Sincerely,<br>The Confident Moves Research Team</p>
                     </div>
                 </div>
             {% endif %}
 
-            <!-- Wave 3 Online Survey (Days 113-119) -->
+            <!-- Wave 3 Online Survey (Days 85-91) -->
             {% if show_wave3_survey %}
                 <div class="card">
                     <div class="alert alert-success">
@@ -519,14 +519,14 @@
                             <p>Sincerely,<br>The Confident Moves Research Team</p>
                         </div>
                     </div>
-                {% elif study_day < 120 %}
+                {% elif study_day < 92 %}
                     <div class="card">
                         <div class="alert alert-warning">
                             <h3>⏳ Wave 3 Code Entry</h3>
                             <p>Wave 3 code entry opens on <strong>{{ start_date_wave3 }}</strong> ({{ days_until_start_wave3 }} days from today).</p>
                         </div>
                     </div>
-                {% elif study_day > 133 or participant.wave3_code_entered %}
+                {% elif study_day > 105 or participant.wave3_code_entered %}
                     <div class="card">
                         <div class="alert alert-secondary">
                             <h3>✅ Wave 3 Code Entry</h3>
@@ -552,7 +552,7 @@
                 </div>
             {% endif %}
 
-            <!-- Information 27: Missing Code Entry (Study End) - Day 134+ if code not entered -->
+            <!-- Information 27: Missing Code Entry (Study End) - Day 106+ if code not entered -->
             {% if show_information_27 %}
                 <div class="card">
                     <div class="alert alert-warning">
