@@ -104,27 +104,28 @@
         }
         .field-wrap {
             position: relative;
-            min-height: 40px;
         }
-        .field-box-svg {
+        .field-box-svg { display: none; }
+        .field-wrap input {
             width: 100%;
             height: 40px;
-            display: block;
-        }
-        .field-wrap input {
-            position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            border: 0;
-            background: transparent;
+            border: 1.5px solid var(--input-border);
+            border-radius: 6px;
+            background: #e8e4dc;
             padding: 8px 14px;
             color: #2d2f3c;
             font-size: 0.95rem;
             line-height: 1.2;
+            box-sizing: border-box;
+            outline: none;
+            box-shadow: none;
+            -webkit-appearance: none;
         }
         .field-wrap input::placeholder { color: #6f7868; }
-        .field-wrap input:focus { outline: none; }
+        .field-wrap input:focus {
+            border-color: #919e84;
+            background: #ede9e1;
+        }
         .btn {
             width: 100%;
             margin-top: 6px;
