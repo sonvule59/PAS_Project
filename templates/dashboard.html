@@ -328,7 +328,6 @@
             {% if show_wave1_survey %}
                 <div class="card">
                     <div class="alert alert-success">
-                        <img class="section-svg title-svg" src="{% static 'design/wave_info/Wave 1 Online Survey (Day 1 - 7).svg' %}" alt="Wave 1 Online Survey (Day 1 - 7)">
                         <p><strong>Hi {{ participant.user.username }},</strong></p>
                         <p>Congratulations! You are now enrolled as a participant in the study.</p>
                         <p>Please click the button below to complete your task, Survey 1, <b><u>within 7 days</u></b> to receive a $5 Amazon gift card. We highly recommend completing it as soon as possible before the link expires. You may need to remember your username and enter it to complete the survey. Your username is: <strong>{{ participant.user.username }}</strong></p>
@@ -351,7 +350,6 @@
             {% if show_information_16 %}
                 <div class="card">
                     <div class="alert alert-info">
-                        <img class="section-svg title-svg" src="{% static 'design/randomization/Day 29 - Next Task in Approximately 4 Weeks.svg' %}" alt="Day 29 - Next Task in Approximately 4 Weeks">
                         <p><strong>Hi {{ participant.user.username }},</strong></p>
                         <p>We recommend that you maintain your usual daily routines. We will email you again <b><u>in approximately 4 weeks</u></b> for the next task (i.e., completing an online survey set). Please regularly check your inbox. You will receive the accrued incentives after this study ends.</p>
                         <p>If you need any assistance or have any questions at any time, please contact Seungmin ("Seung") Lee (Principal Investigator) at <a href="mailto:seunglee@iastate.edu">seunglee@iastate.edu</a> or <a href="tel:517-898-0020">517-898-0020</a>.</p>
@@ -364,7 +362,6 @@
             {% if show_information_17 %}
                 <div class="card">
                     <div class="alert alert-success">
-                        <img class="section-svg title-svg" src="{% static 'design/randomization/Day 29 - Double-Blind Randomization.svg' %}" alt="Day 29 - Double-Blind Randomization">
                         <p><strong>Hi {{ participant.user.username }},</strong></p>
                         <p>Your access to the online physical activity intervention will begin immediately. You may access the online physical activity intervention whenever you wish throughout approximately 4 weeks.</p>
                         <p>• Please log in from the following website: <a href="{% url 'login' %}">{% url 'login' %}</a>.</p>
@@ -382,7 +379,6 @@
             {% if show_wave2_survey %}
                 <div class="card">
                     <div class="alert alert-success">
-                        <img class="section-svg title-svg" src="{% static 'design/wave_info/Wave 2 Online Survey (Day 57 - 63).svg' %}" alt="Wave 2 Online Survey (Day 57 - 63)">
                         <p><strong>Hi {{ participant.user.username }},</strong></p>
                         <p>Please click the button below to complete your task, Survey 2, <b><u>within 7 days</u></b> to receive a $5 Amazon gift card. We highly recommend completing it as soon as possible before the link expires. You may need to remember your username and enter it to complete the survey. Your username is: <strong>{{ participant.user.username }}</strong></p>
                         
@@ -447,7 +443,6 @@
             {% if show_information_12 and information_12_content %}
                 <div class="card">
                     <div class="alert alert-success">
-                        <img class="section-svg title-svg" src="{% static 'design/wave_info/Wave 1 Physical Activity Monitoring Tomorrow.svg' %}" alt="Wave 1 Physical Activity Monitoring Tomorrow">
                         <p><strong>Hi {{ participant.user.username }},</strong></p>
                         <p>You have successfully entered the access code for physical activity monitoring. Thank you!</p>
                         <p>Please start wearing the monitor <b><u>tomorrow</u></b> for <b><u>seven consecutive days</u></b>. For example, if you entered the code on {{ information_12_content.code_date }}, please wear the monitor starting on {{ information_12_content.start_date }} and continue wearing it until {{ information_12_content.end_date }}.</p>
@@ -465,7 +460,6 @@
             {% if show_information_20 %}
                 <div class="card">
                     <div class="alert alert-info">
-                        <img class="section-svg title-svg" src="{% static 'design/wave_info/Wave 2 No Wave 2 Physical Activity Monitoring.svg' %}" alt="Wave 2 No Wave 2 Physical Activity Monitoring">
                         <p>There is no Wave 2 Physical Activity Monitoring.</p>
                         <p>We will email you again <b><u>in approximately 3 weeks</u></b> for the next task (i.e., completing an online survey set). Please regularly check your inbox. You will receive the accrued incentives after this study ends.</p>
                         <p>If you need any assistance or have any questions at any time, please contact Seungmin ("Seung") Lee (Principal Investigator) at <a href="mailto:svu23@iastate.edu">svu23@iastate.edu</a> or <a href="tel:517-898-0020">517-898-0020</a>.</p>
@@ -478,7 +472,6 @@
             {% if show_wave3_survey %}
                 <div class="card">
                     <div class="alert alert-success">
-                        <img class="section-svg title-svg" src="{% static 'design/wave_info/Wave 3 Online Survey (Day 113 - 119).svg' %}" alt="Wave 3 Online Survey (Day 113 - 119)">
                         <p><strong>Hi {{ participant.user.username }},</strong></p>
                         <p>Please click the button below to complete your task, Survey 3, <b><u>within 7 days</u></b> to receive a $5 Amazon gift card. We highly recommend completing it as soon as possible before the link expires. You may need to remember your ID from this website and enter it to complete the survey. Your ID is: <strong>{{ participant.user.username }}</strong></p>
                         
@@ -540,7 +533,6 @@
             {% if show_information_25 and information_25_content %}
                 <div class="card">
                     <div class="alert alert-success">
-                        <img class="section-svg title-svg" src="{% static 'design/wave_info/Wave 3 Physical Activity Monitoring Tomorrow.svg' %}" alt="Wave 3 Physical Activity Monitoring Tomorrow">
                         <p><strong>Hi {{ participant.user.username }},</strong></p>
                         <p>You have successfully entered the access code for physical activity monitoring. Thank you!</p>
                         <p>Please start wearing the monitor <b><u>tomorrow</u></b> for <b><u>seven consecutive days</u></b>. For example, if you entered the code on {{ information_25_content.code_date }}, please wear the monitor starting on {{ information_25_content.start_date }} and continue wearing it until {{ information_25_content.end_date }}.</p>

@@ -188,7 +188,7 @@ TIME_ZONE = 'America/Chicago'
 # Enable test mode via env var: TEST_MODE=true|1|yes
 TEST_MODE = str(os.getenv('TEST_MODE', 'false')).lower() in ('1', 'true', 'yes')
 TIME_COMPRESSION = True
-SECONDS_PER_DAY = 30 # Use 86400 for real-world days. 30 seconds = 2 checks per day with 15-second Celery Beat interval
+SECONDS_PER_DAY = 60 # Use 86400 for real-world days. 60 seconds = 1 minute per day with 15-second Celery Beat interval
 # TEST_TIME_SCALE = 10  # 1 day = 10 seconds for testing
 # TEST_TIME_SCALE = float(os.getenv('TEST_TIME_SCALE', '5'))  # 1 day = 1 second (or set to 60 for minutes)
 # CELERY_BROKER_URL = 'redis://localhost:6379/0'
