@@ -305,7 +305,7 @@ def login_view(request):
             return redirect(next_url)
             # return redirect('dashboard')  # Redirect to the dashboard after successful login
         else:
-            print(f"[DEBUG] Authentication failed for username: {username}")
+            print(f"[DEBUG] Authentication failed for username: {username_input}")
             messages.error(request, 'Invalid username or password.')
             return render(request, 'login.html')
     return render(request, 'login.html')
