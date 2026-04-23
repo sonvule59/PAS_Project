@@ -264,7 +264,8 @@ def confirm_account(request, token):
     print(f"[DEBUG] Participant found: {participant.participant_id}")
     print(f"[DEBUG] Participant is confirmed: {participant.is_confirmed}")
     if participant.is_confirmed:
-        messages.info(request, "Account already confirmed.")
+        messages.success(request, "Account already confirmed.")
+        return redirect("dashboard")
     else:
         participant.is_confirmed = True
         participant.save()
@@ -410,6 +411,10 @@ def questionnaire_interest(request):
         messages.error(request, "Please confirm your registration via the email link before starting the survey.")
         return redirect('login')
 
+    survey_progress = SurveyProgress.objects.filter(user=request.user).first()
+    if survey_progress and survey_progress.interest_submitted:
+        return redirect('dashboard')
+
     if request.method == 'GET':
         return render(request, 'questionnaire_interest.html')
     elif request.method == 'POST':
@@ -422,7 +427,6 @@ def questionnaire_interest(request):
         reason = request.POST.get('reason', '')  # Get reason if provided
         
         # Save interest response to SurveyProgress model
-        from .models import SurveyProgress
         survey_progress, created = SurveyProgress.objects.get_or_create(
             user=request.user,
             defaults={
@@ -438,7 +442,6 @@ def questionnaire_interest(request):
         # Also save to Response model if Questions exist for interest screening
         # This provides detailed response tracking
         try:
-            from .models import Survey, Question, Response
             interest_survey, _ = Survey.objects.get_or_create(
                 title="Interest Screening",
                 defaults={"description": "Information 4: Interest Screening Questionnaire"}
