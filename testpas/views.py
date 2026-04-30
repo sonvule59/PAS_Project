@@ -1553,7 +1553,7 @@ def record_commitment_click(request):
 
 @login_required
 def intervention_challenge_2(request):
-    """Introductory Challenge 2: Physical Activity (video + commitment)."""
+    """Introductory Challenge 2: Physical Activity (video)."""
     participant = get_object_or_404(Participant, user=request.user)
     mark_challenge_completed(request.user, 102, "Physical Activity")
     context = {

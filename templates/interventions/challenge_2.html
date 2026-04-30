@@ -22,61 +22,6 @@
         }
         h2 { margin: 0 0 0.75rem 0; font-weight: 600; color: #333; font-size: 1.35rem; }
         p { color: #444; line-height: 1.55; margin: 0 0 0.85rem 0; }
-        .commitment-panel {
-            background: linear-gradient(180deg, #f7f5ff 0%, #fefcff 100%);
-            border: 1px solid #e0d9f5;
-            border-radius: 12px;
-            padding: 1.35rem 1.5rem 1.5rem;
-            margin-bottom: 1.75rem;
-            border-left: 4px solid #667eea;
-        }
-        .commitment-panel h2 {
-            margin-top: 0;
-            color: #4c3d8f;
-            font-size: 1.25rem;
-        }
-        .commitment-panel ul {
-            margin: 0.5rem 0 0;
-            padding-left: 1.25rem;
-        }
-        .commitment-panel li { margin: 0.35rem 0; color: #444; line-height: 1.45; }
-        .commit-button {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            margin-top: 1.15rem;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #fff;
-            padding: 12px 20px;
-            border-radius: 10px;
-            border: none;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 1rem;
-            box-shadow: 0 6px 16px rgba(102, 126, 234, 0.35);
-            transition: transform 0.15s ease, box-shadow 0.15s ease;
-        }
-        .commit-button:hover {
-            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.45);
-        }
-        .commit-button:active { transform: scale(0.98); }
-        .commit-button.confirmed {
-            background: linear-gradient(135deg, #2e9d5c 0%, #43b97a 100%);
-            box-shadow: 0 6px 16px rgba(46, 157, 92, 0.35);
-        }
-        .commit-status {
-            margin-top: 0.65rem;
-            font-weight: 600;
-            color: #2e9d5c;
-            display: none;
-            font-size: 0.95rem;
-        }
-        .section-rule {
-            border: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, #ddd, transparent);
-            margin: 0 0 1.5rem 0;
-        }
         .challenge-title-svg { max-width: 100%; height: auto; display: block; margin-bottom: 1rem; }
         .video-wrapper {
             position: relative;
@@ -127,58 +72,11 @@
             var el = document.getElementById('caption');
             el.style.display = (el.style.display === 'block') ? 'none' : 'block';
         }
-        function acknowledgeCommitment() {
-            var btn = document.getElementById('commitButton');
-            var status = document.getElementById('commitStatus');
-            btn.classList.add('confirmed');
-            status.style.display = 'block';
-
-            var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]')?.value ||
-                document.cookie.split('; ').find(function(row) { return row.startsWith('csrftoken='); })?.split('=')[1] || '';
-            fetch('{% url "record_commitment_click" %}', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    'X-CSRFToken': csrftoken
-                },
-                body: 'challenge_number=2&challenge_name=Physical Activity'
-            })
-            .then(function(response) { return response.json(); })
-            .then(function(data) {
-                if (data.success) {
-                    console.log('Commitment recorded successfully');
-                }
-            })
-            .catch(function(error) {
-                console.error('Error recording commitment:', error);
-            });
-        }
     </script>
 </head>
 <body>
     <div class="container">
         <div class="card">
-            <div class="commitment-panel">
-                <h2>My Physical Activity Commitment</h2>
-                <p>I am beginning my journey with this online intervention, designed to promote physical activity in adults with obesity.</p>
-                <p>I recognize that this process may be challenging, but I am confident in my persistence, determination, and self-discipline to achieve my goals.</p>
-                <p>When I encounter obstacles, I will overcome them by:</p>
-                <ul>
-                    <li>Taking a moment to refocus</li>
-                    <li>Breaking tasks into smaller, manageable steps</li>
-                    <li>Seeking support and collaboration when needed</li>
-                    <li>Staying informed and motivated</li>
-                    <li>Maintaining a positive mindset</li>
-                    <li>Sharing and discussing ideas and concerns</li>
-                </ul>
-                <button type="button" id="commitButton" class="commit-button" onclick="acknowledgeCommitment()">
-                    <span aria-hidden="true">✔</span> I am fully committed to actively engaging in this intervention.
-                </button>
-                <div id="commitStatus" class="commit-status" role="status">Thank you! Your commitment is noted.</div>
-            </div>
-
-            <hr class="section-rule">
-
             <img class="challenge-title-svg"
                  src="{% static 'design/intervention/Introductory Challenge 1_ Physical Activity.svg' %}"
                  alt="Introductory Challenge 2: Physical Activity">
