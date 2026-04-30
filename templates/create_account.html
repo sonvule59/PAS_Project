@@ -16,6 +16,7 @@
         .container { max-width: 1180px; margin: 0 auto; padding: 24px; position: relative; z-index: 2; }
         img { max-width: 100%; display: block; height: auto; }
         .logo { width: 181px; margin-bottom: 20px; }
+        .logo img { position: relative; top: -30px; }
         .layout { display: grid; grid-template-columns: minmax(0, 1fr) 420px; gap: 28px; align-items: start; }
         .form-shell {
             background: rgba(255, 255, 255, 0.06);
@@ -47,6 +48,7 @@
         .field:focus { outline: none; border-color: #b57957; box-shadow: 0 0 0 3px rgba(181, 121, 87, 0.25); }
         .section-label { width: 316px; max-width: 100%; margin: 10px 0 8px; }
         .plain-label { display: block; margin-bottom: 6px; font-size: 16px; font-weight: 600; color: #e5e7eb; }
+        .plain-label-note { display: block; font-size: 16px; font-weight: 400; margin-top: 2px; }
         .actions { margin-top: 16px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
         .submit-btn { border: 0; background: transparent; padding: 0; cursor: pointer; width: 105px; }
         .submit-btn img { width: 105px; }
@@ -121,7 +123,7 @@
                         
 
                         <div class="form-group">
-                            <label class="plain-label">Address (please enter your address carefully to receive study-related emails from us)</label>
+                            <label class="plain-label">Address<span class="plain-label-note">(please enter your address carefully to receive study-related emails from us)</span></label>
                             <input class="field" type="text" id="address_line1" name="address_line1" required placeholder="Enter street address">
                         </div>
                         <div class="form-group">
