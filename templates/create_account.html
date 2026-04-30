@@ -24,8 +24,13 @@
             padding: 24px;
             backdrop-filter: blur(2px);
         }
-        .title-svg { width: 593px; max-width: 100%; }
-        .subtitle-svg { width: 351px; max-width: 100%; margin-top: 10px; margin-bottom: 18px; }
+        .title-text {
+            color: #ffffff;
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0 0 18px;
+            line-height: 1.2;
+        }
         .form-group { margin-bottom: 14px; }
         .label-svg { height: 18px; width: auto; max-width: 100%; margin-bottom: 6px; }
         .field {
@@ -41,7 +46,7 @@
         }
         .field:focus { outline: none; border-color: #b57957; box-shadow: 0 0 0 3px rgba(181, 121, 87, 0.25); }
         .section-label { width: 316px; max-width: 100%; margin: 10px 0 8px; }
-        .plain-label { display: block; margin-bottom: 6px; font-size: 14px; color: #e5e7eb; }
+        .plain-label { display: block; margin-bottom: 6px; font-size: 16px; font-weight: 600; color: #e5e7eb; }
         .actions { margin-top: 16px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
         .submit-btn { border: 0; background: transparent; padding: 0; cursor: pointer; width: 105px; }
         .submit-btn img { width: 105px; }
@@ -73,51 +78,50 @@
             </a>
             <div class="layout">
                 <section class="form-shell">
-                    <img class="title-svg" src="{% static 'design/create_account/Create Your Account..svg' %}" alt="Create Your Account.">
-                    <img class="subtitle-svg" src="{% static 'design/create_account/Register to Get Started.svg' %}" alt="Register to Get Started">
+                    <h1 class="title-text">Create Your Account</h1>
 
                     <form id="create-account-form" action="{% url 'create_account' %}" method="post" onsubmit="createAccount(event)">
                         {% csrf_token %}
 
                         <div class="form-group">
-                            <img class="label-svg" src="{% static 'design/create_account/Registration Code.svg' %}" alt="Registration Code">
+                            <label class="plain-label" for="registration_code">Registration Code</label>
                             <input class="field" type="text" id="registration_code" name="registration_code" required placeholder="Enter registration code">
                         </div>
 
                         <div class="form-group">
-                            <img class="label-svg" src="{% static 'design/create_account/ID (no case-sensitive).svg' %}" alt="ID (non-case-sensitive)">
+                            <label class="plain-label" for="username">ID (not case-sensitive)</label>
                             <input class="field" type="text" id="username" name="username" required placeholder="Enter your ID">
                         </div>
 
                         <div class="form-group">
-                            <img class="label-svg" src="{% static 'design/create_account/Password (case-sensitive).svg' %}" alt="Password (case-sensitive)">
+                            <label class="plain-label" for="password">Password (case-sensitive)</label>
                             <input class="field" type="password" id="password" name="password" required placeholder="Enter your password">
                         </div>
 
                         <div class="form-group">
-                            <img class="label-svg" src="{% static 'design/create_account/Password Confirmation (case-sensitive).svg' %}" alt="Password Confirmation (case-sensitive)">
+                            <label class="plain-label" for="password_confirm">Password Confirmation (case-sensitive)</label>
                             <input class="field" type="password" id="password_confirm" name="password_confirm" required placeholder="Confirm your password">
                         </div>
 
                         <div class="form-group">
-                            <img class="label-svg" src="{% static 'design/create_account/Full Name.svg' %}" alt="Full Name">
+                            <label class="plain-label" for="full_name">Full Name</label>
                             <input class="field" type="text" id="full_name" name="full_name" required placeholder="Enter your full name">
                         </div>
 
                         <div class="form-group">
-                            <img class="label-svg" src="{% static 'design/create_account/Email Address (no case-sensitive).svg' %}" alt="Email Address (non-case-sensitive)">
+                            <label class="plain-label" for="email">Email Address (not case-sensitive)</label>
                             <input class="field" type="email" id="email" name="email" required placeholder="Enter your email address">
                         </div>
 
                         <div class="form-group">
-                            <img class="label-svg" src="{% static 'design/create_account/Phone Number (no case-sensitive).svg' %}" alt="Phone Number">
+                            <label class="plain-label" for="phone_number">Phone Number (not case-sensitive)</label>
                             <input class="field" type="tel" id="phone_number" name="phone_number" required placeholder="Enter your phone number">
                         </div>
 
-                        <img class="section-label" src="{% static 'design/create_account/Home Address, including ZIP code.svg' %}" alt="Home Address, including ZIP code">
+                        
 
                         <div class="form-group">
-                            <label class="plain-label" for="address_line1">Address Line 1</label>
+                            <label class="plain-label">Address (please enter your address carefully to receive study-related emails from us)</label>
                             <input class="field" type="text" id="address_line1" name="address_line1" required placeholder="Enter street address">
                         </div>
                         <div class="form-group">
