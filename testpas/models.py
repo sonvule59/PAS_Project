@@ -576,6 +576,28 @@ class Content(models.Model):
 
 
 
+class Challenge1Response(models.Model):
+    """Stores responses to Introductory Challenge 1 (Self-efficacy, 7 items, 0-4)."""
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='challenge1_responses')
+    participant = models.ForeignKey(Participant, on_delete=models.CASCADE, related_name='challenge1_responses')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    q1 = models.PositiveSmallIntegerField()
+    q2 = models.PositiveSmallIntegerField()
+    q3 = models.PositiveSmallIntegerField()
+    q4 = models.PositiveSmallIntegerField()
+    q5 = models.PositiveSmallIntegerField()
+    q6 = models.PositiveSmallIntegerField()
+    q7 = models.PositiveSmallIntegerField()
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"Challenge1Response(user={self.user.username}, created_at={self.created_at:%Y-%m-%d %H:%M})"
+
+
 class Challenge5Response(models.Model):
     """Stores responses to Introductory Challenge 5 (Self-efficacy, 7 items, 0-4)."""
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='challenge5_responses')

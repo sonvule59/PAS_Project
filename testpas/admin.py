@@ -2,7 +2,7 @@
 from django.contrib import admin
 from django.http import HttpResponse
 import csv
-from .models import Participant, UserSurveyProgress, Response, EmailTemplate, Survey, Question, ParticipantEntry, EmailContent, MessageContent, Challenge, SurveyProgress, Token, Content
+from .models import Participant, UserSurveyProgress, Response, EmailTemplate, Survey, Question, ParticipantEntry, EmailContent, MessageContent, Challenge, SurveyProgress, Token, Content, Challenge1Response
 from django.utils import timezone
 
 @admin.register(Participant)
@@ -64,6 +64,31 @@ admin.site.register(MessageContent)
 admin.site.register(Challenge)
 admin.site.register(SurveyProgress)
 admin.site.register(Token)
+
+@admin.register(Challenge1Response)
+class Challenge1ResponseAdmin(admin.ModelAdmin):
+    list_display = ('user', 'participant_id_display', 'q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7', 'created_at')
+    list_filter = ('created_at',)
+    search_fields = ('user__username', 'participant__participant_id')
+    actions = ['export_csv']
+
+    def participant_id_display(self, obj):
+        return obj.participant.participant_id
+    participant_id_display.short_description = 'Participant ID'
+
+    def export_csv(self, request, queryset):
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="challenge1_responses.csv"'
+        writer = csv.writer(response)
+        writer.writerow(['username', 'participant_id', 'created_at', 'q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7'])
+        for r in queryset.select_related('user', 'participant'):
+            writer.writerow([
+                r.user.username, r.participant.participant_id, r.created_at.isoformat(),
+                r.q1, r.q2, r.q3, r.q4, r.q5, r.q6, r.q7
+            ])
+        return response
+    export_csv.short_description = 'Export selected responses as CSV'
+
 
 @admin.register(Content)
 class ContentAdmin(admin.ModelAdmin):

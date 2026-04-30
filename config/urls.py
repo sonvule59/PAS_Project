@@ -74,6 +74,7 @@ urlpatterns = [
     path('intervention/challenge-4/', views.intervention_challenge_4, name='intervention_challenge_4'),
     path('intervention/challenge-5/', views.intervention_challenge_5, name='intervention_challenge_5'),
     path('intervention/challenge-6/', views.intervention_challenge_6, name='intervention_challenge_6'),
+    path('intervention/challenge-1/export/', views.export_challenge_1_csv, name='export_challenge_1_csv'),
     path('intervention/challenge-5/export/', views.export_challenge_5_csv, name='export_challenge_5_csv'),
     path('intervention/ge/challenge-1/', views.ge_challenge_1, name='ge_challenge_1'),
     path('intervention/ge/challenge-2/', views.ge_challenge_2, name='ge_challenge_2'),

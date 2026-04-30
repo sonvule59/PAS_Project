@@ -94,7 +94,7 @@
                             <h4>Introductory</h4>
                             <p>Start here to learn how the intervention works.</p>
                             <div class="link-list">
-                                <a class="btn btn-primary" href="{% url 'intervention_challenge_1' %}">Challenge 1: Physical Activity</a>
+                                <a class="btn btn-primary" href="{% url 'intervention_challenge_1' %}">Challenge 1: Self-efficacy</a>
                                 <a class="btn btn-primary" href="{% url 'intervention_challenge_2' %}">Challenge 2: Rethinking Movement</a>
                                 <a class="btn btn-primary" href="{% url 'intervention_challenge_3' %}">Challenge 3: Importance</a>
                                 <a class="btn btn-primary" href="{% url 'intervention_challenge_4' %}">Challenge 4: How to do (Part 1)</a>
@@ -102,7 +102,13 @@
                                 <a class="btn btn-primary" href="{% url 'intervention_challenge_6' %}">Challenge 6: How to do (Part 3)</a>
                             </div>
                         </div>
-                        <div class="category-card">
+                        {% if not introductory_challenges_complete %}
+                        <div class="category-card" style="grid-column: 1 / -1; background: #fff8e1; border: 2px solid #f59e0b;">
+                            <h4 style="color: #b45309;">&#9888; Complete Introductory Challenges First</h4>
+                            <p style="color: #78350f;">You must complete all 5 Introductory Challenges (1–5) before accessing the other intervention components. Please finish the Introductory challenges above to unlock the rest of the content.</p>
+                        </div>
+                        {% endif %}
+                        <div class="category-card" {% if not introductory_challenges_complete %}style="opacity:0.45; pointer-events:none;"{% endif %}>
                             <h4>Orientation</h4>
                             <p>Foundational knowledge about physical activity.</p>
                             <div class="link-list">
@@ -113,7 +119,7 @@
                                 <a class="btn btn-primary" href="{% url 'orientation_challenge_5' %}">Challenge 5: Self-efficacy</a>
                             </div>
                         </div>
-                        <div class="category-card">
+                        <div class="category-card" {% if not introductory_challenges_complete %}style="opacity:0.45; pointer-events:none;"{% endif %}>
                             <h4>Work-related Physical Activity</h4>
                             <p>Tips and challenges for being active at work.</p>
                             <div class="link-list">
@@ -124,7 +130,7 @@
                                 <a class="btn btn-primary" href="{% url 'wr_challenge_10' %}">Challenge 10: Technique</a>
                             </div>
                         </div>
-                        <div class="category-card">
+                        <div class="category-card" {% if not introductory_challenges_complete %}style="opacity:0.45; pointer-events:none;"{% endif %}>
                             <h4>Transport-related Physical Activity</h4>
                             <p>Incorporate movement into your travel.</p>
                             <div class="link-list">
@@ -135,7 +141,7 @@
                                 <a class="btn btn-primary" href="{% url 'tr_challenge_15' %}">Challenge 15: Technique</a>
                             </div>
                         </div>
-                        <div class="category-card">
+                        <div class="category-card" {% if not introductory_challenges_complete %}style="opacity:0.45; pointer-events:none;"{% endif %}>
                             <h4>Domestic-related Activity</h4>
                             <p>Be active in and around your home.</p>
                             <div class="link-list">
@@ -146,7 +152,7 @@
                                 <a class="btn btn-primary" href="{% url 'dom_challenge_20' %}">Challenge 20: Technique</a>
                             </div>
                         </div>
-                        <div class="category-card">
+                        <div class="category-card" {% if not introductory_challenges_complete %}style="opacity:0.45; pointer-events:none;"{% endif %}>
                             <h4>Leisure-related Physical Activity</h4>
                             <p>Enjoyable activities during free time.</p>
                             <div class="link-list">
@@ -159,7 +165,7 @@
                                 <a class="btn btn-primary" href="{% url 'leisure_challenge_27' %}">Challenge 27: Technique</a>
                             </div>
                         </div>
-                        <div class="category-card">
+                        <div class="category-card" {% if not introductory_challenges_complete %}style="opacity:0.45; pointer-events:none;"{% endif %}>
                             <h4>Mindfulness</h4>
                             <p>Cultivate awareness to support activity.</p>
                             <div class="link-list">

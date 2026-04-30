@@ -1422,10 +1422,23 @@ def intervention_access(request):
             access_message = "You have not been assigned to a group yet."
         
         # Count completed challenges using the new tracking system
-        from .models import ChallengeCompletion
+        from .models import ChallengeCompletion, Challenge1Response
         challenges_completed = ChallengeCompletion.objects.filter(user=request.user).count()
         total_challenges = 32  # Total number of challenges (1-32)
-        
+
+        # Check that all 5 introductory challenges (numbers 101-105) are completed
+        INTRO_CHALLENGE_NUMBERS = [101, 102, 103, 104, 105]
+        completed_intro = set(
+            ChallengeCompletion.objects.filter(
+                user=request.user,
+                challenge_number__in=INTRO_CHALLENGE_NUMBERS
+            ).values_list('challenge_number', flat=True)
+        )
+        # Challenge 1 (101) only counts when survey is actually submitted
+        if 101 in completed_intro and not Challenge1Response.objects.filter(user=request.user).exists():
+            completed_intro.discard(101)
+        introductory_challenges_complete = all(n in completed_intro for n in INTRO_CHALLENGE_NUMBERS)
+
         # Calculate progress percentage
         progress_percent = (challenges_completed / total_challenges) * 100 if total_challenges > 0 else 0
         remaining_challenges = total_challenges - challenges_completed
@@ -1440,6 +1453,7 @@ def intervention_access(request):
             'intervention_login_count': participant.intervention_login_count,
             'progress_percent': progress_percent,
             'remaining_challenges': remaining_challenges,
+            'introductory_challenges_complete': introductory_challenges_complete,
         }
         
         return render(request, 'intervention_access.html', context)  
@@ -1459,11 +1473,49 @@ def intervention_challenge_25(request):
 
 @login_required
 def intervention_challenge_1(request):
-    """Render Challenge 1: Introduction."""
+    """Introductory Challenge 1: Self-efficacy survey (7 items, 0-4 Likert)."""
     participant = get_object_or_404(Participant, user=request.user)
-    mark_challenge_completed(request.user, 101, "Introduction")
+    from .models import Challenge1Response
+    already_submitted = Challenge1Response.objects.filter(user=request.user).exists()
+
+    if request.method == 'POST' and not already_submitted:
+        try:
+            q1 = int(request.POST.get('q1'))
+            q2 = int(request.POST.get('q2'))
+            q3 = int(request.POST.get('q3'))
+            q4 = int(request.POST.get('q4'))
+            q5 = int(request.POST.get('q5'))
+            q6 = int(request.POST.get('q6'))
+            q7 = int(request.POST.get('q7'))
+        except (TypeError, ValueError):
+            messages.error(request, 'Please answer all questions before submitting.')
+            return redirect('intervention_challenge_1')
+
+        Challenge1Response.objects.create(
+            user=request.user, participant=participant,
+            q1=q1, q2=q2, q3=q3, q4=q4, q5=q5, q6=q6, q7=q7
+        )
+        mark_challenge_completed(request.user, 101, "Self-efficacy")
+        messages.success(request, 'Responses saved. Thank you!')
+        return redirect('intervention_access')
+
+    if already_submitted:
+        mark_challenge_completed(request.user, 101, "Self-efficacy")
+
+    questions = [
+        {'text': 'complete at least 26 post-introductory challenges (i.e., approximately 2 hours) in this online intervention within a 4-week time period'},
+        {'text': 'frequently engage with this online intervention'},
+        {'text': 'engage with this online intervention for at least 30 minutes per week across a 4-week time period'},
+        {'text': 'engage with the full variety of content provided in this online intervention'},
+        {'text': 'pay close attention when engaging with this online intervention'},
+        {'text': 'be genuinely interested in engaging with this online intervention'},
+        {'text': 'have a positive attitude when engaging with this online intervention'},
+    ]
+
     context = {
         'participant': participant,
+        'already_submitted': already_submitted,
+        'questions': questions,
     }
     return render(request, 'interventions/challenge_1.html', context)
 
@@ -1536,6 +1588,25 @@ def intervention_challenge_6(request):
         'participant': participant,
     }
     return render(request, 'interventions/challenge_6.html', context)
+
+@staff_member_required
+def export_challenge_1_csv(request):
+    """Export Challenge 1 (Self-efficacy) responses as CSV (staff only)."""
+    from .models import Challenge1Response
+    import csv
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="challenge1_responses.csv"'
+    writer = csv.writer(response)
+    writer.writerow(['username', 'participant_id', 'created_at', 'q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7'])
+    for r in Challenge1Response.objects.select_related('user', 'participant').all():
+        writer.writerow([
+            r.user.username,
+            r.participant.participant_id,
+            r.created_at.isoformat(),
+            r.q1, r.q2, r.q3, r.q4, r.q5, r.q6, r.q7
+        ])
+    return response
+
 
 @staff_member_required
 def export_challenge_5_csv(request):
