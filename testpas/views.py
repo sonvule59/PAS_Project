@@ -1437,6 +1437,7 @@ def intervention_access(request):
             challenge_number__lte=31,
         ).count()
         total_challenges = 31
+        GIFT_CARD_POST_INTRO_MIN = 26
 
         # Check that all 7 introductory challenges (numbers 101-107) are completed
         INTRO_CHALLENGE_NUMBERS = [101, 102, 103, 104, 105, 106, 107]
@@ -1454,6 +1455,7 @@ def intervention_access(request):
         # Calculate progress percentage
         progress_percent = (challenges_completed / total_challenges) * 100 if total_challenges > 0 else 0
         remaining_challenges = total_challenges - challenges_completed
+        gift_incentive_remaining = max(0, GIFT_CARD_POST_INTRO_MIN - challenges_completed)
         
         context = {
             'participant': participant,
@@ -1465,6 +1467,8 @@ def intervention_access(request):
             'intervention_login_count': participant.intervention_login_count,
             'progress_percent': progress_percent,
             'remaining_challenges': remaining_challenges,
+            'gift_incentive_threshold': GIFT_CARD_POST_INTRO_MIN,
+            'gift_incentive_remaining': gift_incentive_remaining,
             'introductory_challenges_complete': introductory_challenges_complete,
         }
         
@@ -2135,6 +2139,7 @@ def intervention_access_test(request):
             challenge_number__lte=31,
         ).count()
         total_challenges = 31
+        GIFT_CARD_POST_INTRO_MIN = 26   # for testing purposes
         INTRO_CHALLENGE_NUMBERS = [101, 102, 103, 104, 105, 106, 107]
         completed_intro = set(
             ChallengeCompletion.objects.filter(
@@ -2147,7 +2152,7 @@ def intervention_access_test(request):
         introductory_challenges_complete = all(n in completed_intro for n in INTRO_CHALLENGE_NUMBERS)
         progress_percent = (challenges_completed / total_challenges) * 100 if total_challenges > 0 else 0
         remaining_challenges = total_challenges - challenges_completed
-        
+        gift_incentive_remaining = max(0, GIFT_CARD_POST_INTRO_MIN - challenges_completed)
         context = {
             'participant': participant,
             'study_day': 50,

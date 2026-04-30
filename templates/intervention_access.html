@@ -49,8 +49,8 @@
                     
                     <ul>
                         <li><strong>Duration:</strong> 4 weeks of access</li>
-                        <li><strong>Goal:</strong> Complete at least 24 post-introductory challenges</li>
-                        <li><strong>Incentive:</strong> $20 Amazon gift card for completing 24+ challenges</li>
+                        <li><strong>Goal:</strong> If you complete at least 26 post-introductory challenges during the 4-week access period</li>
+                        <li><strong>Incentive:</strong> $20 Amazon gift card if you complete at least 26 post-introductory challenges</li>
                         <li><strong>Time Estimate:</strong> Approximately 2 hours total</li>
                     </ul>
                     
@@ -67,7 +67,11 @@
                             <div class="progress-bar">
                                 <div id="progress-fill" class="progress-fill"></div>
                             </div>
-                            <p>{{ remaining_challenges }} more challenges needed to earn the $20 gift card.</p>
+                            {% if challenges_completed >= gift_incentive_threshold %}
+                                <p>You have completed at least {{ gift_incentive_threshold }} post-introductory challenges required for the $20 Amazon gift card incentive.</p>
+                            {% else %}
+                                <p>{{ gift_incentive_remaining }} more post-introductory challenges needed to earn the $20 gift card.</p>
+                            {% endif %}
                         {% endif %}
                     </div>
                     
