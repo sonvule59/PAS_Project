@@ -62,9 +62,16 @@ def account_confirmation_pending(request):
     return render(request, 'account_confirmation_pending.html')
 
 def test_all_challenges(request):
-    """Test page with links to all challenges for quick testing."""
-    # Only allow this test utility in local/dev mode.
-    if not (settings.TEST_MODE or settings.DEBUG):
+    """Test page with links to all challenges for quick testing.
+
+    Allowed for anyone in local/dev mode, or for Django Staff users in any
+    environment (including Render). Staff is the single privileged flag here;
+    ``createsuperuser`` sets is_staff=True automatically. This auto-creates a
+    tester user (anonymous visits only) or uses your logged-in staff account +
+    Participant so challenge URLs work without enrollment.
+    """
+    is_allowed_staff = request.user.is_authenticated and request.user.is_staff
+    if not (settings.TEST_MODE or settings.DEBUG or is_allowed_staff):
         return HttpResponse("Intervention test mode is disabled.", status=403)
 
     # Auto-create/login a local tester so all @login_required challenge routes work.
@@ -2159,3 +2166,102 @@ def intervention_access_test(request):
     except Participant.DoesNotExist:
         messages.error(request, "Participant record not found.")
         return redirect('dashboard')
+
+
+@staff_member_required
+def intervention_preview(request):
+    """Preview page with direct links to every intervention challenge (Staff only).
+
+    One rule: user must have Django **Staff** (`is_staff=True`), same category of
+    users who can log into `/admin/`. ``createsuperuser`` sets Staff (and also
+    Superuser); use Staff-only accounts for teammates who should preview content
+    but not need full Superuser powers.
+
+    Bypasses study-day/group/enrollment gating for browsing links only.
+
+    Individual challenge views still require login + a Participant (hit
+    /test-challenges/ once while logged in as Staff).
+    """
+    categories = [
+        {
+            'title': 'Introductory',
+            'description': 'The 5 mandatory introductory challenges.',
+            'items': [
+                {'label': 'Challenge 1: Self-efficacy', 'url': reverse('intervention_challenge_1')},
+                {'label': 'Challenge 2: Rethinking Movement', 'url': reverse('intervention_challenge_2')},
+                {'label': 'Challenge 3: Importance', 'url': reverse('intervention_challenge_3')},
+                {'label': 'Challenge 4: How to do (Part 1)', 'url': reverse('intervention_challenge_4')},
+                {'label': 'Challenge 5: How to do (Part 2)', 'url': reverse('intervention_challenge_5')},
+                {'label': 'Challenge 6: How to do (Part 3)', 'url': reverse('intervention_challenge_6')},
+            ],
+        },
+        {
+            'title': 'Orientation / General Education',
+            'description': 'Foundational education modules.',
+            'items': [
+                {'label': 'Orientation 1: Introduction', 'url': reverse('orientation_challenge_1')},
+                {'label': 'Orientation 2: Contents', 'url': reverse('orientation_challenge_2')},
+                {'label': 'Orientation 3: Game', 'url': reverse('orientation_challenge_3')},
+                {'label': 'Orientation 4: Review', 'url': reverse('orientation_challenge_4')},
+                {'label': 'Orientation 5: Self-efficacy', 'url': reverse('orientation_challenge_5')},
+            ],
+        },
+        {
+            'title': 'Work-related',
+            'description': 'Activity at work.',
+            'items': [
+                {'label': 'Challenge 6: Learning', 'url': reverse('wr_challenge_6')},
+                {'label': 'Challenge 7: Easy Task', 'url': reverse('wr_challenge_7')},
+                {'label': 'Challenge 8: Story', 'url': reverse('wr_challenge_8')},
+                {'label': 'Challenge 9: Game', 'url': reverse('wr_challenge_9')},
+                {'label': 'Challenge 10: Technique', 'url': reverse('wr_challenge_10')},
+            ],
+        },
+        {
+            'title': 'Transport-related',
+            'description': 'Movement built into travel.',
+            'items': [
+                {'label': 'Challenge 11: Learning', 'url': reverse('tr_challenge_11')},
+                {'label': 'Challenge 12: Easy Task', 'url': reverse('tr_challenge_12')},
+                {'label': 'Challenge 13: Story', 'url': reverse('tr_challenge_13')},
+                {'label': 'Challenge 14: Game', 'url': reverse('tr_challenge_14')},
+                {'label': 'Challenge 15: Technique', 'url': reverse('tr_challenge_15')},
+            ],
+        },
+        {
+            'title': 'Domestic-related',
+            'description': 'Activity at home.',
+            'items': [
+                {'label': 'Challenge 16: Learning', 'url': reverse('dom_challenge_16')},
+                {'label': 'Challenge 17: Easy Task', 'url': reverse('dom_challenge_17')},
+                {'label': 'Challenge 18: Story', 'url': reverse('dom_challenge_18')},
+                {'label': 'Challenge 19: Game', 'url': reverse('dom_challenge_19')},
+                {'label': 'Challenge 20: Technique', 'url': reverse('dom_challenge_20')},
+            ],
+        },
+        {
+            'title': 'Leisure-related',
+            'description': 'Free-time activity.',
+            'items': [
+                {'label': 'Challenge 21: Learning', 'url': reverse('leisure_challenge_21')},
+                {'label': 'Challenge 22: Easy Task', 'url': reverse('leisure_challenge_22')},
+                {'label': 'Challenge 23: Learning Yoga', 'url': reverse('leisure_challenge_23')},
+                {'label': 'Challenge 24: Yoga Practice 1', 'url': reverse('leisure_challenge_24')},
+                {'label': 'Challenge 25: Yoga Practice 2', 'url': reverse('leisure_challenge_25')},
+                {'label': 'Challenge 26: Game', 'url': reverse('leisure_challenge_26')},
+                {'label': 'Challenge 27: Technique', 'url': reverse('leisure_challenge_27')},
+            ],
+        },
+        {
+            'title': 'Mindfulness',
+            'description': 'Awareness practices.',
+            'items': [
+                {'label': 'Challenge 28: Learning', 'url': reverse('mindfulness_challenge_28')},
+                {'label': 'Challenge 29: Easy Task', 'url': reverse('mindfulness_challenge_29')},
+                {'label': 'Challenge 30: Mindfulness Practice', 'url': reverse('mindfulness_challenge_30')},
+                {'label': 'Challenge 31: Game', 'url': reverse('mindfulness_challenge_31')},
+                {'label': 'Challenge 32: Technique', 'url': reverse('mindfulness_challenge_32')},
+            ],
+        },
+    ]
+    return render(request, 'intervention_preview.html', {'categories': categories})

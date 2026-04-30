@@ -1,0 +1,61 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Intervention Preview (Staff Only)</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <style>
+        body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; min-height: 100vh; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+        .header-card { background: #fff; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); padding: 1.5rem 2rem; margin-bottom: 1.5rem; }
+        .header-card h1 { margin: 0 0 0.5rem; color: #333; }
+        .header-card p { margin: 0; color: #555; }
+        .badge { display: inline-block; background: #f59e0b; color: #fff; padding: 4px 10px; border-radius: 999px; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; }
+        .grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+        @media (min-width: 700px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (min-width: 1100px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+        .card { background: #fff; border-radius: 14px; padding: 18px; box-shadow: 0 4px 14px rgba(0,0,0,0.06); display: flex; flex-direction: column; }
+        .card h3 { margin: 0 0 6px; color: #333; }
+        .card p { margin: 0 0 12px; color: #666; font-size: 0.9rem; }
+        .links { display: flex; flex-direction: column; gap: 6px; margin-top: auto; }
+        .links a { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #fff; text-decoration: none; padding: 9px 12px; border-radius: 8px; font-weight: 600; font-size: 0.92rem; text-align: center; }
+        .links a:hover { opacity: 0.9; }
+        .nav { margin-top: 1.5rem; display: flex; gap: 10px; flex-wrap: wrap; }
+        .btn-back { background: #fff; color: #333; padding: 10px 16px; border-radius: 8px; text-decoration: none; font-weight: 600; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header-card">
+            <span class="badge">Staff Preview</span>
+            <h1 style="margin-top: 0.5rem;">Intervention Preview</h1>
+            <p>Direct links to every intervention challenge. No timeline, study day, group, or enrollment requirements. Use this to preview, edit, or test content on any environment (local or Render).</p>
+            <p style="margin-top: 0.75rem; font-size: 0.88rem; color: #777;">
+                Tip: if a challenge link redirects you to login or returns a 404, click
+                <a href="{% url 'test_all_challenges' %}" style="color: #4c3d8f; font-weight: 600;">/test-challenges/</a>
+                first &mdash; it auto-creates a tester Participant so all routes work.
+            </p>
+        </div>
+
+        <div class="grid">
+            {% for category in categories %}
+            <div class="card">
+                <h3>{{ category.title }}</h3>
+                <p>{{ category.description }}</p>
+                <div class="links">
+                    {% for item in category.items %}
+                    <a href="{{ item.url }}" target="_blank" rel="noopener">{{ item.label }}</a>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="nav">
+            <a class="btn-back" href="{% url 'dashboard' %}">Back to Dashboard</a>
+            <a class="btn-back" href="/admin/">Django Admin</a>
+        </div>
+    </div>
+</body>
+</html>

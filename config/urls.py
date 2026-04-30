@@ -68,6 +68,7 @@ urlpatterns = [
     path('password-reset-confirm/<str:token>/', views.password_reset_confirm, name='password_reset_confirm'),
     path('intervention/', views.intervention_access, name='intervention_access'),
     path('intervention/test/', views.intervention_access_test, name='intervention_access_test'),
+    path('intervention/preview/', views.intervention_preview, name='intervention_preview'),
     path('intervention/challenge-25/', views.intervention_challenge_25, name='intervention_challenge_25'),
     path('intervention/challenge-2/', views.intervention_challenge_2, name='intervention_challenge_2'),
     path('intervention/challenge-3/', views.intervention_challenge_3, name='intervention_challenge_3'),
