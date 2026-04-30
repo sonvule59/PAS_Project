@@ -385,7 +385,7 @@ def daily_timeline_check(user):
                     elif second_participant.randomized_group == 1:
                         second_participant.send_email("intervention_access_immediate", extra_context={
                             "username": second_participant.user.username,
-                            "login_link": settings.LOGIN_URL if hasattr(settings, "LOGIN_URL") else "https://your-login-page.com"
+                            "login_link": settings.LOGIN_PAGE_URL,
                         }, mark_as='sent_intervention_access')
                         second_participant.randomization_email_sent = True
                         second_participant.randomization_email_sent_date = timezone.now().date()
@@ -429,7 +429,7 @@ def daily_timeline_check(user):
                     elif first_participant.randomized_group == 1:
                         first_participant.send_email("intervention_access_immediate", extra_context={
                             "username": first_participant.user.username,
-                            "login_link": settings.LOGIN_URL if hasattr(settings, "LOGIN_URL") else "https://your-login-page.com"
+                            "login_link": settings.LOGIN_PAGE_URL,
                         }, mark_as='sent_intervention_access')
                         first_participant.randomization_email_sent = True
                         first_participant.randomization_email_sent_date = timezone.now().date()
@@ -450,7 +450,7 @@ def daily_timeline_check(user):
                     elif second_participant.randomized_group == 1:
                         second_participant.send_email("intervention_access_immediate", extra_context={
                             "username": second_participant.user.username,
-                            "login_link": settings.LOGIN_URL if hasattr(settings, "LOGIN_URL") else "https://your-login-page.com"
+                            "login_link": settings.LOGIN_PAGE_URL,
                         }, mark_as='sent_intervention_access')
                         second_participant.randomization_email_sent = True
                         second_participant.randomization_email_sent_date = timezone.now().date()
@@ -486,7 +486,7 @@ def daily_timeline_check(user):
                 elif single_participant.randomized_group == 1:
                     single_participant.send_email("intervention_access_immediate", extra_context={
                         "username": single_participant.user.username,
-                        "login_link": settings.LOGIN_URL if hasattr(settings, "LOGIN_URL") else "https://your-login-page.com"
+                        "login_link": settings.LOGIN_PAGE_URL,
                     }, mark_as='sent_intervention_access')
                     single_participant.randomization_email_sent = True
                     single_participant.randomization_email_sent_date = timezone.now().date()

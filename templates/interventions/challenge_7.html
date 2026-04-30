@@ -1,0 +1,60 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Introductory Challenge 7: How to do - Part 3</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <style>
+        body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 2rem; }
+        .card { background: #fff; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); padding: 2rem; margin-bottom: 1.5rem; }
+        h1 { margin: 0 0 0.5rem 0; font-weight: 300; color: #333; }
+        h2 { margin: 0 0 1rem 0; font-weight: 600; color: #333; }
+        p { color: #444; }
+        .video-wrapper { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 12px; }
+        .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+        .caption-toggle { display: inline-block; background: #ff6b35; color: #fff; padding: 10px 14px; border-radius: 8px; cursor: pointer; border: none; font-weight: 600; }
+        .caption { display: none; margin-top: 1rem; background: #f9f7ff; border: 1px solid #eee; border-radius: 12px; padding: 1rem; color: #333; }
+        .actions { margin-top: 1.25rem; display: flex; gap: 10px; flex-wrap: wrap; }
+        .btn { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #fff; padding: 10px 16px; border-radius: 8px; text-decoration: none; font-weight: 600; }
+        .challenge-title-svg { max-width: 100%; height: auto; display: block; margin-bottom: 1rem; }
+    </style>
+    <script>
+        function toggleCaption() {
+            const el = document.getElementById('caption');
+            el.style.display = (el.style.display === 'block') ? 'none' : 'block';
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <img class="challenge-title-svg" src="{% static 'design/intervention/Introductory Challenge 6_ How to do - Part 3.svg' %}" alt="Introductory Challenge 7: How to do - Part 3">
+            <div class="video-wrapper">
+                <iframe src="https://player.vimeo.com/video/1042952958" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen title="Introductory Challenge 7 Video"></iframe>
+            </div>
+            <div class="actions">
+                <button class="caption-toggle" onclick="toggleCaption()">Show/Hide Captions</button>
+                <a class="btn" href="{% url 'intervention_access' %}">Back to Intervention Access</a>
+            </div>
+            <div id="caption" class="caption">
+                <p>This is part 3 to explain how you can increase your physical activity.</p>
+                <p>You can use some strategies to adopt an active lifestyle. Expensive gym memberships are not necessary to promote physical activity, despite common assumptions. We suggest four strategies that may work for you.</p>
+                <ul>
+                    <li><strong>Strategy 1. Identify personal benefits of physical activity.</strong><br>
+                        You can identify personal benefits of physical activity. For some people, the health benefits that were mentioned (e.g., attenuated weight gain, relative reduction in incidence of a chronic disease, weight loss) are compelling enough to motivate them to be active. For others, different reasons are key motivators to be active. Physical activity may provide opportunities to enjoy recreational activities or feelings of energy and well-being. Identifying personal benefits of physical activity is important to being physically active. Weight loss should not be the only reason for physical activity although it should be helpful for that goal, as well.</li>
+                    <li><strong>Strategy 2. Set goals for physical activity.</strong><br>
+                        Simple goals will work. For example, a brisk walk in the neighborhood for 40 minutes, 2 days per week, and walking before lunch may be just the right approach for someone. Activities that are multipurpose are another way for people to incorporate physical activity into their busy lives. For example, you can use active transportation such as walking or biking to get to work. This intervention will help you set physical activity goals!</li>
+                    <li><strong>Strategy 3. Develop knowledge and skills to attain goals.</strong><br>
+                        It is important to develop knowledge and skills needed to meet physical activity-related goals. For example, if regular walking is your goal, learning about neighborhood walking trails can help you meet the goal. If playing tennis is your goal, it is important to learn how to play tennis by practicing some skills. If weight loss or weight maintenance is your goal, you want to understand that dietary changes are often necessary, and vigorous-intensity activity can be more efficient in burning calories than light- or moderate-intensity activity.</li>
+                    <li><strong>Strategy 4. Find someone to exercise with.</strong><br>
+                        It can be helpful to exercise with someone, because you may support and motivate each other. When exercising with others, consider their fitness levels, as well as your own, because your inability to keep up with them could be de-motivating. Finding a suitable activity that you can do together is also important.</li>
+                </ul>
+                <p>With this intervention, you will have opportunities to practice the strategies for promoting physical activity!</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

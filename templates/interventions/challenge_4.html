@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Introductory Challenge 4: How to do - Part 1</title>
+    <title>Introductory Challenge 4: Importance</title>
     <link rel="stylesheet" href="{% static 'styles.css' %}">
     <style>
         body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
@@ -13,13 +13,13 @@
         h1 { margin: 0 0 0.5rem 0; font-weight: 300; color: #333; }
         h2 { margin: 0 0 1rem 0; font-weight: 600; color: #333; }
         p { color: #444; }
-        ul { margin: 0.75rem 0 0 1.2rem; }
         .video-wrapper { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 12px; }
         .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
         .caption-toggle { display: inline-block; background: #ff6b35; color: #fff; padding: 10px 14px; border-radius: 8px; cursor: pointer; border: none; font-weight: 600; }
         .caption { display: none; margin-top: 1rem; background: #f9f7ff; border: 1px solid #eee; border-radius: 12px; padding: 1rem; color: #333; }
         .actions { margin-top: 1.25rem; display: flex; gap: 10px; flex-wrap: wrap; }
         .btn { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #fff; padding: 10px 16px; border-radius: 8px; text-decoration: none; font-weight: 600; }
+        ul { margin: 0.75rem 0 0 1.2rem; }
         .challenge-title-svg { max-width: 100%; height: auto; display: block; margin-bottom: 1rem; }
     </style>
     <script>
@@ -32,24 +32,27 @@
 <body>
     <div class="container">
         <div class="card">
-            <img class="challenge-title-svg" src="{% static 'design/intervention/Introductory Challenge 4_ How to do - Part 1.svg' %}" alt="Introductory Challenge 4: How to do - Part 1">
+            <img class="challenge-title-svg" src="{% static 'design/intervention/Introductory Challenge 3_ Importance.svg' %}" alt="Introductory Challenge 4: Importance">
             <div class="video-wrapper">
-                <iframe src="https://player.vimeo.com/video/1041378236" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen title="Intro Challenge 4 Video"></iframe>
+                <iframe src="https://player.vimeo.com/video/1041378284" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen title="Introductory Challenge 4 Video"></iframe>
             </div>
             <div class="actions">
                 <button class="caption-toggle" onclick="toggleCaption()">Show/Hide Captions</button>
                 <a class="btn" href="{% url 'intervention_access' %}">Back to Intervention Access</a>
             </div>
             <div id="caption" class="caption">
-                <p>This is part 1 to explain how you can increase your physical activity.</p>
-                <p>According to the Physical Activity Guidelines for Americans, each week adults need at least 150 minutes (2 hours and 30 minutes) of moderate intensity physical activity or 75 minutes (1 hour and 15 minutes) of vigorous intensity physical activity, or an equivalent combination of moderate and vigorous intensity activity, for substantial health benefits. The focus should be an aerobic physical activity like running, but muscle-strengthening activity such as lifting weights is also helpful. Additional health benefits can be gained by engaging in physical activity beyond the recommended weekly amount.</p>
-                <p>It is important to know that all physical activity, whether light-, moderate-, or vigorous-intensity, counts. You can move more and sit less throughout the day, because any length of physical activity contributes to the health benefits. Some physical activity is better than none for your health, even a brief episode of physical activity like taking the stairs rather than the elevator or adding short walks to your day.</p>
-                <p>Start with light or moderate-intensity physical activity and gradually increase the intensity, duration, and frequency. Physical activity should be increased gradually over time regardless of your physical fitness. You shouldn’t start with high-intensity activities because they may cause injury and exhaustion. Exercising at very high intensity may result in discontinuing the activity. Working incrementally and waiting for the body to adapt and recover should reduce the risk of physical overload, mental stress, decreased motivation, and injury.</p>
-                <p>If you have low physical fitness, you may find that moderate-intensity physical activity is experienced as vigorous intensity. You can get health benefits from starting with activities that would be considered light intensity and, as you are able, gradually build up to moderate or vigorous-intensity activities. If you have chronic disease or disabilities, you need to engage in physical activity adapted for your physical conditions in consultation with your health care provider. A variety of physical activities will be introduced in this intervention. Remember to consult a health care professional about the appropriate types and amounts of physical activity that are right for you.</p>
+                <p>The good news for adults with obesity is that regular physical activity provides major health benefits, no matter how their weight changes. Of course, as you know, regular physical activity is helpful for weight loss, but that is not all! Physical activity is valuable for adults with obesity for at least four reasons reported by the U.S. Department of Health and Human Services.</p>
+                <ul>
+                    <li>First, moderate-to-vigorous physical activity has an additive effect on weight loss when combined with dietary restriction, compared to the diet only.</li>
+                    <li>Second, physical activity is helpful to prevent weight gain.</li>
+                    <li>Third, even if weight status of adults with obesity remains the same, they can experience major health benefits such as the relative reduction in incidence of a chronic disease or progression of a chronic disease they already have.</li>
+                    <li>Fourth, vigorous physical activity consistently produces great improvements in insulin sensitivity, blood pressure, and body composition in adults with obesity.</li>
+                </ul>
+                <p>It is important to know that increasing physical activity has other multiple health benefits, in addition to weight loss. While physical activity alone may not result in significant weight loss in the short term without also considering dieting, you are strongly encouraged to increase physical activity for these major health benefits.</p>
+                <p>Additionally, physical activity also gives you a chance to have fun, be with friends and family, enjoy the outdoors, feel more energetic and healthier, and improve fitness so you can more easily participate in additional physical activity, such as playing a sport. The health benefits from physical activity generally outweigh adverse outcomes such as the risk of injury. You can be physically active for any reasons that are meaningful to you.</p>
+                <p>Despite the benefits of physical activity, there is consistent evidence that most adults with obesity do not meet the 150 min per week of moderate-intensity physical activity recommended by public health guidelines. Moreover, there is evidence that adults with obesity tend to be physically active only when trying to lose weight. Simply understanding the benefits of an active lifestyle is insufficient to promote physical activity. This intervention can help you!</p>
             </div>
         </div>
     </div>
 </body>
 </html>
-
-

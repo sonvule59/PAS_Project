@@ -4,86 +4,213 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Introductory Challenge 2: Rethinking Movement</title>
+    <title>Introductory Challenge 2: Physical Activity</title>
     <link rel="stylesheet" href="{% static 'styles.css' %}">
     <style>
-        body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
         .container { max-width: 1000px; margin: 0 auto; padding: 2rem; }
-        .card { background: #fff; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); padding: 2rem; margin-bottom: 1.5rem; }
-        h1 { margin: 0 0 0.5rem 0; font-weight: 300; color: #333; }
-        h2 { margin: 0 0 1rem 0; font-weight: 600; color: #333; }
-        p { color: #444; }
-        .video-wrapper { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 12px; }
-        .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
-        .caption-toggle { display: inline-block; background: #ff6b35; color: #fff; padding: 10px 14px; border-radius: 8px; cursor: pointer; border: none; font-weight: 600; }
-        .caption { display: none; margin-top: 1rem; background: #f9f7ff; border: 1px solid #eee; border-radius: 12px; padding: 1rem; color: #333; }
-        .actions { margin-top: 1.25rem; display: flex; gap: 10px; flex-wrap: wrap; }
-        .btn { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #fff; padding: 10px 16px; border-radius: 8px; text-decoration: none; font-weight: 600; }
-        ul { margin: 0.75rem 0 0 1.2rem; }
+        .card {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        h2 { margin: 0 0 0.75rem 0; font-weight: 600; color: #333; font-size: 1.35rem; }
+        p { color: #444; line-height: 1.55; margin: 0 0 0.85rem 0; }
+        .commitment-panel {
+            background: linear-gradient(180deg, #f7f5ff 0%, #fefcff 100%);
+            border: 1px solid #e0d9f5;
+            border-radius: 12px;
+            padding: 1.35rem 1.5rem 1.5rem;
+            margin-bottom: 1.75rem;
+            border-left: 4px solid #667eea;
+        }
+        .commitment-panel h2 {
+            margin-top: 0;
+            color: #4c3d8f;
+            font-size: 1.25rem;
+        }
+        .commitment-panel ul {
+            margin: 0.5rem 0 0;
+            padding-left: 1.25rem;
+        }
+        .commitment-panel li { margin: 0.35rem 0; color: #444; line-height: 1.45; }
+        .commit-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 1.15rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            padding: 12px 20px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            box-shadow: 0 6px 16px rgba(102, 126, 234, 0.35);
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+        .commit-button:hover {
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.45);
+        }
+        .commit-button:active { transform: scale(0.98); }
+        .commit-button.confirmed {
+            background: linear-gradient(135deg, #2e9d5c 0%, #43b97a 100%);
+            box-shadow: 0 6px 16px rgba(46, 157, 92, 0.35);
+        }
+        .commit-status {
+            margin-top: 0.65rem;
+            font-weight: 600;
+            color: #2e9d5c;
+            display: none;
+            font-size: 0.95rem;
+        }
+        .section-rule {
+            border: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #ddd, transparent);
+            margin: 0 0 1.5rem 0;
+        }
         .challenge-title-svg { max-width: 100%; height: auto; display: block; margin-bottom: 1rem; }
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            border-radius: 12px;
+        }
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            border: 0;
+        }
+        .caption-toggle {
+            display: inline-block;
+            background: #ff6b35;
+            color: #fff;
+            padding: 10px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            border: none;
+            font-weight: 600;
+        }
+        .caption {
+            display: none;
+            margin-top: 1rem;
+            background: #f9f7ff;
+            border: 1px solid #eee;
+            border-radius: 12px;
+            padding: 1rem;
+            color: #333;
+        }
+        .caption ul { margin: 0.65rem 0 0.65rem 1.15rem; padding: 0; }
+        .caption li { margin: 0.35rem 0; line-height: 1.45; }
+        .actions { margin-top: 1.25rem; display: flex; gap: 10px; flex-wrap: wrap; }
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            padding: 10px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+        }
     </style>
     <script>
         function toggleCaption() {
             var el = document.getElementById('caption');
             el.style.display = (el.style.display === 'block') ? 'none' : 'block';
         }
+        function acknowledgeCommitment() {
+            var btn = document.getElementById('commitButton');
+            var status = document.getElementById('commitStatus');
+            btn.classList.add('confirmed');
+            status.style.display = 'block';
+
+            var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]')?.value ||
+                document.cookie.split('; ').find(function(row) { return row.startsWith('csrftoken='); })?.split('=')[1] || '';
+            fetch('{% url "record_commitment_click" %}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-CSRFToken': csrftoken
+                },
+                body: 'challenge_number=2&challenge_name=Physical Activity'
+            })
+            .then(function(response) { return response.json(); })
+            .then(function(data) {
+                if (data.success) {
+                    console.log('Commitment recorded successfully');
+                }
+            })
+            .catch(function(error) {
+                console.error('Error recording commitment:', error);
+            });
+        }
     </script>
 </head>
 <body>
     <div class="container">
         <div class="card">
-            <img class="challenge-title-svg" src="{% static 'design/intervention/Introductory Challenge 2_ Rethinking Movement.svg' %}" alt="Introductory Challenge 2: Rethinking Movement">
-            <h2>Rethinking Movement</h2>
+            <div class="commitment-panel">
+                <h2>My Physical Activity Commitment</h2>
+                <p>I am beginning my journey with this online intervention, designed to promote physical activity in adults with obesity.</p>
+                <p>I recognize that this process may be challenging, but I am confident in my persistence, determination, and self-discipline to achieve my goals.</p>
+                <p>When I encounter obstacles, I will overcome them by:</p>
+                <ul>
+                    <li>Taking a moment to refocus</li>
+                    <li>Breaking tasks into smaller, manageable steps</li>
+                    <li>Seeking support and collaboration when needed</li>
+                    <li>Staying informed and motivated</li>
+                    <li>Maintaining a positive mindset</li>
+                    <li>Sharing and discussing ideas and concerns</li>
+                </ul>
+                <button type="button" id="commitButton" class="commit-button" onclick="acknowledgeCommitment()">
+                    <span aria-hidden="true">✔</span> I am fully committed to actively engaging in this intervention.
+                </button>
+                <div id="commitStatus" class="commit-status" role="status">Thank you! Your commitment is noted.</div>
+            </div>
+
+            <hr class="section-rule">
+
+            <img class="challenge-title-svg"
+                 src="{% static 'design/intervention/Introductory Challenge 1_ Physical Activity.svg' %}"
+                 alt="Introductory Challenge 2: Physical Activity">
+            <h2>Introductory Challenge 2: Physical Activity</h2>
             <div class="video-wrapper">
-                <iframe src="https://player.vimeo.com/video/1097880022" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen title="Intro Challenge 2 Video"></iframe>
+                <iframe src="https://player.vimeo.com/video/1041378056"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowfullscreen
+                        title="Introductory Challenge 2: Physical Activity video"></iframe>
             </div>
             <div class="actions">
-                <button class="caption-toggle" onclick="toggleCaption()">Show/Hide Captions</button>
+                <button type="button" class="caption-toggle" onclick="toggleCaption()">Show/Hide Captions</button>
                 <a class="btn" href="{% url 'intervention_access' %}">Back to Intervention Access</a>
             </div>
             <div id="caption" class="caption">
-                <p>Hi there.</p>
-                <p>Thanks for taking a few minutes for yourself today.</p>
-                <p>Let’s talk about seeing exercise and physical activity in a whole new way—one that’s not just about knowing it’s good for your health, but about actually enjoying it and making it easier to stick with. And the best part? This isn’t just a nice idea—it’s backed by science!</p>
-                <p>We often think of physical activity or exercise as something we should do… something hard, time-consuming, or uncomfortable. For many people—especially those who don’t move much—exercise can feel painful, inconvenient, or like something they have to do just to lose weight, which might be your goal. Even if they start out motivated, those feelings often make them stop.</p>
-                <p>But what if movement could feel different?</p>
-                <p><b><u>Step 1: Move in Ways That Feel Good to You.</u></b></p>
-                <p>Let’s begin with a simple idea: Move in ways that feel good.</p>
+                <p>Physical activity refers to any bodily movement that increases energy expenditure above a basal level. There are different intensities of physical activity: light, moderate, and vigorous intensity.</p>
                 <ul>
-                    <li>Ask yourself: What kind of movement actually feels good to me?</li>
-                    <li>It could be dancing in your kitchen, stretching in bed, or walking outdoors with a friend.</li>
+                    <li>Light-intensity physical activity refers to non-sedentary behavior (e.g., walking slowly, stretching, making the bed).</li>
+                    <li>Moderate-intensity physical activity refers to activities that require moderate physical effort and make you breathe somewhat harder than normal (e.g., walking briskly, playing doubles tennis, raking the yard).</li>
+                    <li>Vigorous-intensity physical activity refers to activities that require more challenging physical effort and make you breathe much harder than normal (e.g., running, playing basketball, carrying heavy loads upstairs repeatedly).</li>
                 </ul>
-                <p>You don’t have to follow a strict workout plan to benefit. You just need to <b>find what feels right for you</b>. New research shows that how we feel during physical activity affects whether we’ll want to do it again. When movement feels good, your brain remembers that—and it increases your chances of repeating it.</p>
-                <p>You might try choosing activities not just to cross them off a to-do list, but because they actually feel good while you’re doing them. Instead of thinking, “I have to take a walk,” you could start thinking of it as something you get to do—something to enjoy.</p>
-                <p>That’s the shift: turning exercise from a “have to” into a <b>“want to”</b>—a gift you give yourself.</p>
-                <p><b><u>Step 2: Everything Counts. It All Adds Up.</u></b></p>
-                <p>Here’s something many people don’t realize: <b>Every bit of activity counts—no matter how small.</b></p>
-                <p>You don’t need to do a long workout at the gym to make progress.</p>
+                <p>Physical activity can be accumulated in short bouts during the day rather than performed in one long, continuous bout.</p>
+                <p>Physical activity consists of planned or unplanned activities that are part of everyday life. These are activities that an individual selects and are not normally prescribed. There are multiple domains in physical activity: work-, transport-, domestic-, and leisure-related physical activity.</p>
                 <ul>
-                    <li>Walking the dog, doing chores, or even standing up to stretch—it all adds up.</li>
-                    <li>Just 2 minutes of movement is worth doing.</li>
+                    <li>Work-related refers to physical activity at your workplace or as part of your work, including paid jobs, farming, and volunteer work.</li>
+                    <li>Transport-related refers to physical activity that you do for traveling from place to place, including to places like work, stores, and movie theaters.</li>
+                    <li>Domestic-related refers to physical activity done in and around your home, like housework, gardening, yard work, and caring for your family.</li>
+                    <li>Leisure-related refers to any preferred pleasurable and enjoyable physical activity during unobligated time or free time, including playing a sport, yoga, or walking at a park.</li>
                 </ul>
-                <p>For a long time, we’ve been told that physical activity only counts if it’s long, intense, or done “right.” <b>But that kind of thinking can be discouraging.</b> If it’s not perfect, we often feel like it’s not worth doing at all.</p>
-                <p>But here’s a better way to think about it:</p>
-                <p>Let’s say you usually skip the gym unless you have a full hour. But now, you start thinking, “Maybe I don’t need a full hour—maybe a 15-minute walk is still worth it.” So instead of skipping it, you go anyway. You walk a lap or two. You stretch. You move a little. And you feel good for doing something.</p>
-                <p>That’s the mindset: <b>Shorter activity still matters.</b> It’s easier to fit into your day, and it helps build confidence and momentum. You might walk a little more. Take an extra trip upstairs. Do a stretch break at work. These micro-movements add up—and they matter.</p>
-                <p>And when you combine “everything counts” with doing what feels good, you begin to reframe the meaning of physical activity—not as something to check off a list, but as something that supports your life.</p>
-                <p><b><u>Step 3: Give Yourself Permission to Prioritize Self-Care.</u></b></p>
-                <p>This one might be the hardest—but maybe the most important.</p>
-                <p>So many people feel guilty taking time for themselves. But here’s the truth: making time for exercise or activity is <b>a smart and necessary form of self-care</b>. When you move, you support your mental health, your energy, and your ability to do the things that matter most.</p>
-                <p>Giving yourself permission to move for you can break down some of the biggest barriers—like feeling too busy or thinking self-care is selfish. It helps you see movement as a way to fuel your day, your focus, and your priorities—not as something extra or optional.</p>
-                <p>You’re not being selfish by choosing to move. You’re being strong. You deserve to feel better and have more energy for the people and things that matter to you.</p>
-                <p>So go ahead—<b>give yourself permission to take care of yourself.</b></p>
-                <p><b><u>Let’s Review</u></b></p>
-                <p>Step 1: Move in ways that feel good to you</p>
-                <p>Step 2: Remember that everything counts</p>
-                <p>Step 3: Give yourself permission to prioritize your well-being</p>
-                <p>You don’t have to do it all at once. Just take one small step today. <b>One choice to move. One kind decision for yourself.</b></p>
-                <p>You’ve got this.</p>
+                <p>This intervention is to promote light-, moderate-, and vigorous-intensity physical activity in the work-, transport-, domestic-, and leisure-related domains. We believe that you can increase physical activity with the intervention!</p>
             </div>
         </div>
     </div>
 </body>
 </html>
-
-

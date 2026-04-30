@@ -112,7 +112,13 @@ if not BASE_URL:
         # Local development default
         BASE_URL = 'http://127.0.0.1:8000'
 
-LOGIN_URL = '/login/'  # Default login URL for the application
+LOGIN_URL = '/login/'  # Default login URL for the application (path only)
+
+# Absolute login URL for emails (participants need https://… — relative paths break in clients).
+LOGIN_PAGE_URL = os.getenv('LOGIN_PAGE_URL')
+if not LOGIN_PAGE_URL:
+    _login_path = LOGIN_URL if LOGIN_URL.startswith('/') else f'/{LOGIN_URL}'
+    LOGIN_PAGE_URL = f"{BASE_URL.rstrip('/')}{_login_path}"
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 # BASE_DIR = os.path.dirname(os.path.abspath(__file__))
