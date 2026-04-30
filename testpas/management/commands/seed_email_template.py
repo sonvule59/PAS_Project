@@ -16,7 +16,8 @@ EMAIL_TEMPLATES = [
         "name": "account_confirmation",
         "subject": "Confirm to Activate Your Account (Confident Moves Research)",
         # "body": "Dear {participant_id},\n\nPlease confirm your email by clicking the following link:\n{confirmation_link}\n\nThank you,\nPAS 2.0 Team"
-        "body": "Hi {username},\n\nPlease click the following link to confirm your registration and activate your account:\n{confirmation_link}\n\n"
+        "body": "Hi {username},\n\nPlease click the following link to confirm your registration and activate your account:\n<a href=\"{confirmation_link}\">Activate your account</a>\n\n"
+        "If the button/link does not open, copy and paste this URL into your browser:\n{confirmation_link}\n\n"
         "If you need any assistance or have any questions at any time, please contact Seungmin (“Seung”) Lee (Principal Investigator) at seunglee@iastate.edu or 517-898-0020.\n\n"
         "Sincerely,\nThe Confident Moves Research Team"
     },
