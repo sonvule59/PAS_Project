@@ -10,12 +10,22 @@
     <title>Confident Moves Intervention - Dashboard</title>
     <link rel="stylesheet" href="{% static 'styles.css' %}">
     <style>
+        /* Muted dark burnt-orange / terracotta — darker, less saturated than bright orange */
+        :root {
+            --dash-bg-from: #a67c62;
+            --dash-bg-via: #6f4538;
+            --dash-bg-to: #3d2924;
+            --dash-accent: #b07a5a;
+            --dash-accent-deep: #6e4534;
+            --dash-accent-shadow: rgba(45, 28, 22, 0.5);
+            --dash-ring: rgba(176, 122, 90, 0.32);
+        }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
             margin: 0;
             padding: 0;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, var(--dash-bg-from) 0%, var(--dash-bg-via) 42%, var(--dash-bg-to) 100%);
             min-height: 100vh;
         }
         .container {
@@ -76,7 +86,7 @@
             margin-bottom: 1.5rem;
             font-size: 1.5rem;
             font-weight: 400;
-            border-bottom: 2px solid #f0f0f0;
+            border-bottom: 2px solid #c9a088;
             padding-bottom: 0.5rem;
         }
         .card h3 {
@@ -102,10 +112,10 @@
             margin-bottom: 2rem;
         }
         .status-item {
-            background: #f8f9fa;
+            background: #faf6f2;
             padding: 1.5rem;
             border-radius: 10px;
-            border-left: 4px solid #667eea;
+            border-left: 4px solid var(--dash-accent);
         }
         .status-item h4 {
             margin: 0 0 0.5rem 0;
@@ -156,12 +166,12 @@
             margin: 0.5rem 0.5rem 0.5rem 0;
         }
         .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #8f6049 0%, var(--dash-accent) 50%, var(--dash-accent-deep) 100%);
             color: white;
         }
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 8px 20px var(--dash-accent-shadow);
         }
         .btn-success {
             background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
@@ -205,8 +215,8 @@
         }
         .form-group input:focus {
             outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            border-color: var(--dash-accent);
+            box-shadow: 0 0 0 3px var(--dash-ring);
         }
         .progress-bar {
             background: #e0e0e0;
@@ -216,7 +226,7 @@
             overflow: hidden;
         }
         .progress-fill {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #8f6049 0%, var(--dash-accent) 50%, var(--dash-accent-deep) 100%);
             width: 0;
             height: 100%;
             border-radius: 10px;
@@ -238,6 +248,7 @@
             color: white;
             margin-top: 3rem;
             padding: 2rem;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
         }
         .footer p {
             margin: 0.5rem 0;
@@ -308,7 +319,7 @@
                     </div>
                     <div class="status-item">
                         <h4>Intervention Points</h4>
-                        <p style="color: #ff6b35; font-weight: 600; font-size: 1.2em;">🎯 {{ intervention_points|default:0 }} points</p>
+                        <p style="color: var(--dash-accent); font-weight: 600; font-size: 1.2em;">🎯 {{ intervention_points|default:0 }} points</p>
                     </div>
                     <div class="status-item">
                         <h4>Study Day</h4>
